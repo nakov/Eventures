@@ -8,7 +8,7 @@ namespace Eventures.UnitTests
     public class HomeControllerTests
     {
         [Test]
-        public void TestEventsControllerGetCreate()
+        public void TestHomeControllerGetCreate()
         {
             // Arrange
             var controller = new EventsController(new TestData().DbContext);
