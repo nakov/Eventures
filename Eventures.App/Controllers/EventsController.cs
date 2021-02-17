@@ -13,16 +13,16 @@ namespace Eventures.App.Controllers
     [Authorize]
     public class EventsController : Controller
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext dbContext;
 
         public EventsController(ApplicationDbContext context)
         {
-            this.context = context;
+            this.dbContext = context;
         }
 
         public IActionResult All()
         {
-            List<EventAllViewModel> events = context.Events
+            List<EventAllViewModel> events = dbContext.Events
                 .Select(eventFromDb => new EventAllViewModel
                 {
                     Name = eventFromDb.Name,
@@ -59,8 +59,8 @@ namespace Eventures.App.Controllers
                     OwnerId = currentUserId
                 };
 
-                context.Events.Add(eventForDb);
-                context.SaveChanges();
+                dbContext.Events.Add(eventForDb);
+                dbContext.SaveChanges();
 
                 return this.RedirectToAction("All");
             }

@@ -4,23 +4,25 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create Event</h1>
+<h1>Create New Event</h1>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<form asp-action="Create">
+    <div class="row">
+        <div class="col-md-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" placeholder="Name..."/>
+                <input asp-for="Name" class="form-control" placeholder="Name..." />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Place" class="control-label"></label>
-                <input asp-for="Place" class="form-control" placeholder="Place..."/>
+                <input asp-for="Place" class="form-control" placeholder="Place..." />
                 <span asp-validation-for="Place" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Start" class="control-label"></label>
                 <input asp-for="Start" class="form-control" />
@@ -31,25 +33,29 @@
                 <input asp-for="End" class="form-control" />
                 <span asp-validation-for="End" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="TotalTickets" class="control-label"></label>
-                <input asp-for="TotalTickets" class="form-control" placeholder="Total Tickets..."/>
+                <input asp-for="TotalTickets" class="form-control" placeholder="Total Tickets..." />
                 <span asp-validation-for="TotalTickets" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PricePerTicket" class="control-label"></label>
-                <input asp-for="PricePerTicket" class="form-control" placeholder="Price Per Ticket..."/>
+                <input asp-for="PricePerTicket" class="form-control" placeholder="Price Per Ticket..." />
                 <span asp-validation-for="PricePerTicket" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="All">Back to List</a>
 </div>
 
 @section Scripts {

@@ -22,15 +22,14 @@ namespace Eventures.App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<EventuresUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             services.AddControllersWithViews();
             services.AddRazorPages();
-
+            services.AddDatabaseDeveloperPageExceptionFilter();
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -48,7 +47,7 @@ namespace Eventures.App
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {

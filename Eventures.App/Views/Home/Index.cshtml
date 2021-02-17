@@ -5,12 +5,10 @@
 @if (!this.User.Identity.IsAuthenticated)
 {
     <div class="jumbotron bg-eventures w-75 mx-auto">
-        <h1>Eventures - The best ticket service in the world.</h1>
+        <h1>Eventures: Events and Tickets</h1>
         <hr class="hr-2 bg-dark" />
-        <h3 class="mt-4">
-            <a href="/Identity/Account/Login">Login</a> to start "eventing".</h3>
-        <h3 class="mt-4">
-            <a href="/Identity/Account/Register">Register</a> if you don't have an account.</h3>
+        <h3 class="mt-4"><a href="/Identity/Account/Login">Login</a> to start "eventing".</h3>
+        <h3 class="mt-4"><a href="/Identity/Account/Register">Register</a> if you don't have an account.</h3>
     </div>
 }
 else
@@ -19,5 +17,7 @@ else
         <h1 class="text-center">Welcome, @this.User.Identity.Name</h1>
         <hr class="hr-2 bg-secondary" />
         <h4 class="mt-4 text-secondary text-center">Eventures wishes you an exciting experience.</h4>
+        <h3 class="mt-4">View <a href="/Events/All">all events</a>.</h3>
+        <h3 class="mt-4">Create a <a href="/Events/Create">new event</a>.</h3>
     </div>
 }
