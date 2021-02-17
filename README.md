@@ -16,3 +16,4 @@ Sample **ASP.NET MVC app** for demonstrating how to implement **continuous integ
 
 ![image](https://user-images.githubusercontent.com/1689586/108188232-01e6f880-7118-11eb-8cd3-7fb40e96a630.png)
 
+![image](https://user-images.githubusercontent.com/1689586/108191087-66578700-711b-11eb-9af5-1c2d5c747b1d.png)
