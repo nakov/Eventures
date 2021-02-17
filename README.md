@@ -3,6 +3,7 @@
 Sample **ASP.NET MVC app** for demonstrating how to implement **continuous integration** and build a CI/CD pipeline with **GitHub Actions**.
   - Technologies: C#, ASP.NET Core, Entity Framework Core, ASP.NET Core Identity, NUnit
   - Target platform: .NET 5 (Linux)
+  - CI system: GitHub Actions
 
 ## Screenshots
 
