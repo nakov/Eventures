@@ -39,6 +39,8 @@ namespace Eventures.App
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredUniqueChars = 0;
             });
+            services.ConfigureApplicationCookie(options => 
+                options.LoginPath = "/Identity/Account/LogIn");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
