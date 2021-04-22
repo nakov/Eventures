@@ -22,7 +22,7 @@ namespace Eventures.UnitTests
             optionsBuilder.UseInMemoryDatabase("Eventures-MemoryDb-" + DateTime.Now.Ticks);
             DbContext = new ApplicationDbContext(optionsBuilder.Options);
 
-            UserMaria = new EventuresUser()
+            this.UserMaria = new EventuresUser()
             {
                 Id = "25ab6879-32b1-4b44-b0f1-49e85a6418c9",
                 UserName = "maria",
@@ -30,8 +30,8 @@ namespace Eventures.UnitTests
                 FirstName = "Maria",
                 LastName = "Green",
             };
-            DbContext.Add(UserMaria);
-            var eventSoftuniada = new Event()
+            DbContext.Add(this.UserMaria);
+            this.EventSoftuniada = new Event()
             {
                 Id = 1,
                 Name = "Softuniada 2021",
@@ -42,8 +42,8 @@ namespace Eventures.UnitTests
                 PricePerTicket = 12.00m,
                 OwnerId = UserMaria.Id
             };
-            DbContext.Add(eventSoftuniada);
-            var eventOpenFest = new Event()
+            DbContext.Add(this.EventSoftuniada);
+            this.EventOpenFest = new Event()
             {
                 Id = 2,
                 Name = "OpenFest 2021",
@@ -54,7 +54,7 @@ namespace Eventures.UnitTests
                 PricePerTicket = 0,
                 OwnerId = UserMaria.Id
             };
-            DbContext.Add(eventOpenFest);
+            DbContext.Add(this.EventOpenFest);
             DbContext.SaveChanges();
         }
 

@@ -13,7 +13,7 @@ namespace Eventures.UnitTests
     public class EventControllerTests
     {
         [Test]
-        public void TestEventsControllerGetAll()
+        public void Test_All()
         {
             // Arrange
             var testData = new TestData();
@@ -24,15 +24,17 @@ namespace Eventures.UnitTests
 
             // Assert
             var viewResult = result as ViewResult;
-            var model = viewResult.Model as List<EventViewModel>;
+            Assert.IsNotNull(viewResult);
 
+            var model = viewResult.Model as List<EventViewModel>;
+            Assert.IsNotNull(model);
             Assert.AreEqual(2, model.Count);
-            Assert.AreEqual("Softuniada 2021", model[0].Name);
-            Assert.AreEqual("OpenFest 2021", model[1].Name);
+            Assert.AreEqual(testData.EventSoftuniada.Name, model[0].Name);
+            Assert.AreEqual(testData.EventOpenFest.Name, model[1].Name);
         }
 
         [Test]
-        public void TestEventsControllerGetCreate()
+        public void Test_Create()
         {
             // Arrange
             var testData = new TestData();
@@ -44,10 +46,12 @@ namespace Eventures.UnitTests
             // Assert
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
+            var model = viewResult.Model as EventCreateBindingModel;
+            Assert.IsNotNull(model);
         }
 
         [Test]
-        public void TestEventsControllerPostCreate()
+        public void Test_Create_PostValidData()
         {
             // Arrange
             var testData = new TestData();
@@ -55,13 +59,14 @@ namespace Eventures.UnitTests
             TestData.AssignCurrentUserForController(controller, testData.UserMaria);
             var newEventData = new EventCreateBindingModel()
             {
-                Name = "New Event",
+                Name = "New Event " + DateTime.Now.Ticks,
                 Place = "Sofia",
                 Start = DateTime.Now.AddMonths(3),
                 End = DateTime.Now.AddMonths(3).AddDays(1),
                 TotalTickets = 500,
                 PricePerTicket = 20
             };
+            int eventsCountBefore = testData.DbContext.Events.Count();
 
             // Act
             var result = controller.Create(newEventData);
@@ -70,10 +75,67 @@ namespace Eventures.UnitTests
             var redirectResult = result as RedirectToActionResult;
             Assert.AreEqual("All", redirectResult.ActionName);
 
+            int eventsCountAfter = testData.DbContext.Events.Count();
+            Assert.That(eventsCountAfter == eventsCountBefore + 1);
+
             var newEventFromDb =
                 testData.DbContext.Events.FirstOrDefault(e => e.Name == newEventData.Name);
-            Assert.AreEqual(newEventData.Place, newEventFromDb.Place);
             Assert.IsTrue(newEventFromDb.Id > 0);
+            Assert.AreEqual(newEventData.Place, newEventFromDb.Place);
+            Assert.AreEqual(newEventData.Start, newEventFromDb.Start);
+            Assert.AreEqual(newEventData.End, newEventFromDb.End);
+            Assert.AreEqual(newEventData.PricePerTicket, newEventFromDb.PricePerTicket);
+            Assert.AreEqual(newEventData.TotalTickets, newEventFromDb.TotalTickets);
+        }
+
+        [Test]
+        public void Test_Create_PostInvalidData()
+        {
+            // Arrange
+            var testData = new TestData();
+            var controller = new EventsController(testData.DbContext);
+            TestData.AssignCurrentUserForController(controller, testData.UserMaria);
+            var newEventData = new EventCreateBindingModel()
+            {
+                Name = null,
+                Place = "Sofia",
+                Start = DateTime.Now.AddMonths(3),
+                End = DateTime.Now.AddMonths(3).AddDays(1),
+                TotalTickets = 500,
+                PricePerTicket = 20
+            };
+            controller.ModelState.AddModelError("Name", "The Name field is required");
+            int eventsCountBefore = testData.DbContext.Events.Count();
+
+            // Act
+            var result = controller.Create(newEventData);
+
+            // Assert
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
+            
+            int eventsCountAfter = testData.DbContext.Events.Count();
+            Assert.That(eventsCountAfter == eventsCountBefore);
+        }
+
+        [Test]
+        public void Test_Delete()
+        {
+            // Arrange
+            var testData = new TestData();
+            var controller = new EventsController(testData.DbContext);
+
+            // Act
+            var result = controller.Delete(1);
+
+            // Assert
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
+            var model = viewResult.Model as EventViewModel;
+            Assert.IsNotNull(model);
+            Assert.That(model.Id == 1);
+            Assert.That(model.Name == testData.EventSoftuniada.Name);
+            Assert.That(model.Place == testData.EventSoftuniada.Place);
         }
     }
 }
