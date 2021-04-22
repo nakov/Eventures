@@ -1,6 +1,8 @@
-﻿using Eventures.App.Models;
+﻿using System.Diagnostics;
+
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+
+using Eventures.App.Models;
 
 namespace Eventures.App.Controllers
 {

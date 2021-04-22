@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Eventures.App.Data;
 using Eventures.App.Models;
-using System;
 
 namespace Eventures.App.Controllers
 {
@@ -84,9 +86,13 @@ namespace Eventures.App.Controllers
             Event ev = dbContext.Events
                 .Where(e => e.Id == eventModel.Id)
                 .FirstOrDefault();
-            dbContext.Events.Remove(ev);
-            dbContext.SaveChanges();
-            return this.RedirectToAction("All");
+            if (ev != null)
+            {
+                dbContext.Events.Remove(ev);
+                dbContext.SaveChanges();
+                return this.RedirectToAction("All");
+            }
+            return this.View();
         }
 
         private static EventViewModel CreateEventViewModel(Event ev)
