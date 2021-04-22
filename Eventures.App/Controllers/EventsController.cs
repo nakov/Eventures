@@ -73,19 +73,16 @@ namespace Eventures.App.Controllers
 
         public IActionResult Delete(int id)
         {
-            EventViewModel ev = dbContext.Events
-                .Where(e => e.Id == id)
-                .Select(e => CreateEventViewModel(e))
-                .FirstOrDefault();
-            return this.View(ev);
+            Event ev = dbContext.Events.Find(id);
+            if (ev != null)
+                return this.View(CreateEventViewModel(ev));
+            return this.View();
         }
 
         [HttpPost]
         public IActionResult Delete(EventViewModel eventModel)
         {
-            Event ev = dbContext.Events
-                .Where(e => e.Id == eventModel.Id)
-                .FirstOrDefault();
+            Event ev = dbContext.Events.Find(eventModel.Id);
             if (ev != null)
             {
                 dbContext.Events.Remove(ev);

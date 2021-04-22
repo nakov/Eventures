@@ -119,7 +119,7 @@ namespace Eventures.UnitTests
         }
 
         [Test]
-        public void Test_Delete()
+        public void Test_Delete_ValidId()
         {
             // Arrange
             var testData = new TestData();
@@ -139,7 +139,7 @@ namespace Eventures.UnitTests
         }
 
         [Test]
-        public void Test_DeleteInvalid()
+        public void Test_Delete_InvalidId()
         {
             // Arrange
             var testData = new TestData();
