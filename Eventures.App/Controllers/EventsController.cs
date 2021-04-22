@@ -1,5 +1,4 @@
 ﻿using Eventures.App.Data;
-using Eventures.App.Domain;
 using Eventures.App.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

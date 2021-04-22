@@ -1,12 +1,10 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore;
-
-using Eventures.App.Data;
-using Eventures.App.Domain;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Eventures.App.Data;
 
 namespace Eventures.UnitTests
 {
