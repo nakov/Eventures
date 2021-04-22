@@ -1,11 +1,13 @@
-﻿using Eventures.App.Data;
-using Eventures.App.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Eventures.App.Data;
+using Eventures.App.Models;
+using System;
 
 namespace Eventures.App.Controllers
 {
@@ -21,24 +23,25 @@ namespace Eventures.App.Controllers
 
         public IActionResult All()
         {
-            List<EventAllViewModel> events = dbContext.Events
-                .Select(eventFromDb => new EventAllViewModel
-                {
-                    Name = eventFromDb.Name,
-                    Place = eventFromDb.Place,
-                    Start = eventFromDb.Start.ToString("dd-MMM-yyyy HH:mm", CultureInfo.InvariantCulture),
-                    End = eventFromDb.End.ToString("dd-MMM-yyyy HH:mm", 
-                        CultureInfo.InvariantCulture),
-                    Owner = eventFromDb.Owner.UserName
-                })
+            List<EventViewModel> events = dbContext.Events
+                .Include(e => e.Owner)
+                .Select(e => CreateEventViewModel(e))
                 .ToList();
-
             return this.View(events);
         }
 
         public IActionResult Create()
         {
-            return this.View();
+            EventCreateBindingModel model = new EventCreateBindingModel()
+            {
+                Name = "New Event",
+                Place = "Some Place",
+                Start = DateTime.Now.Date.AddDays(7).AddHours(10),
+                End = DateTime.Now.Date.AddDays(7).AddHours(18),
+                PricePerTicket = 10,
+                TotalTickets = 100
+            };
+            return this.View(model);
         }
 
         [HttpPost]
@@ -57,7 +60,6 @@ namespace Eventures.App.Controllers
                     PricePerTicket = bindingModel.PricePerTicket,
                     OwnerId = currentUserId
                 };
-
                 dbContext.Events.Add(eventForDb);
                 dbContext.SaveChanges();
 
@@ -65,6 +67,39 @@ namespace Eventures.App.Controllers
             }
 
             return this.View();
+        }
+
+        public IActionResult Delete(int id)
+        {
+            EventViewModel ev = dbContext.Events
+                .Where(e => e.Id == id)
+                .Select(e => CreateEventViewModel(e))
+                .FirstOrDefault();
+            return this.View(ev);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(EventViewModel eventModel)
+        {
+            Event ev = dbContext.Events
+                .Where(e => e.Id == eventModel.Id)
+                .FirstOrDefault();
+            dbContext.Events.Remove(ev);
+            dbContext.SaveChanges();
+            return this.RedirectToAction("All");
+        }
+
+        private static EventViewModel CreateEventViewModel(Event ev)
+        {
+            return new EventViewModel
+            {
+                Id = ev.Id,
+                Name = ev.Name,
+                Place = ev.Place,
+                Start = ev.Start.ToString("dd-MMM-yyyy HH:mm", CultureInfo.InvariantCulture),
+                End = ev.End.ToString("dd-MMM-yyyy HH:mm", CultureInfo.InvariantCulture),
+                Owner = ev.Owner?.UserName
+            };
         }
     }
 }

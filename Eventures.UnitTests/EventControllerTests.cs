@@ -24,7 +24,7 @@ namespace Eventures.UnitTests
 
             // Assert
             var viewResult = result as ViewResult;
-            var model = viewResult.Model as List<EventAllViewModel>;
+            var model = viewResult.Model as List<EventViewModel>;
 
             Assert.AreEqual(2, model.Count);
             Assert.AreEqual("Softuniada 2021", model[0].Name);
