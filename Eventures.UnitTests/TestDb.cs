@@ -8,16 +8,16 @@ using Microsoft.AspNetCore.Http;
 
 using Eventures.App.Data;
 
-namespace Eventures.IntegrationTests
+namespace Eventures.UnitTests
 {
-    public class TestData
+    public class TestDb
     {
         public ApplicationDbContext DbContext { get; private set; }
         public EventuresUser UserMaria { get; private set; }
         public Event EventSoftuniada { get; private set; }
         public Event EventOpenFest { get; private set; }
 
-        public TestData()
+        public TestDb()
         {
             // Create an in-memory database for testing
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -30,7 +30,7 @@ namespace Eventures.IntegrationTests
                 UserName = "maria",
                 Email = "maria@gmail.com",
                 FirstName = "Maria",
-                LastName = "Green",
+                LastName = "Green"
             };
             DbContext.Add(this.UserMaria);
             this.EventSoftuniada = new Event()

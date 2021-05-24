@@ -16,8 +16,8 @@ namespace Eventures.UnitTests
         public void Test_All()
         {
             // Arrange
-            var testData = new TestData();
-            var controller = new EventsController(testData.DbContext);
+            var testDb = new TestDb();
+            var controller = new EventsController(testDb.DbContext);
 
             // Act
             var result = controller.All();
@@ -29,16 +29,16 @@ namespace Eventures.UnitTests
             var model = viewResult.Model as List<EventViewModel>;
             Assert.IsNotNull(model);
             Assert.AreEqual(2, model.Count);
-            Assert.AreEqual(testData.EventSoftuniada.Name, model[0].Name);
-            Assert.AreEqual(testData.EventOpenFest.Name, model[1].Name);
+            Assert.AreEqual(testDb.EventSoftuniada.Name, model[0].Name);
+            Assert.AreEqual(testDb.EventOpenFest.Name, model[1].Name);
         }
 
         [Test]
         public void Test_Create()
         {
             // Arrange
-            var testData = new TestData();
-            var controller = new EventsController(testData.DbContext);
+            var testDb = new TestDb();
+            var controller = new EventsController(testDb.DbContext);
 
             // Act
             var result = controller.Create();
@@ -54,9 +54,9 @@ namespace Eventures.UnitTests
         public void Test_Create_PostValidData()
         {
             // Arrange
-            var testData = new TestData();
-            var controller = new EventsController(testData.DbContext);
-            TestData.AssignCurrentUserForController(controller, testData.UserMaria);
+            var testDb = new TestDb();
+            var controller = new EventsController(testDb.DbContext);
+            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
             var newEventData = new EventCreateBindingModel()
             {
                 Name = "New Event " + DateTime.Now.Ticks,
@@ -66,7 +66,7 @@ namespace Eventures.UnitTests
                 TotalTickets = 500,
                 PricePerTicket = 20
             };
-            int eventsCountBefore = testData.DbContext.Events.Count();
+            int eventsCountBefore = testDb.DbContext.Events.Count();
 
             // Act
             var result = controller.Create(newEventData);
@@ -75,11 +75,11 @@ namespace Eventures.UnitTests
             var redirectResult = result as RedirectToActionResult;
             Assert.AreEqual("All", redirectResult.ActionName);
 
-            int eventsCountAfter = testData.DbContext.Events.Count();
+            int eventsCountAfter = testDb.DbContext.Events.Count();
             Assert.That(eventsCountAfter == eventsCountBefore + 1);
 
             var newEventFromDb =
-                testData.DbContext.Events.FirstOrDefault(e => e.Name == newEventData.Name);
+                testDb.DbContext.Events.FirstOrDefault(e => e.Name == newEventData.Name);
             Assert.IsTrue(newEventFromDb.Id > 0);
             Assert.AreEqual(newEventData.Place, newEventFromDb.Place);
             Assert.AreEqual(newEventData.Start, newEventFromDb.Start);
@@ -92,9 +92,9 @@ namespace Eventures.UnitTests
         public void Test_Create_PostInvalidData()
         {
             // Arrange
-            var testData = new TestData();
-            var controller = new EventsController(testData.DbContext);
-            TestData.AssignCurrentUserForController(controller, testData.UserMaria);
+            var testDb = new TestDb();
+            var controller = new EventsController(testDb.DbContext);
+            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
             var newEventData = new EventCreateBindingModel()
             {
                 Name = null,
@@ -105,7 +105,7 @@ namespace Eventures.UnitTests
                 PricePerTicket = 20
             };
             controller.ModelState.AddModelError("Name", "The Name field is required");
-            int eventsCountBefore = testData.DbContext.Events.Count();
+            int eventsCountBefore = testDb.DbContext.Events.Count();
 
             // Act
             var result = controller.Create(newEventData);
@@ -114,7 +114,7 @@ namespace Eventures.UnitTests
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
             
-            int eventsCountAfter = testData.DbContext.Events.Count();
+            int eventsCountAfter = testDb.DbContext.Events.Count();
             Assert.That(eventsCountAfter == eventsCountBefore);
         }
 
@@ -122,8 +122,8 @@ namespace Eventures.UnitTests
         public void Test_Delete_ValidId()
         {
             // Arrange
-            var testData = new TestData();
-            var controller = new EventsController(testData.DbContext);
+            var testDb = new TestDb();
+            var controller = new EventsController(testDb.DbContext);
 
             // Act
             var result = controller.Delete(1);
@@ -134,16 +134,16 @@ namespace Eventures.UnitTests
             var model = viewResult.Model as EventViewModel;
             Assert.IsNotNull(model);
             Assert.That(model.Id == 1);
-            Assert.That(model.Name == testData.EventSoftuniada.Name);
-            Assert.That(model.Place == testData.EventSoftuniada.Place);
+            Assert.That(model.Name == testDb.EventSoftuniada.Name);
+            Assert.That(model.Place == testDb.EventSoftuniada.Place);
         }
 
         [Test]
         public void Test_Delete_InvalidId()
         {
             // Arrange
-            var testData = new TestData();
-            var controller = new EventsController(testData.DbContext);
+            var testDb = new TestDb();
+            var controller = new EventsController(testDb.DbContext);
 
             // Act
             var result = controller.Delete(-1);
@@ -159,13 +159,13 @@ namespace Eventures.UnitTests
         public void Test_Delete_PostValidData()
         {
             // Arrange
-            var testData = new TestData();
-            var controller = new EventsController(testData.DbContext);
+            var testDb = new TestDb();
+            var controller = new EventsController(testDb.DbContext);
             EventViewModel model = new EventViewModel()
             {
                 Id = 1
             };
-            int eventsCountBefore = testData.DbContext.Events.Count();
+            int eventsCountBefore = testDb.DbContext.Events.Count();
 
             // Act
             var result = controller.Delete(model);
@@ -173,9 +173,9 @@ namespace Eventures.UnitTests
             // Assert
             var redirectResult = result as RedirectToActionResult;
             Assert.AreEqual("All", redirectResult.ActionName);
-            int eventsCountAfter = testData.DbContext.Events.Count();
+            int eventsCountAfter = testDb.DbContext.Events.Count();
             Assert.That(eventsCountAfter == eventsCountBefore - 1);
-            var deletedEvent = testData.DbContext.Events.Find(model.Id);
+            var deletedEvent = testDb.DbContext.Events.Find(model.Id);
             Assert.IsNull(deletedEvent);
         }
 
@@ -183,13 +183,13 @@ namespace Eventures.UnitTests
         public void Test_Delete_PostInvalidData()
         {
             // Arrange
-            var testData = new TestData();
-            var controller = new EventsController(testData.DbContext);
+            var testDb = new TestDb();
+            var controller = new EventsController(testDb.DbContext);
             EventViewModel model = new EventViewModel()
             {
                 Id = -1
             };
-            int eventsCountBefore = testData.DbContext.Events.Count();
+            int eventsCountBefore = testDb.DbContext.Events.Count();
 
             // Act
             var result = controller.Delete(model);
@@ -199,7 +199,7 @@ namespace Eventures.UnitTests
             Assert.IsNotNull(viewResult);
             var resultModel = viewResult.Model as EventViewModel;
             Assert.IsNull(resultModel);
-            int eventsCountAfter = testData.DbContext.Events.Count();
+            int eventsCountAfter = testDb.DbContext.Events.Count();
             Assert.That(eventsCountAfter == eventsCountBefore);
         }
     }

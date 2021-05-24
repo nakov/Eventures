@@ -27,9 +27,6 @@ namespace Eventures.App
             services.AddIdentity<EventuresUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-            services.AddDatabaseDeveloperPageExceptionFilter();
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -39,6 +36,9 @@ namespace Eventures.App
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredUniqueChars = 0;
             });
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddDatabaseDeveloperPageExceptionFilter();
             services.ConfigureApplicationCookie(options => 
                 options.LoginPath = "/Identity/Account/LogIn");
         }
