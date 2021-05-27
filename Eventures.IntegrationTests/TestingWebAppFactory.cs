@@ -6,16 +6,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Eventures.App;
 using Eventures.App.Data;
+using Eventures.UnitTests;
 
 namespace Eventures.IntegrationTests
 {
     public class TestingWebAppFactory : WebApplicationFactory<Startup>
     {
-        private ApplicationDbContext dbContext;
+        private TestDb testDb;
 
-        public TestingWebAppFactory(ApplicationDbContext dbContext)
+        public TestingWebAppFactory(TestDb testDb)
         {
-            this.dbContext = dbContext;
+            this.testDb = testDb;
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -25,7 +26,8 @@ namespace Eventures.IntegrationTests
                 var oldDbContext = services.SingleOrDefault(
                     d => d.ServiceType == typeof(ApplicationDbContext));
                 services.Remove(oldDbContext);
-                services.AddScoped<ApplicationDbContext>(provider => this.dbContext);
+                services.AddScoped<ApplicationDbContext>(
+                    provider => this.testDb.CreateDbContext());
             });
         }
     }

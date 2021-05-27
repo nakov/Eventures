@@ -7,22 +7,39 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
 using Eventures.App.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Eventures.UnitTests
 {
     public class TestDb
     {
-        public ApplicationDbContext DbContext { get; private set; }
         public EventuresUser UserMaria { get; private set; }
         public Event EventSoftuniada { get; private set; }
         public Event EventOpenFest { get; private set; }
+        private string uniqueDbName;
+
+        public ApplicationDbContext CreateDbContext()
+        {
+            // Use in-memory database for testing
+            // Attach the same DB every time, unless new TestDb() is called
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseInMemoryDatabase(uniqueDbName);
+            var dbContext = new ApplicationDbContext(optionsBuilder.Options);
+            return dbContext;
+        }
 
         public TestDb()
         {
-            // Create an in-memory database for testing
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseInMemoryDatabase("Eventures-MemoryDb-" + DateTime.Now.Ticks);
-            DbContext = new ApplicationDbContext(optionsBuilder.Options);
+            this.uniqueDbName = "Eventures-MemoryDb-" + DateTime.Now.Ticks;
+            this.SeedDatabase();
+        }
+
+        public void SeedDatabase()
+        {
+            var dbContext = this.CreateDbContext();
+            var userStore = new UserStore<EventuresUser>(dbContext);
+            var userManager = new UserManager<EventuresUser>(userStore, null, new PasswordHasher<EventuresUser>(), null, null, null, null, null, null);
 
             this.UserMaria = new EventuresUser()
             {
@@ -30,9 +47,10 @@ namespace Eventures.UnitTests
                 UserName = "maria",
                 Email = "maria@gmail.com",
                 FirstName = "Maria",
-                LastName = "Green"
+                LastName = "Green",
             };
-            DbContext.Add(this.UserMaria);
+            userManager.CreateAsync(this.UserMaria, this.UserMaria.UserName).Wait();
+
             this.EventSoftuniada = new Event()
             {
                 Id = 1,
@@ -44,7 +62,8 @@ namespace Eventures.UnitTests
                 PricePerTicket = 12.00m,
                 OwnerId = UserMaria.Id
             };
-            DbContext.Add(this.EventSoftuniada);
+            dbContext.Add(this.EventSoftuniada);
+
             this.EventOpenFest = new Event()
             {
                 Id = 2,
@@ -56,8 +75,9 @@ namespace Eventures.UnitTests
                 PricePerTicket = 0,
                 OwnerId = UserMaria.Id
             };
-            DbContext.Add(this.EventOpenFest);
-            DbContext.SaveChanges();
+            dbContext.Add(this.EventOpenFest);
+
+            dbContext.SaveChanges();
         }
 
         public static void AssignCurrentUserForController(

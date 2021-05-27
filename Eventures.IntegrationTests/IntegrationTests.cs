@@ -19,7 +19,7 @@ namespace Eventures.IntegrationTests
         public void OneTimeSetUp()
         {
             this.testDb = new TestDb();
-            var testingWebAppFactory = new TestingWebAppFactory(testDb.DbContext);
+            var testingWebAppFactory = new TestingWebAppFactory(testDb);
             this.httpClient = testingWebAppFactory.CreateClient();
         }
 
@@ -58,6 +58,33 @@ namespace Eventures.IntegrationTests
         [Test]
         public async Task Test_UserLogin()
         {
+            // Load the login form
+            var loginFormResponse = 
+                await this.httpClient.GetAsync("/Identity/Account/Login");
+            var loginFormResponseBody = 
+                await loginFormResponse.Content.ReadAsStringAsync();
+            Assert.AreEqual(HttpStatusCode.OK, loginFormResponse.StatusCode);
+            Assert.That(loginFormResponseBody, Does.Contain("<h1>Log in</h1>"));
+
+            // Fill the login form and submit it
+            var antiForgeryToken = ExtractAntiForgeryToken(loginFormResponseBody);
+            var postContent = new FormUrlEncodedContent(
+                new Dictionary<string, string>
+                {
+                    { "Input.Username", this.testDb.UserMaria.UserName },
+                    { "Input.Password", this.testDb.UserMaria.UserName },
+                    { "__RequestVerificationToken", antiForgeryToken }
+                });
+            var postRequest = new HttpRequestMessage(
+                HttpMethod.Post, "/Identity/Account/Login");
+            postRequest.Content = postContent;
+            var postResponse = await httpClient.SendAsync(postRequest);
+            var responseBody = await postResponse.Content.ReadAsStringAsync();
+
+            Assert.AreEqual(HttpStatusCode.Redirect, postResponse.StatusCode);
+            Assert.AreEqual(postResponse.Headers.Location, "/");
+
+            // Open the redirected page and check for logged-in user
         }
 
         [Test]
