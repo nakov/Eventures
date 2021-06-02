@@ -10,6 +10,16 @@ using Eventures.App.Models;
 
 namespace Eventures.UnitTests
 {
+
+
+
+
+    // TODO: check why unit tests are so slow!
+    // Slower than the integration tests
+
+
+
+
     public class EventControllerTests
     {
         [Test]
@@ -107,17 +117,19 @@ namespace Eventures.UnitTests
                 TotalTickets = 500,
                 PricePerTicket = 20
             };
-            controller.ModelState.AddModelError("Name", "The Name field is required");
-            int eventsCountBefore = dbContext.Events.Count();
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
 
-            // Act
+            int eventsCountBefore = dbContext.Events.Count();
+
+            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            controller.ModelState.AddModelError("Name", "The Name field is required");
+
+            //// Act
             var result = controller.Create(newEventData);
 
-            // Assert
+            //// Assert
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
-            
+
             int eventsCountAfter = dbContext.Events.Count();
             Assert.That(eventsCountAfter == eventsCountBefore);
         }

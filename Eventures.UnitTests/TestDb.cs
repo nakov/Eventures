@@ -25,13 +25,14 @@ namespace Eventures.UnitTests
             // Attach the same DB every time, unless new TestDb() is called
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseInMemoryDatabase(uniqueDbName);
+            //optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=" + uniqueDbName);
             var dbContext = new ApplicationDbContext(optionsBuilder.Options);
             return dbContext;
         }
 
         public TestDb()
         {
-            this.uniqueDbName = "Eventures-MemoryDb-" + DateTime.Now.Ticks;
+            this.uniqueDbName = "Eventures-TestDb-" + DateTime.Now.Ticks;
             this.SeedDatabase();
         }
 
@@ -39,11 +40,13 @@ namespace Eventures.UnitTests
         {
             var dbContext = this.CreateDbContext();
             var userStore = new UserStore<EventuresUser>(dbContext);
-            var userManager = new UserManager<EventuresUser>(userStore, null, new PasswordHasher<EventuresUser>(), null, null, null, null, null, null);
+            var hasher = new PasswordHasher<EventuresUser>();
+            var normalizer = new UpperInvariantLookupNormalizer();
+            var userManager = new UserManager<EventuresUser>(
+                userStore, null, hasher, null, null, normalizer, null, null, null);
 
             this.UserMaria = new EventuresUser()
             {
-                Id = "25ab6879-32b1-4b44-b0f1-49e85a6418c9",
                 UserName = "maria",
                 Email = "maria@gmail.com",
                 FirstName = "Maria",
@@ -53,7 +56,6 @@ namespace Eventures.UnitTests
 
             this.EventSoftuniada = new Event()
             {
-                Id = 1,
                 Name = "Softuniada 2021",
                 Place = "Sofia",
                 Start = DateTime.Now.AddMonths(3),
@@ -66,7 +68,6 @@ namespace Eventures.UnitTests
 
             this.EventOpenFest = new Event()
             {
-                Id = 2,
                 Name = "OpenFest 2021",
                 Place = "Online",
                 Start = DateTime.Now.AddDays(200),
