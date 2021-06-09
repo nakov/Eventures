@@ -1,11 +1,15 @@
-﻿using Eventures.UnitTests;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+using NUnit.Framework;
+
+using Eventures.UnitTests;
+using Microsoft.Net.Http.Headers;
 
 namespace Eventures.IntegrationTests
 {
@@ -51,9 +55,16 @@ namespace Eventures.IntegrationTests
                 "/Identity/Account/Register", postContent);
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
             var postResponseBody = await postResponse.Content.ReadAsStringAsync();
+            
             // Assert that the client was redirected to the Home page
             Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(postResponseBody, Does.Contain($"Welcome, {username}"));
+
+            //// Assert that the ASP.NET Identity cookie was set correctly by the server
+            //postResponse.Headers.TryGetValues("Set-Cookie", out var cookiesSetByRequest);
+            //var aspNetIdentityCookie = cookiesSetByRequest.FirstOrDefault(
+            //    c => c.Contains(".AspNetCore.Identity.Application"));
+            //Assert.NotNull(aspNetIdentityCookie);
         }
 
         [Test]
@@ -67,7 +78,7 @@ namespace Eventures.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, loginFormResponse.StatusCode);
             Assert.That(loginFormResponseBody.Contains("<h1>Log in</h1>"));
 
-            // Fill the login form and send a post request
+            // Fill the login form and send a POST request
             string username = this.testDb.UserMaria.UserName;
             string password = this.testDb.UserMaria.UserName;
             var antiForgeryToken = ExtractAntiForgeryToken(loginFormResponseBody);
@@ -79,15 +90,23 @@ namespace Eventures.IntegrationTests
                     { "Input.RememberMe", "false" },
                     { "__RequestVerificationToken", antiForgeryToken }
                 });
-
             var postResponse = await this.httpClient.PostAsync(
                 "/Identity/Account/Login", postContent);
 
+            // Assert the login operation succeeded
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
             var responseBody = await postResponse.Content.ReadAsStringAsync();
+
             // Assert that the client was redirected to the Home page
             Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(responseBody.Contains($"Welcome, {username}"));
+
+            // Assert that the ASP.NET Identity cookie was set correctly by the server
+            //var requestHeaders = this.httpClient.DefaultRequestHeaders;
+            //var cookies = postResponse.Headers.GetValues(HeaderNames.Cookie);
+            //var aspNetIdentityCookie = cookies.FirstOrDefault(
+            //    c => c.Contains(".AspNetCore.Identity.Application"));
+            //Assert.NotNull(aspNetIdentityCookie);
         }
 
         [Test]

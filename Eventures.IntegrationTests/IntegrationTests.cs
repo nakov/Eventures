@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 using Eventures.UnitTests;
 using Eventures.App.Data;
+using System.Linq;
 
 namespace Eventures.IntegrationTests
 {
@@ -30,28 +31,27 @@ namespace Eventures.IntegrationTests
         [Test]
         public async Task Test_UserLogout()
         {
-
-
-
-
-
-
-
-            // TODO: use logout with CSRF token
-            // POST /Identity/Account/Logout?returnUrl=%2F 
-
-
-
-
-
-
-
-
-            // Always redirected to Log Out page when tested (logged and not-logged in users)
+            // Go to the "Logout" page
             var response = await this.httpClient.GetAsync(
-                "/Identity/Account/Logout");
+                 "/Identity/Account/Logout");
             var responseBody = await response.Content.ReadAsStringAsync();
             Assert.That(responseBody.Contains("Log out"));
+            
+            var antiForgeryToken = ExtractAntiForgeryToken(responseBody);
+            var postContent = new FormUrlEncodedContent(
+                new Dictionary<string, string>
+                {
+                    { "__RequestVerificationToken", antiForgeryToken }
+                });
+
+            // Send a post request to log out client
+            var postResponse = await this.httpClient.PostAsync(
+                 "/Identity/Account/Logout?returnUrl=%2F", postContent);
+            var postResponseBody = await postResponse.Content.ReadAsStringAsync();
+
+            // Assert that the client was redirected to the Home page
+            Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
+            Assert.That(postResponseBody.Contains("<h1>Eventures: Events and Tickets</h1>"));
         }
 
         [Test]
@@ -119,6 +119,10 @@ namespace Eventures.IntegrationTests
             var postResponseBody = await postResponse.Content.ReadAsStringAsync();
             Assert.That(postResponseBody, Does.Contain(eventName));
             Assert.That(postResponseBody, Does.Contain(eventPlace));
+
+            var lastEvent = this.testDb.CreateDbContext().Events.Last();
+            Assert.AreEqual(lastEvent.Name, eventName);
+            Assert.AreEqual(lastEvent.Place, eventPlace);
         }
 
         [Test]
@@ -127,6 +131,7 @@ namespace Eventures.IntegrationTests
             var response = await this.httpClient.GetAsync("/Events/Create");
             var responseBody = await response.Content.ReadAsStringAsync();
             Assert.That(responseBody.Contains("<h1>Create New Event</h1>"));
+            var eventsCountBefore = this.testDb.CreateDbContext().Events.Count();
 
             // Send invalid event data: name == empty string
             var postContent = new FormUrlEncodedContent(
@@ -139,14 +144,18 @@ namespace Eventures.IntegrationTests
                     { "TotalTickets", "120"},
                     { "PricePerTicket", "20"}
                 });
-
-            // Page should not be redirected and an error message should appear
             var postResponse = await this.httpClient.PostAsync(
                 "/Events/Create", postContent);
+
+            // Page should not be redirected and an error message should appear
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
             var postResponseBody = await postResponse.Content.ReadAsStringAsync();
             Assert.AreEqual("/Events/Create", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(postResponseBody, Does.Contain($"The Name field is required."));
+
+            // Events in the database should be unchanged
+            var eventsCountAfter = this.testDb.CreateDbContext().Events.Count();
+            Assert.AreEqual(eventsCountBefore, eventsCountAfter);
         }
 
         [Test]
@@ -185,14 +194,15 @@ namespace Eventures.IntegrationTests
                 {
                     { "__RequestVerificationToken", antiForgeryToken }
                 });
-
             var postResponse = await this.httpClient.PostAsync(
                 $"/Events/Delete/{newEvent.Id}", postContent);
             var postResponseBody = await postResponse.Content.ReadAsStringAsync();
 
-            // You should be redirected to "All Events" page and event should not exist
+            // You should be redirected to "All Events" page and the deleted event should not exist
             Assert.AreEqual("/Events/All", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(!postResponseBody.Contains(newEvent.Name));
+            
+            // Asert that the event was deleted from the database
             dbContext = this.testDb.CreateDbContext();
             var deletedEvent = dbContext.Events.Find(newEvent.Id);
             Assert.That(deletedEvent == null);
@@ -224,6 +234,7 @@ namespace Eventures.IntegrationTests
 
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
             var responseBody = await postResponse.Content.ReadAsStringAsync();
+
             // Assert that the client was redirected to the Home page
             Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(responseBody.Contains($"Welcome, {username}"));

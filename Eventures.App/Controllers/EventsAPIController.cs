@@ -87,7 +87,7 @@ namespace Eventures.App.Controllers
             return NoContent();
         }
 
-        // Allow authenticated event owner only
+        // Allow authenticated users only
         [HttpDelete("{id}")] // DELETE: api/eventsapi/1
         public ActionResult<Event> Delete(int id)
         {
@@ -96,9 +96,6 @@ namespace Eventures.App.Controllers
             {
                 return NotFound();
             };
-
-            // TODO: check event owner
-
             dbContext.Events.Remove(ev);
             dbContext.SaveChanges();
             return ev;

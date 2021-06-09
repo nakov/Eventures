@@ -1,35 +1,33 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
 using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
-
 using Eventures.App.Controllers;
 using Eventures.App.Models;
+using Eventures.App.Data;
 
 namespace Eventures.UnitTests
 {
-
-
-
-
-    // TODO: check why unit tests are so slow!
-    // Slower than the integration tests
-
-
-
-
     public class EventControllerTests
     {
+        TestDb testDb;
+        ApplicationDbContext dbContext;
+        EventsController controller;
+
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            testDb = new TestDb();
+            dbContext = testDb.CreateDbContext();
+            controller = new EventsController(dbContext);
+        }
+
         [Test]
         public void Test_All()
         {
             // Arrange
-            var testDb = new TestDb();
-            var dbContext = testDb.CreateDbContext();
-            var controller = new EventsController(dbContext);
-
+            
             // Act
             var result = controller.All();
 
@@ -48,10 +46,7 @@ namespace Eventures.UnitTests
         public void Test_Create()
         {
             // Arrange
-            var testDb = new TestDb();
-            var dbContext = testDb.CreateDbContext();
-            var controller = new EventsController(dbContext);
-
+           
             // Act
             var result = controller.Create();
 
@@ -66,9 +61,6 @@ namespace Eventures.UnitTests
         public void Test_Create_PostValidData()
         {
             // Arrange
-            var testDb = new TestDb();
-            var dbContext = testDb.CreateDbContext();
-            var controller = new EventsController(dbContext);
             var newEventData = new EventCreateBindingModel()
             {
                 Name = "New Event " + DateTime.Now.Ticks,
@@ -105,9 +97,6 @@ namespace Eventures.UnitTests
         public void Test_Create_PostInvalidData()
         {
             // Arrange
-            var testDb = new TestDb();
-            var dbContext = testDb.CreateDbContext();
-            var controller = new EventsController(dbContext);
             var newEventData = new EventCreateBindingModel()
             {
                 Name = null,
@@ -123,10 +112,10 @@ namespace Eventures.UnitTests
             TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
             controller.ModelState.AddModelError("Name", "The Name field is required");
 
-            //// Act
+            // Act
             var result = controller.Create(newEventData);
 
-            //// Assert
+            // Assert
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
 
@@ -137,32 +126,38 @@ namespace Eventures.UnitTests
         [Test]
         public void Test_Delete_ValidId()
         {
-            // Arrange
-            var testDb = new TestDb();
-            var dbContext = testDb.CreateDbContext();
-            var controller = new EventsController(dbContext);
+            // Arrange: create a new event in the DB for deleting
+            var newEvent = new Event()
+            {
+                Name = "Beach Party" + DateTime.Now.Ticks,
+                Place = "Ibiza",
+                Start = DateTime.Now.AddMonths(3),
+                End = DateTime.Now.AddMonths(3),
+                TotalTickets = 20,
+                PricePerTicket = 120.00m,
+                OwnerId = testDb.UserMaria.Id
+            };
+            dbContext.Add(newEvent);
+            dbContext.SaveChanges();
 
             // Act
-            var result = controller.Delete(1);
+            var result = controller.Delete(newEvent.Id);
 
             // Assert
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
             var model = viewResult.Model as EventViewModel;
             Assert.IsNotNull(model);
-            Assert.That(model.Id == 1);
-            Assert.That(model.Name == testDb.EventSoftuniada.Name);
-            Assert.That(model.Place == testDb.EventSoftuniada.Place);
+            Assert.That(model.Id == newEvent.Id);
+            Assert.That(model.Name == newEvent.Name);
+            Assert.That(model.Place == newEvent.Place);
         }
 
         [Test]
         public void Test_Delete_InvalidId()
         {
             // Arrange
-            var testDb = new TestDb();
-            var dbContext = testDb.CreateDbContext();
-            var controller = new EventsController(dbContext);
-
+         
             // Act
             var result = controller.Delete(-1);
 
@@ -176,14 +171,25 @@ namespace Eventures.UnitTests
         [Test]
         public void Test_Delete_PostValidData()
         {
-            // Arrange
-            var testDb = new TestDb();
-            var dbContext = testDb.CreateDbContext();
-            var controller = new EventsController(dbContext);
+            // Arrange: create a new event in the DB for deleting
+            var newEvent = new Event()
+            {
+                Name = "Beach Party" + DateTime.Now.Ticks,
+                Place = "Ibiza",
+                Start = DateTime.Now.AddMonths(3),
+                End = DateTime.Now.AddMonths(3),
+                TotalTickets = 20,
+                PricePerTicket = 120.00m,
+                OwnerId = testDb.UserMaria.Id
+            };
+            dbContext.Add(newEvent);
+            dbContext.SaveChanges();
+
             EventViewModel model = new EventViewModel()
             {
-                Id = 1
+                Id = newEvent.Id
             };
+
             int eventsCountBefore = dbContext.Events.Count();
 
             // Act
@@ -202,9 +208,6 @@ namespace Eventures.UnitTests
         public void Test_Delete_PostInvalidData()
         {
             // Arrange
-            var testDb = new TestDb();
-            var dbContext = testDb.CreateDbContext();
-            var controller = new EventsController(dbContext);
             EventViewModel model = new EventViewModel()
             {
                 Id = -1
