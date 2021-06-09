@@ -1,0 +1,34 @@
+TODO:
+
+0) At the home page, anonymous users should see the #count of events.
+
+1) GET https://localhost:44318/api/events -> return 
+"owner": {
+      "firstName": "Mincho",
+      "lastName": "Praznikov",
+      "id": "0631c18d-b61f-4a77-81f3-b069cafa9571",
+      "userName": "mincho",
+      "email": "mincho@abv.bg"
+}
+map entity User -> UserViewModel
+
+2) In the Web App ->
+  users should be able to delete only their own events
+
+3) In the Web App -> [Delete] shudl be available only for the event owner
+  - Also check in the controllers
+
+4) In the Web App -> implement [Edit] button + edit form (similar to create form, but for editing)
+
+5) Merge API with the main app
+
+6) Fix the unit tests for the Web App
+
+7) Add unit tests for the Web API
+
+8) Add API help page (auto-generated): GET /api -> return JSON endpoints
+Example: https://shorturl.nakov.repl.co/api
+Web API Help Page: https://docs.microsoft.com/en-us/aspnet/web-api/overview/getting-started-with-aspnet-web-api/creating-api-help-pages
+
+9) Add Selenium tests
+
