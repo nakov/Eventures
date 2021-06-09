@@ -51,7 +51,10 @@
                 @Html.DisplayFor(modelItem => item.Owner)
             </td>
             <td>
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @if (this.User.Identity.Name == item.Owner)
+                {
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                }
             </td>
         </tr>
     }

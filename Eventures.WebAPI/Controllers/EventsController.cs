@@ -1,39 +1,44 @@
 ﻿using Eventures.App.Data;
 using Eventures.App.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Eventures.App.Controllers
+namespace Eventures.WebAPI.Controllers
 {
-    [Route("api/events")]
     [ApiController]
-    public class EventsAPIController : ControllerBase
+    [Route("api/[controller]")]
+    public class EventsController : ControllerBase
     {
         private readonly ApplicationDbContext dbContext;
 
-        public EventsAPIController(ApplicationDbContext context)
+        public EventsController(ApplicationDbContext context)
         {
             this.dbContext = context;
         }
 
-        // Allow anonymous
-        [HttpGet] // GET: /api/eventsapi
-        public ActionResult<IEnumerable<Event>> GetEventsCount() 
+        [HttpGet("count")] // GET: /api/events/count
+        public int GetEventsCount()
         {
-            return this.dbContext.Events.ToList();
+            return this.dbContext.Events.ToList().Count();
         }
 
-        // Allow authenticated users only
-        [HttpGet] // GET: /api/eventsapi
+        [Authorize]
+        [HttpGet] // GET: /api/events
         public ActionResult<IEnumerable<Event>> GetEvents()
         {
+            var events = this.dbContext.Events.ToList();
+            foreach (var ev in events)
+            {
+                ev.Owner = this.dbContext.Users.Find(ev.OwnerId);
+            }
             return this.dbContext.Events.ToList();
         }
 
-        // Allow authenticated users only
-        [HttpGet("{id}")] // GET: /api/eventsapi/1
+        [Authorize]
+        [HttpGet("{id}")] // GET: /api/events/1
         public ActionResult<Event> GetEventById(int id)
         {
             var ev = this.dbContext.Events.Find(id);
@@ -41,14 +46,16 @@ namespace Eventures.App.Controllers
             {
                 return NotFound();
             }
+            ev.Owner = this.dbContext.Users.Find(ev.OwnerId);
             return Ok(ev);
         }
 
-        // Allow authenticated users only
-        [HttpPost] // POST: api/eventsapi
-        public IActionResult Create(EventCreateBindingModel bindingModel)
+        [Authorize]
+        [HttpPost("create")] // POST: api/events/create
+        public IActionResult CreateEvent(EventCreateBindingModel bindingModel)
         {
-            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
+            var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
             Event ev = new Event
             {
                 Name = bindingModel.Name,
@@ -57,7 +64,8 @@ namespace Eventures.App.Controllers
                 End = bindingModel.End,
                 TotalTickets = bindingModel.TotalTickets,
                 PricePerTicket = bindingModel.PricePerTicket,
-                OwnerId = currentUserId
+                Owner = currentUser,
+                OwnerId = currentUser.Id
             };
             dbContext.Events.Add(ev);
             dbContext.SaveChanges();
@@ -65,9 +73,9 @@ namespace Eventures.App.Controllers
             return CreatedAtAction("GetEventById", new { id = ev.Id }, ev);
         }
 
-        // Allow authenticated event owner only
-        [HttpPut("{id}")] // PUT: api/eventsapi/1
-        public IActionResult PutProduct(int id, EventCreateBindingModel eventModel)
+        [Authorize]
+        [HttpPut("{id}")] // PUT: api/events/1
+        public IActionResult PutEvent(int id, EventCreateBindingModel eventModel)
         {
             var ev = dbContext.Events.Find(id);
             if (ev == null)
@@ -75,7 +83,12 @@ namespace Eventures.App.Controllers
                 return NotFound();
             }
 
-            // TODO: check event owner
+            string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
+            var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
+            if(currentUser.Id != ev.OwnerId)
+            {
+                return Unauthorized();
+            }
 
             ev.Name = eventModel.Name;
             ev.Place = eventModel.Place;
@@ -84,11 +97,12 @@ namespace Eventures.App.Controllers
             ev.TotalTickets = eventModel.TotalTickets;
             ev.PricePerTicket = eventModel.PricePerTicket;
             dbContext.SaveChanges();
+
             return NoContent();
         }
 
-        // Allow authenticated users only
-        [HttpDelete("{id}")] // DELETE: api/eventsapi/1
+        [Authorize]
+        [HttpDelete("{id}")] // DELETE: api/events/1
         public ActionResult<Event> Delete(int id)
         {
             Event ev = dbContext.Events.Find(id);
@@ -96,9 +110,17 @@ namespace Eventures.App.Controllers
             {
                 return NotFound();
             };
+
+            string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
+            var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
+            if (currentUser.Id != ev.OwnerId)
+            {
+                return Unauthorized();
+            }
+
             dbContext.Events.Remove(ev);
             dbContext.SaveChanges();
-            return ev;
+            return Ok(ev);
         }
     }
 }
