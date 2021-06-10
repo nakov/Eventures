@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using WebApi.Models;
@@ -105,7 +104,21 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = dbContext.Users.ToList();
+            var users = new List<ApiUserViewModel>();
+
+            var dbUsers = dbContext.Users.ToList();
+            foreach (var dbUser in dbUsers)
+            {
+                var user = new ApiUserViewModel
+                {
+                    Id = dbUser.Id,
+                    FirstName = dbUser.FirstName,
+                    LastName = dbUser.LastName,
+                    Username = dbUser.UserName,
+                    Email = dbUser.Email
+                };
+                users.Add(user);
+            }
             return Ok(users);
         }
     }

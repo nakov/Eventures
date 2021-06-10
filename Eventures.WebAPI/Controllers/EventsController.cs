@@ -1,10 +1,12 @@
 ﻿using Eventures.App.Data;
 using Eventures.App.Models;
+using Eventures.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using WebApi.Models;
 
 namespace Eventures.WebAPI.Controllers
 {
@@ -27,27 +29,66 @@ namespace Eventures.WebAPI.Controllers
 
         [Authorize]
         [HttpGet] // GET: /api/events
-        public ActionResult<IEnumerable<Event>> GetEvents()
+        public ActionResult<IEnumerable<ApiEventViewModel>> GetEvents()
         {
-            var events = this.dbContext.Events.ToList();
-            foreach (var ev in events)
+            var events = new List<ApiEventViewModel>();
+
+            var dbEvents = this.dbContext.Events.ToList();
+            foreach (var ev in dbEvents)
             {
-                ev.Owner = this.dbContext.Users.Find(ev.OwnerId);
+                var owner = this.dbContext.Users.Find(ev.OwnerId);
+                var eventModel = new ApiEventViewModel()
+                {
+                    Id = ev.Id,
+                    Name = ev.Name,
+                    Place = ev.Place,
+                    Start = ev.Start,
+                    End = ev.End,
+                    TotalTickets = ev.TotalTickets,
+                    PricePerTicket = ev.PricePerTicket,
+                    Owner = new ApiUserViewModel()
+                    {
+                        FirstName = owner.FirstName,
+                        LastName = owner.LastName,
+                        Id = owner.Id,
+                        Username = owner.UserName,
+                        Email = owner.Email
+                    }
+                };
+                events.Add(eventModel);
             }
-            return this.dbContext.Events.ToList();
+            return events;
         }
 
         [Authorize]
         [HttpGet("{id}")] // GET: /api/events/1
-        public ActionResult<Event> GetEventById(int id)
+        public ActionResult<ApiEventViewModel> GetEventById(int id)
         {
-            var ev = this.dbContext.Events.Find(id);
-            if (ev == null)
+            var dbEvent = this.dbContext.Events.Find(id);
+            if (dbEvent == null)
             {
                 return NotFound();
             }
-            ev.Owner = this.dbContext.Users.Find(ev.OwnerId);
-            return Ok(ev);
+            var owner = this.dbContext.Users.Find(dbEvent.OwnerId);
+            var eventModel = new ApiEventViewModel()
+            {
+                Id = dbEvent.Id,
+                Name = dbEvent.Name,
+                Place = dbEvent.Place,
+                Start = dbEvent.Start,
+                End = dbEvent.End,
+                TotalTickets = dbEvent.TotalTickets,
+                PricePerTicket = dbEvent.PricePerTicket,
+                Owner = new ApiUserViewModel()
+                {
+                    FirstName = owner.FirstName,
+                    LastName = owner.LastName,
+                    Id = owner.Id,
+                    Username = owner.UserName,
+                    Email = owner.Email
+                }
+            };
+            return Ok(eventModel);
         }
 
         [Authorize]
