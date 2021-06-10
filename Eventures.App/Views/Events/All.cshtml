@@ -28,7 +28,7 @@
                 @Html.DisplayNameFor(model => model.Owner)
             </th>
             <th>
-                Action
+                Actions
             </th>
         </tr>
     </thead>
@@ -54,6 +54,8 @@
                 @if (this.User.Identity.Name == item.Owner)
                 {
                     @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    <span>|</span>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
                 }
             </td>
         </tr>

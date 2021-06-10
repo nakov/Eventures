@@ -93,6 +93,50 @@ namespace Eventures.App.Controllers
             return this.View();
         }
 
+        public IActionResult Edit(int id)
+        {
+            Event ev = dbContext.Events.Find(id);
+            string currentUser = this.User.FindFirstValue(ClaimTypes.Name);
+            if (ev == null || currentUser != this.dbContext.Users.Find(ev.OwnerId).UserName)
+            {
+                return this.View();
+            }
+            EventCreateBindingModel model = new EventCreateBindingModel()
+            {
+                Name = ev.Name,
+                Place = ev.Place,
+                Start = ev.Start,
+                End = ev.End,
+                PricePerTicket = ev.PricePerTicket,
+                TotalTickets = ev.TotalTickets
+            };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, EventCreateBindingModel bindingModel)
+        {
+            Event ev = dbContext.Events.Find(id);
+            if (ev == null)
+            {
+                return this.View();
+            }
+            if (this.ModelState.IsValid)
+            {
+                ev.Name = bindingModel.Name;
+                ev.Place = bindingModel.Place;
+                ev.Start = bindingModel.Start;
+                ev.End = bindingModel.End;
+                ev.TotalTickets = bindingModel.TotalTickets;
+                ev.PricePerTicket = bindingModel.PricePerTicket;
+
+                dbContext.SaveChanges();
+                return this.RedirectToAction("All");
+            }
+
+            return this.View();
+        }
+
         private static EventViewModel CreateEventViewModel(Event ev)
         {
             return new EventViewModel
