@@ -74,9 +74,10 @@ namespace Eventures.App.Controllers
         public IActionResult Delete(int id)
         {
             Event ev = dbContext.Events.Find(id);
-            if (ev != null)
-                return this.View(CreateEventViewModel(ev));
-            return this.View();
+            string currentUser = this.User.FindFirstValue(ClaimTypes.Name);
+            if (ev == null || currentUser != this.dbContext.Users.Find(ev.OwnerId).UserName)
+                return this.View();
+            return this.View(CreateEventViewModel(ev));
         }
 
         [HttpPost]
