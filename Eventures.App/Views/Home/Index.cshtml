@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Eventures.App.Data.Event>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -9,6 +11,8 @@
         <hr class="hr-2 bg-dark" />
         <h3 class="mt-4"><a href="/Identity/Account/Login">Login</a> to start "eventing".</h3>
         <h3 class="mt-4"><a href="/Identity/Account/Register">Register</a> if you don't have an account.</h3>
+        <hr class="hr-2 bg-dark" />
+        <h5 class="mt-4">We already have <b>@Model.Count()</b> events on our Eventures App!</h5>
     </div>
 }
 else
