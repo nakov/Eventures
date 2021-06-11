@@ -3,13 +3,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
-
 using NUnit.Framework;
-
 using Eventures.UnitTests;
 using Eventures.App.Data;
-using System.Linq;
 
 namespace Eventures.IntegrationTests
 {
@@ -159,6 +157,49 @@ namespace Eventures.IntegrationTests
         }
 
         [Test]
+        public async Task Test_DeletePage_DeleteEventOfAnotherUser_ShouldBeUnsuccessful()
+        {
+            // Arrange: create new user, who will have an event
+            var dbContext = this.testDb.CreateDbContext();
+            var user = new EventuresUser()
+            {
+                FirstName = "Test",
+                LastName = "Test",
+                Email = "test@test.bg",
+                UserName = "test"
+            };
+            dbContext.Add(user);
+
+            // Arrange: create a new event in the DB for deleting with the new user as owner
+            var newEvent = new Event()
+            {
+                Name = "Beach Party" + DateTime.Now.Ticks,
+                Place = "Ibiza",
+                Start = DateTime.Now.AddMonths(3),
+                End = DateTime.Now.AddMonths(3),
+                TotalTickets = 20,
+                PricePerTicket = 120.00m,
+                OwnerId = user.Id
+            };
+            dbContext.Add(newEvent);
+
+            dbContext.SaveChanges();
+
+            // Go to "All Events" page and assert the event exists
+            var allresponse = await this.httpClient.GetAsync("/Events/All");
+            var allresponseBody = await allresponse.Content.ReadAsStringAsync();
+            Assert.That(allresponseBody.Contains(newEvent.Name));
+
+            // Load the "Delete Event" page for the new event id
+            var deleteResponse = await this.httpClient.GetAsync(
+               $"/Events/Delete/{newEvent.Id}");
+            var deleteResponseBody = await deleteResponse.Content.ReadAsStringAsync();
+
+            // "Delete Event" page should show "Event not found." message
+            Assert.That(deleteResponseBody.Contains("Event not found."));
+        }
+
+        [Test]
         public async Task Test_EventsPage_DeleteEvent()
         {
             // Arrange: create a new event in the DB for deleting
@@ -206,6 +247,160 @@ namespace Eventures.IntegrationTests
             dbContext = this.testDb.CreateDbContext();
             var deletedEvent = dbContext.Events.Find(newEvent.Id);
             Assert.That(deletedEvent == null);
+        }
+
+        [Test]
+        public async Task Test_EditPage_EditEventOfAnotherUser_ShouldBeUnsuccessful()
+        {
+            // Arrange: create new user, who will have an event
+            var dbContext = this.testDb.CreateDbContext();
+            var user = new EventuresUser()
+            {
+                FirstName = "Test",
+                LastName = "Test",
+                Email = "test@test.bg",
+                UserName = "test"
+            };
+            dbContext.Add(user);
+
+            // Arrange: create a new event in the DB for editing with the new user as owner
+            var newEvent = new Event()
+            {
+                Name = "Beach Party" + DateTime.Now.Ticks,
+                Place = "Ibiza",
+                Start = DateTime.Now.AddMonths(3),
+                End = DateTime.Now.AddMonths(3),
+                TotalTickets = 20,
+                PricePerTicket = 120.00m,
+                OwnerId = user.Id
+            };
+            dbContext.Add(newEvent);
+
+            dbContext.SaveChanges();
+
+            // Go to "All Events" page and assert the event exists
+            var allresponse = await this.httpClient.GetAsync("/Events/All");
+            var allresponseBody = await allresponse.Content.ReadAsStringAsync();
+            Assert.That(allresponseBody.Contains(newEvent.Name));
+
+            // Load the "Edit Event" page for the new event id
+            var editResponse = await this.httpClient.GetAsync(
+               $"/Events/Edit/{newEvent.Id}");
+            var editResponseBody = await editResponse.Content.ReadAsStringAsync();
+
+            // "Edit Event" page should show "Event not found." message
+            Assert.That(editResponseBody.Contains("Event not found."));
+        }
+
+        [Test]
+        public async Task Test_EventsPage_EditEvent_ValidData()
+        {
+            // Arrange: create a new event in the DB for deleting
+            var dbContext = this.testDb.CreateDbContext();
+            var newEvent = new Event()
+            {
+                Name = "Beach Party" + DateTime.Now.Ticks,
+                Place = "Ibiza",
+                Start = DateTime.Now.AddMonths(3),
+                End = DateTime.Now.AddMonths(3),
+                TotalTickets = 20,
+                PricePerTicket = 120.00m,
+                OwnerId = this.testDb.UserMaria.Id
+            };
+            dbContext.Add(newEvent);
+            dbContext.SaveChanges();
+
+            // Go to "All Events" page and assert the event exists
+            var allresponse = await this.httpClient.GetAsync("/Events/All");
+            var allresponseBody = await allresponse.Content.ReadAsStringAsync();
+            Assert.That(allresponseBody.Contains(newEvent.Name));
+
+            // Load the "Edit Event" page for the new event id
+            var editResponse = await this.httpClient.GetAsync(
+               $"/Events/Edit/{newEvent.Id}");
+            editResponse.EnsureSuccessStatusCode();
+
+            var editedEventName = "Party" + DateTime.Now.Ticks;
+            var postContent = new FormUrlEncodedContent(
+                new Dictionary<string, string>
+                {
+                    { "Name", editedEventName },
+                    { "Place", newEvent.Place },
+                    { "Start", newEvent.Start.ToString()},
+                    { "End", newEvent.End.ToString()},
+                    { "TotalTickets", newEvent.TotalTickets.ToString()},
+                    { "PricePerTicket", newEvent.PricePerTicket.ToString()}
+                });
+
+            // Post event data
+            var postResponse = await this.httpClient.PostAsync(
+                $"/Events/Edit/{newEvent.Id}", postContent);
+            Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
+
+            // You should be redirected to "All Events" page
+            Assert.AreEqual("/Events/All", postResponse.RequestMessage.RequestUri.LocalPath);
+
+            // The event should be created
+            var postResponseBody = await postResponse.Content.ReadAsStringAsync();
+            Assert.That(postResponseBody, Does.Contain(editedEventName));
+            Assert.That(postResponseBody, !Does.Contain(newEvent.Name));
+
+            var lastEvent = this.testDb.CreateDbContext().Events.Last();
+            Assert.AreEqual(lastEvent.Name, editedEventName);
+        }
+
+        [Test]
+        public async Task Test_EventsPage_EditEvent_InvalidData()
+        {
+            // Arrange: create a new event in the DB for deleting
+            var dbContext = this.testDb.CreateDbContext();
+            var newEvent = new Event()
+            {
+                Name = "Beach Party" + DateTime.Now.Ticks,
+                Place = "Ibiza",
+                Start = DateTime.Now.AddMonths(3),
+                End = DateTime.Now.AddMonths(3),
+                TotalTickets = 20,
+                PricePerTicket = 120.00m,
+                OwnerId = this.testDb.UserMaria.Id
+            };
+            dbContext.Add(newEvent);
+            dbContext.SaveChanges();
+
+            // Go to "All Events" page and assert the event exists
+            var allresponse = await this.httpClient.GetAsync("/Events/All");
+            var allresponseBody = await allresponse.Content.ReadAsStringAsync();
+            Assert.That(allresponseBody.Contains(newEvent.Name));
+
+            // Load the "Edit Event" page for the new event id
+            var editResponse = await this.httpClient.GetAsync(
+               $"/Events/Edit/{newEvent.Id}");
+            editResponse.EnsureSuccessStatusCode();
+
+            // Post content has invalid event name 
+            var editedEventName = string.Empty;
+            var postContent = new FormUrlEncodedContent(
+                new Dictionary<string, string>
+                {
+                    { "Name", editedEventName },
+                    { "Place", newEvent.Place },
+                    { "Start", newEvent.Start.ToString()},
+                    { "End", newEvent.End.ToString()},
+                    { "TotalTickets", newEvent.TotalTickets.ToString()},
+                    { "PricePerTicket", newEvent.PricePerTicket.ToString()}
+                });
+
+            // Post event data
+            var postResponse = await this.httpClient.PostAsync(
+                $"/Events/Edit/{newEvent.Id}", postContent);
+            Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
+
+            // You should be on the "Edit Event" page
+            Assert.AreEqual($"/Events/Edit/{newEvent.Id}", postResponse.RequestMessage.RequestUri.LocalPath);
+
+            // Event should not be edited in the database
+            var lastEvent = this.testDb.CreateDbContext().Events.Last();
+            Assert.AreEqual(lastEvent.Name, newEvent.Name);
         }
 
         public async Task LoginUser(string username, string password)
