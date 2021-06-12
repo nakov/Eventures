@@ -127,7 +127,7 @@ namespace Eventures.UnitTests
         }
 
         [Test]
-        public void Test_Delete_ValidId()
+        public void Test_DeletePage_ValidId()
         {
             // Arrange: create a new event in the DB for deleting
             TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
@@ -158,7 +158,7 @@ namespace Eventures.UnitTests
         }
 
         [Test]
-        public void Test_Delete_InvalidId()
+        public void Test_DeletePage_InvalidId()
         {
             // Arrange
             TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
