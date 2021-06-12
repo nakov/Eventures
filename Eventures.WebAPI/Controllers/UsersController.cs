@@ -21,7 +21,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : Controller
     {
         private ApplicationDbContext dbContext;
         private UserManager<EventuresUser> userManager;

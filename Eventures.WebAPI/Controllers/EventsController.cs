@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using WebApi.Models;
 
@@ -12,7 +13,7 @@ namespace Eventures.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EventsController : ControllerBase
+    public class EventsController : Controller
     {
         private readonly ApplicationDbContext dbContext;
 
@@ -29,66 +30,32 @@ namespace Eventures.WebAPI.Controllers
 
         [Authorize]
         [HttpGet] // GET: /api/events
-        public ActionResult<IEnumerable<ApiEventViewModel>> GetEvents()
+        public IActionResult GetEvents()
         {
             var events = new List<ApiEventViewModel>();
 
             var dbEvents = this.dbContext.Events.ToList();
             foreach (var ev in dbEvents)
             {
-                var owner = this.dbContext.Users.Find(ev.OwnerId);
-                var eventModel = new ApiEventViewModel()
-                {
-                    Id = ev.Id,
-                    Name = ev.Name,
-                    Place = ev.Place,
-                    Start = ev.Start,
-                    End = ev.End,
-                    TotalTickets = ev.TotalTickets,
-                    PricePerTicket = ev.PricePerTicket,
-                    Owner = new ApiUserViewModel()
-                    {
-                        FirstName = owner.FirstName,
-                        LastName = owner.LastName,
-                        Id = owner.Id,
-                        Username = owner.UserName,
-                        Email = owner.Email
-                    }
-                };
-                events.Add(eventModel);
+                ev.Owner = this.dbContext.Users.Find(ev.OwnerId);
+                var eventViewModel = CreateViewModel(ev);
+                events.Add(eventViewModel);
             }
-            return events;
+            return Ok(events);
         }
 
         [Authorize]
         [HttpGet("{id}")] // GET: /api/events/1
-        public ActionResult<ApiEventViewModel> GetEventById(int id)
+        public IActionResult GetEventById(int id)
         {
             var dbEvent = this.dbContext.Events.Find(id);
             if (dbEvent == null)
             {
                 return NotFound();
             }
-            var owner = this.dbContext.Users.Find(dbEvent.OwnerId);
-            var eventModel = new ApiEventViewModel()
-            {
-                Id = dbEvent.Id,
-                Name = dbEvent.Name,
-                Place = dbEvent.Place,
-                Start = dbEvent.Start,
-                End = dbEvent.End,
-                TotalTickets = dbEvent.TotalTickets,
-                PricePerTicket = dbEvent.PricePerTicket,
-                Owner = new ApiUserViewModel()
-                {
-                    FirstName = owner.FirstName,
-                    LastName = owner.LastName,
-                    Id = owner.Id,
-                    Username = owner.UserName,
-                    Email = owner.Email
-                }
-            };
-            return Ok(eventModel);
+            dbEvent.Owner = this.dbContext.Users.Find(dbEvent.OwnerId);
+            var eventViewModel = CreateViewModel(dbEvent);
+            return Ok(eventViewModel);
         }
 
         [Authorize]
@@ -111,7 +78,9 @@ namespace Eventures.WebAPI.Controllers
             dbContext.Events.Add(ev);
             dbContext.SaveChanges();
 
-            return CreatedAtAction("GetEventById", new { id = ev.Id }, ev);
+            var eventViewModel = CreateViewModel(ev);
+
+            return CreatedAtAction("GetEventById", new { id = ev.Id }, eventViewModel);
         }
 
         [Authorize]
@@ -144,7 +113,7 @@ namespace Eventures.WebAPI.Controllers
 
         [Authorize]
         [HttpDelete("{id}")] // DELETE: api/events/1
-        public ActionResult<Event> Delete(int id)
+        public IActionResult DeleteEvent(int id)
         {
             Event ev = dbContext.Events.Find(id);
             if (ev == null)
@@ -158,10 +127,36 @@ namespace Eventures.WebAPI.Controllers
             {
                 return Unauthorized();
             }
-
             dbContext.Events.Remove(ev);
             dbContext.SaveChanges();
-            return Ok(ev);
+
+            var eventViewModel = CreateViewModel(ev);
+            
+            return Ok(eventViewModel);
+        }
+
+        private ApiEventViewModel CreateViewModel(Event ev)
+        {
+            var eventModel = new ApiEventViewModel()
+            {
+                Id = ev.Id,
+                Name = ev.Name,
+                Place = ev.Place,
+                Start = ev.Start,
+                End = ev.End,
+                TotalTickets = ev.TotalTickets,
+                PricePerTicket = ev.PricePerTicket,
+                Owner = new ApiUserViewModel()
+                {
+                    FirstName = ev.Owner.FirstName,
+                    LastName = ev.Owner.LastName,
+                    Id = ev.Owner.Id,
+                    Username = ev.Owner.UserName,
+                    Email = ev.Owner.Email
+                }
+            };
+
+            return eventModel;
         }
     }
 }
