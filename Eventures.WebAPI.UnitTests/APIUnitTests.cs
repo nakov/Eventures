@@ -4,11 +4,16 @@ using Eventures.UnitTests;
 using Eventures.WebAPI.Controllers;
 using Eventures.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using WebApi.Controllers;
+using WebApi.Models;
 
 namespace Eventures.WebAPI.UnitTests
 {
@@ -17,6 +22,7 @@ namespace Eventures.WebAPI.UnitTests
         TestDb testDb;
         ApplicationDbContext dbContext;
         EventsController controller;
+        UsersController usersController;
 
         [OneTimeSetUp]
         public void Setup()
@@ -24,6 +30,78 @@ namespace Eventures.WebAPI.UnitTests
             testDb = new TestDb();
             dbContext = testDb.CreateDbContext();
             controller = new EventsController(dbContext);
+            
+            // Get configuration from appsettings.json file in the Web API project
+            var configurationPath = Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\..\Eventures.WebAPI\");
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(configurationPath)
+                .AddJsonFile("appsettings.json")
+                .Build();
+            usersController = new UsersController(dbContext, configuration);
+        }
+
+        [Test]
+        public async Task Test_User_Register()
+        {
+            // Arrange: create new user
+            var newUser = new ApiRegisterModel()
+            {
+                Username = "newUser",
+                FirstName = "Peter",
+                LastName = "Petrov",
+                Email = "pesho.petrov@abv.bg",
+                Password = "password1",
+                ConfirmPassword = "password1"
+            };
+            var usersBefore = this.dbContext.Users.Count();
+
+            // Act
+            var result = await usersController.Register(newUser) as OkObjectResult;
+
+            // Assert
+            Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
+            var resultValues = result.Value as Response;
+            Assert.AreEqual("Success", resultValues.Status);
+            Assert.AreEqual("User created successfully!", resultValues.Message);
+
+            var usersAfter = this.dbContext.Users.Count();
+            Assert.That(usersAfter == usersBefore + 1);
+        }
+
+        [Test]
+        public async Task Test_User_Login()
+        {
+            // Arrange: create new user
+            var user = new ApiLoginModel()
+            {
+                Username = this.testDb.UserMaria.UserName,
+                Password = this.testDb.UserMaria.UserName
+            };
+
+            // Act
+            var result = await usersController.Login(user) as OkObjectResult;
+
+            // Assert
+            Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
+
+            var resultValue = result.Value as ResponseWithToken;
+            Assert.IsNotNull(resultValue.Token);
+            Assert.AreNotEqual("1/1/0001 12:00:00 AM", resultValue.Expiration);
+        }
+
+        [Test]
+        public void Test_User_GetAllUsers()
+        {
+            //Arrange
+
+            //Act
+            var result = usersController.GetAll() as OkObjectResult;
+
+            // Assert
+            Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
+
+            var resultValue = result.Value as IEnumerable<ApiUserViewModel>;
+            Assert.AreEqual(this.dbContext.Users.Count(), resultValue.Count());
         }
 
         [Test]
@@ -255,7 +333,7 @@ namespace Eventures.WebAPI.UnitTests
 
             TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
             int eventsCountBefore = dbContext.Events.Count();
-            
+
             // Act
             var result = controller.DeleteEvent(newEvent.Id) as OkObjectResult;
 
@@ -280,7 +358,7 @@ namespace Eventures.WebAPI.UnitTests
         {
             // Arrange: create a new event in the DB for deleting
             TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
-           
+
             int eventsCountBefore = dbContext.Events.Count();
             int invalidId = -1;
             // Act: create request with invalid id
@@ -304,7 +382,7 @@ namespace Eventures.WebAPI.UnitTests
                 UserName = "test"
             };
             dbContext.Add(user);
-            
+
             // Arrange: create a new event in the database for deleting
             var newEvent = new Event()
             {
@@ -323,7 +401,7 @@ namespace Eventures.WebAPI.UnitTests
 
             // Assign the newly-created user to the controller
             TestDb.AssignCurrentUserForController(controller, user);
-            
+
             // Act
             var result = controller.DeleteEvent(newEvent.Id) as UnauthorizedResult;
 
