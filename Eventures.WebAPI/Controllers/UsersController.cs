@@ -41,7 +41,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] ApiLoginModel model)
         {
             var user = await userManager.FindByNameAsync(model.Username);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
@@ -59,6 +59,7 @@ namespace WebApi.Controllers
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
+                //var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
@@ -69,17 +70,17 @@ namespace WebApi.Controllers
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
 
-                return Ok(new
+                return Ok(new ResponseWithToken
                 {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    Expiration = token.ValidTo
                 });
             }
             return Unauthorized();
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] AuthRegisterModel model)
+        public async Task<IActionResult> Register([FromBody] ApiRegisterModel model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
