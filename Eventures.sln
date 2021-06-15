@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.IntegrationTests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI", "Eventures.WebAPI\Eventures.WebAPI.csproj", "{010DD5B0-DD50-4026-9030-6301ECD97FC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.WebAPI.UnitTests", "Eventures.WebAPI.UnitTests\Eventures.WebAPI.UnitTests.csproj", "{B87ACAE2-CF97-41A3-9778-B77F680B63FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.UnitTests", "Eventures.WebAPI.UnitTests\Eventures.WebAPI.UnitTests.csproj", "{B87ACAE2-CF97-41A3-9778-B77F680B63FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.WebAPI.IntegrationTests", "Eventures.WebAPI.IntegrationTests\Eventures.WebAPI.IntegrationTests.csproj", "{32D156D1-81CC-4C21-A710-61031F3FB655}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{B87ACAE2-CF97-41A3-9778-B77F680B63FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B87ACAE2-CF97-41A3-9778-B77F680B63FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B87ACAE2-CF97-41A3-9778-B77F680B63FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32D156D1-81CC-4C21-A710-61031F3FB655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32D156D1-81CC-4C21-A710-61031F3FB655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32D156D1-81CC-4C21-A710-61031F3FB655}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32D156D1-81CC-4C21-A710-61031F3FB655}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
