@@ -31,16 +31,26 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_GetAll_Unauthorized()
         {
+            // Arrange
+
+            // Act
             var response = await htttClient.GetAsync("api/events");
+
+            // Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [Test]
         public async Task Test_Events_GetCount()
         {
+            // Arrange
+
+            // Act
             var response = await this.htttClient.GetAsync("api/events/count");
             var responseContent = response.Content.ReadAsStringAsync();
             int responseResult = int.Parse(responseContent.Result);
+
+            // Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.AreEqual(this.dbContext.Events.Count(), responseResult);
         }
@@ -48,6 +58,7 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Users_Register_ValidData()
         {
+            // Arrange
             string username = "user" + DateTime.Now.Ticks;
             string password = "pass" + DateTime.Now.Ticks;
             var newUser = new ApiRegisterModel()
@@ -60,8 +71,12 @@ namespace Eventures.WebAPI.IntegrationTests
                 Email = username + "@testmail.com"
             };
             var usersCountBefore = this.dbContext.Users.Count();
+
+            // Act
             var postResponse = await this.htttClient.PostAsJsonAsync(
                 "/api/users/register", newUser);
+
+            // Assert
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
 
             var postResponseContent = postResponse.Content.ReadAsAsync<Response>();
@@ -76,6 +91,7 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Users_Register_InvalidData()
         {
+            // Arrange
             string username = "user" + DateTime.Now.Ticks;
             string password = "pass" + DateTime.Now.Ticks;
             var newUser = new ApiRegisterModel()
@@ -88,8 +104,12 @@ namespace Eventures.WebAPI.IntegrationTests
                 Email = username + "@testmail.com"
             };
             var usersCountBefore = this.dbContext.Users.Count();
+
+            // Act
             var postResponse = await this.htttClient.PostAsJsonAsync(
                 "/api/users/register", newUser);
+
+            // Assert
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
 
             var postResponseContent = postResponse.Content.ReadAsAsync<Response>();
@@ -104,12 +124,17 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Users_Login_ValidData()
         {
+            // Arrange
             var userMaria = this.testDb.UserMaria;
+
+            // Act
             var postResponse = await htttClient.PostAsJsonAsync("api/users/login", new ApiLoginModel
             {
                 Username = userMaria.UserName,
                 Password = userMaria.UserName
             });
+
+            // Assert
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
 
             var postResponseContent = await postResponse.Content.ReadAsAsync<ResponseWithToken>();
@@ -120,13 +145,18 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Users_Login_InvalidData()
         {
+            // Arrange
             var userMaria = this.testDb.UserMaria;
             var wrongPassword = "wrongPass";
+
+            // Act
             var postResponse = await htttClient.PostAsJsonAsync("api/users/login", new ApiLoginModel
             {
                 Username = userMaria.UserName,
                 Password = wrongPassword
             });
+
+            // Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, postResponse.StatusCode);
         }
     }
