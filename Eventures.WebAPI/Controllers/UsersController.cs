@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -36,8 +37,10 @@ namespace WebApi.Controllers
             var userStore = new UserStore<EventuresUser>(dbContext);
             var hasher = new PasswordHasher<EventuresUser>();
             var normalizer = new UpperInvariantLookupNormalizer();
+            var factory = new LoggerFactory();
+            var logger = new Logger<UserManager<EventuresUser>>(factory);
             this.userManager = new UserManager<EventuresUser>(
-                userStore, null, hasher, null, null, normalizer, null, null, null);
+                userStore, null, hasher, null, null, normalizer, null, null, logger);
         }
 
         [HttpPost("login")]
