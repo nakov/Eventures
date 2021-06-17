@@ -15,6 +15,7 @@ namespace Eventures.UnitTests
     public class TestDb
     {
         public EventuresUser UserMaria { get; private set; }
+        public EventuresUser UserPeter { get; private set; }
         public Event EventSoftuniada { get; private set; }
         public Event EventOpenFest { get; private set; }
         private string uniqueDbName;
@@ -54,6 +55,16 @@ namespace Eventures.UnitTests
             };
             userManager.CreateAsync(this.UserMaria, this.UserMaria.UserName).Wait();
 
+            this.UserPeter = new EventuresUser()
+            {
+                UserName = "peter",
+                Email = "peter@gmail.com",
+                FirstName = "Peter",
+                LastName = "Newton",
+            };
+            userManager.CreateAsync(this.UserPeter, this.UserPeter.UserName).Wait();
+
+            // EventSoftuniada has owner UserMaria
             this.EventSoftuniada = new Event()
             {
                 Name = "Softuniada 2021",
@@ -66,6 +77,7 @@ namespace Eventures.UnitTests
             };
             dbContext.Add(this.EventSoftuniada);
 
+            // EventOpenFest has owner UserPeter
             this.EventOpenFest = new Event()
             {
                 Name = "OpenFest 2021",
@@ -73,8 +85,8 @@ namespace Eventures.UnitTests
                 Start = DateTime.Now.AddDays(200),
                 End = DateTime.Now.AddDays(201),
                 TotalTickets = 5000,
-                PricePerTicket = 0,
-                OwnerId = UserMaria.Id
+                PricePerTicket = 10.00m,
+                OwnerId = UserPeter.Id
             };
             dbContext.Add(this.EventOpenFest);
 
