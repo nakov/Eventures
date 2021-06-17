@@ -97,9 +97,10 @@ namespace Eventures.UnitTests
         public void Test_Create_PostInvalidData()
         {
             // Arrange
+            string invalidName = null;
             var newEventData = new EventCreateBindingModel()
             {
-                Name = null,
+                Name = invalidName,
                 Place = "Sofia",
                 Start = DateTime.Now.AddMonths(3),
                 End = DateTime.Now.AddMonths(3).AddDays(1),
@@ -234,23 +235,12 @@ namespace Eventures.UnitTests
         [Test]
         public void Test_Edit_ValidId()
         {
-            // Arrange: create a new event in the DB for editing
+            // Arrange: get the "Softuniada" event from the database for editing
+            var softuniadaEvent = this.testDb.EventSoftuniada;
             TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
-            var newEvent = new Event()
-            {
-                Name = "Beach Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m,
-                OwnerId = testDb.UserMaria.Id
-            };
-            dbContext.Add(newEvent);
-            dbContext.SaveChanges();
 
             // Act
-            var result = controller.Edit(newEvent.Id);
+            var result = controller.Edit(softuniadaEvent.Id);
 
             // Assert
             var viewResult = result as ViewResult;
@@ -259,12 +249,12 @@ namespace Eventures.UnitTests
             // Assert fields are filled with correct data
             var model = viewResult.Model as EventCreateBindingModel;
             Assert.IsNotNull(model);
-            Assert.That(model.Name == newEvent.Name);
-            Assert.That(model.Place == newEvent.Place);
-            Assert.That(model.Start == newEvent.Start);
-            Assert.That(model.End == newEvent.End);
-            Assert.That(model.PricePerTicket == newEvent.PricePerTicket);
-            Assert.That(model.TotalTickets == newEvent.TotalTickets);
+            Assert.That(model.Name == softuniadaEvent.Name);
+            Assert.That(model.Place == softuniadaEvent.Place);
+            Assert.That(model.Start == softuniadaEvent.Start);
+            Assert.That(model.End == softuniadaEvent.End);
+            Assert.That(model.PricePerTicket == softuniadaEvent.PricePerTicket);
+            Assert.That(model.TotalTickets == softuniadaEvent.TotalTickets);
         }
 
         [Test]
@@ -286,7 +276,7 @@ namespace Eventures.UnitTests
         [Test]
         public void Test_Edit_PostValidData()
         {
-            // Arrange: create a new event in the DB for editing
+            // Arrange: create a new event in the database for editing
             var newEvent = new Event()
             {
                 Name = "Beach Party" + DateTime.Now.Ticks,
@@ -301,9 +291,10 @@ namespace Eventures.UnitTests
             dbContext.SaveChanges();
 
             // Only the name is changed
+            var changedName = "Party" + DateTime.Now.Ticks;
             EventCreateBindingModel model = new EventCreateBindingModel()
             {
-                Name = "Edited Beach Party" + DateTime.Now.Ticks,
+                Name = changedName,
                 Place = "Ibiza",
                 Start = DateTime.Now.AddMonths(3),
                 End = DateTime.Now.AddMonths(3),
@@ -327,44 +318,35 @@ namespace Eventures.UnitTests
         [Test]
         public void Test_Edit_PostInvalidData()
         {
-            // Arrange: create a new event in the DB for editing
-            var newEvent = new Event()
-            {
-                Name = "Beach Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m,
-                OwnerId = testDb.UserMaria.Id
-            };
-            dbContext.Add(newEvent);
-            dbContext.SaveChanges();
+            // Arrange: get the "Softuniada" event from the database for editing
+            var softuniadaEvent = this.testDb.EventSoftuniada;
+            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
 
-            // Only the name is changed to string.Empty -> this is invalid name
+            // The changed name is invalid: name == empty string
+            var invalidName = string.Empty;
             EventCreateBindingModel model = new EventCreateBindingModel()
             {
-                Name = string.Empty,
-                Place = "Ibiza",
+                Name = invalidName,
+                Place = "Sofia",
                 Start = DateTime.Now.AddMonths(3),
                 End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m
+                TotalTickets = 200,
+                PricePerTicket = 12.00m
             };
 
             controller.ModelState.AddModelError("Name", "The Name field is required");
 
             // Act
-            var result = controller.Edit(newEvent.Id, model);
+            var result = controller.Edit(softuniadaEvent.Id, model);
 
             // Assert user is not redirected
             var redirectResult = result as RedirectToActionResult;
             Assert.IsNull(redirectResult);
 
             // Assert that event's name is not edited
-            var editedEvent = dbContext.Events.Find(newEvent.Id);
+            var editedEvent = dbContext.Events.Find(softuniadaEvent.Id);
             Assert.IsNotNull(editedEvent);
-            Assert.AreEqual(newEvent.Name, editedEvent.Name);
+            Assert.AreEqual(softuniadaEvent.Name, editedEvent.Name);
 
             // Remove ModelState error for next tests
             controller.ModelState.Remove("Name");

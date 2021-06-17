@@ -23,6 +23,7 @@ namespace Eventures.IntegrationTests
             this.testDb = new TestDb();
             testingWebAppFactory = new TestingWebAppFactory(testDb);
             this.httpClient = testingWebAppFactory.CreateClient();
+            // Login UserMaria
             await LoginUser(this.testDb.UserMaria.UserName, this.testDb.UserMaria.UserName);
         }
 
@@ -162,45 +163,23 @@ namespace Eventures.IntegrationTests
         [Test]
         public async Task Test_DeletePage_DeleteEventOfAnotherUser_ShouldBeUnsuccessful()
         {
-            // Arrange: create new user, who will have an event
-            var dbContext = this.testDb.CreateDbContext();
-            var user = new EventuresUser()
-            {
-                FirstName = "Test",
-                LastName = "Test",
-                Email = "test@test.bg",
-                UserName = "test"
-            };
-            dbContext.Add(user);
-
-            // Arrange: create a new event in the DB for deleting with the new user as owner
-            var newEvent = new Event()
-            {
-                Name = "Beach Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m,
-                OwnerId = user.Id
-            };
-            dbContext.Add(newEvent);
-
-            dbContext.SaveChanges();
+            // Arrange: get the "EventOpenFest" event with owner UserPeter
+            var eventOpenFest = this.testDb.EventOpenFest;
 
             // Go to "All Events" page and assert the event exists
             var allresponse = await this.httpClient.GetAsync("/Events/All");
             var allresponseBody = await allresponse.Content.ReadAsStringAsync();
-            Assert.That(allresponseBody.Contains(newEvent.Name));
+            Assert.That(allresponseBody.Contains(eventOpenFest.Name));
 
-            // Load the "Delete Event" page for the new event id
+            // Act: load the "Delete Event" page for the event
             var deleteResponse = await this.httpClient.GetAsync(
-               $"/Events/Delete/{newEvent.Id}");
+               $"/Events/Delete/{eventOpenFest.Id}");
             Assert.AreEqual(HttpStatusCode.OK, deleteResponse.StatusCode);
 
             var deleteResponseBody = await deleteResponse.Content.ReadAsStringAsync();
 
             // "Delete Event" page should show "Event not found." message
+            // because our current logged-in user is UserMaria
             Assert.That(deleteResponseBody.Contains("Event not found."));
         }
 
@@ -249,7 +228,7 @@ namespace Eventures.IntegrationTests
             Assert.AreEqual("/Events/All", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(!postResponseBody.Contains(newEvent.Name));
             
-            // Asert that the event was deleted from the database
+            // Assert that the event was deleted from the database
             dbContext = this.testDb.CreateDbContext();
             var deletedEvent = dbContext.Events.Find(newEvent.Id);
             Assert.That(deletedEvent == null);
@@ -258,91 +237,57 @@ namespace Eventures.IntegrationTests
         [Test]
         public async Task Test_EditPage_EditEventOfAnotherUser_ShouldBeUnsuccessful()
         {
-            // Arrange: create new user, who will have an event
-            var dbContext = this.testDb.CreateDbContext();
-            var user = new EventuresUser()
-            {
-                FirstName = "Test",
-                LastName = "Test",
-                Email = "test@test.bg",
-                UserName = "test"
-            };
-            dbContext.Add(user);
-
-            // Arrange: create a new event in the DB for editing with the new user as owner
-            var newEvent = new Event()
-            {
-                Name = "Beach Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m,
-                OwnerId = user.Id
-            };
-            dbContext.Add(newEvent);
-
-            dbContext.SaveChanges();
+            // Arrange: get the "EventOpenFest" event with owner UserPeter
+            var eventOpenFest = this.testDb.EventOpenFest;
 
             // Go to "All Events" page and assert the event exists
             var allResponse = await this.httpClient.GetAsync("/Events/All");
             Assert.AreEqual(HttpStatusCode.OK, allResponse.StatusCode);
             var allResponseBody = await allResponse.Content.ReadAsStringAsync();
-            Assert.That(allResponseBody.Contains(newEvent.Name));
+            Assert.That(allResponseBody.Contains(eventOpenFest.Name));
 
-            // Load the "Edit Event" page for the new event id
+            // Load the "Edit Event" page for the event
             var editResponse = await this.httpClient.GetAsync(
-               $"/Events/Edit/{newEvent.Id}");
+               $"/Events/Edit/{eventOpenFest.Id}");
             Assert.AreEqual(HttpStatusCode.OK, editResponse.StatusCode);
             var editResponseBody = await editResponse.Content.ReadAsStringAsync();
 
             // "Edit Event" page should show "Event not found." message
+            // because our current logged-in user is UserMaria
             Assert.That(editResponseBody.Contains("Event not found."));
         }
 
         [Test]
         public async Task Test_EventsPage_EditEvent_ValidData()
         {
-            // Arrange: create a new event in the DB for deleting
-            var dbContext = this.testDb.CreateDbContext();
-            var newEvent = new Event()
-            {
-                Name = "Beach Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m,
-                OwnerId = this.testDb.UserMaria.Id
-            };
-            dbContext.Add(newEvent);
-            dbContext.SaveChanges();
+            // Arrange: get the "Softuniada 2021" event
+            var softuniadaEvent = this.testDb.EventSoftuniada;
 
             // Go to "All Events" page and assert the event exists
             var allresponse = await this.httpClient.GetAsync("/Events/All");
             var allresponseBody = await allresponse.Content.ReadAsStringAsync();
-            Assert.That(allresponseBody.Contains(newEvent.Name));
+            Assert.That(allresponseBody.Contains(softuniadaEvent.Name));
 
             // Load the "Edit Event" page for the new event id
             var editResponse = await this.httpClient.GetAsync(
-               $"/Events/Edit/{newEvent.Id}");
+               $"/Events/Edit/{softuniadaEvent.Id}");
             Assert.AreEqual(HttpStatusCode.OK, editResponse.StatusCode);
 
-            var editedEventName = "Party" + DateTime.Now.Ticks;
+            var editedEventName = "Softuniada 2021 (New Edition)";
             var postContent = new FormUrlEncodedContent(
                 new Dictionary<string, string>
                 {
                     { "Name", editedEventName },
-                    { "Place", newEvent.Place },
-                    { "Start", newEvent.Start.ToString()},
-                    { "End", newEvent.End.ToString()},
-                    { "TotalTickets", newEvent.TotalTickets.ToString()},
-                    { "PricePerTicket", newEvent.PricePerTicket.ToString()}
+                    { "Place", softuniadaEvent.Place },
+                    { "Start", softuniadaEvent.Start.ToString()},
+                    { "End", softuniadaEvent.End.ToString()},
+                    { "TotalTickets", softuniadaEvent.TotalTickets.ToString()},
+                    { "PricePerTicket", softuniadaEvent.PricePerTicket.ToString()}
                 });
 
             // Post event data
             var postResponse = await this.httpClient.PostAsync(
-                $"/Events/Edit/{newEvent.Id}", postContent);
+                $"/Events/Edit/{softuniadaEvent.Id}", postContent);
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
 
             // You should be redirected to "All Events" page
@@ -351,65 +296,52 @@ namespace Eventures.IntegrationTests
             // The event should be edited
             var postResponseBody = await postResponse.Content.ReadAsStringAsync();
             Assert.That(postResponseBody, Does.Contain(editedEventName));
-            Assert.That(postResponseBody, !Does.Contain(newEvent.Name));
 
             // Event should be edited in the database
-            var lastEvent = this.testDb.CreateDbContext().Events.Last();
-            Assert.AreEqual(lastEvent.Name, editedEventName);
+            var eventInDb = this.testDb.CreateDbContext().Events.FirstOrDefault(x => x.Id == softuniadaEvent.Id);
+            Assert.AreEqual(eventInDb.Name, editedEventName);
         }
 
         [Test]
         public async Task Test_EventsPage_EditEvent_InvalidData()
         {
-            // Arrange: create a new event in the DB for deleting
-            var dbContext = this.testDb.CreateDbContext();
-            var newEvent = new Event()
-            {
-                Name = "Beach Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m,
-                OwnerId = this.testDb.UserMaria.Id
-            };
-            dbContext.Add(newEvent);
-            dbContext.SaveChanges();
+            // Arrange: get the "Softuniada 2021" event
+            var softuniadaEvent = this.testDb.EventSoftuniada;
 
             // Go to "All Events" page and assert the event exists
             var allresponse = await this.httpClient.GetAsync("/Events/All");
             var allresponseBody = await allresponse.Content.ReadAsStringAsync();
-            Assert.That(allresponseBody.Contains(newEvent.Name));
+            Assert.That(allresponseBody.Contains(softuniadaEvent.Name));
 
             // Load the "Edit Event" page for the new event id
             var editResponse = await this.httpClient.GetAsync(
-               $"/Events/Edit/{newEvent.Id}");
+               $"/Events/Edit/{softuniadaEvent.Id}");
             Assert.AreEqual(HttpStatusCode.OK, editResponse.StatusCode);
 
-            // Post content has invalid event name 
-            var editedEventName = string.Empty;
+            // Post content has invalid event name: name == empty string
+            var invalidEventName = string.Empty;
             var postContent = new FormUrlEncodedContent(
                 new Dictionary<string, string>
                 {
-                    { "Name", editedEventName },
-                    { "Place", newEvent.Place },
-                    { "Start", newEvent.Start.ToString()},
-                    { "End", newEvent.End.ToString()},
-                    { "TotalTickets", newEvent.TotalTickets.ToString()},
-                    { "PricePerTicket", newEvent.PricePerTicket.ToString()}
+                    { "Name", invalidEventName },
+                    { "Place", softuniadaEvent.Place },
+                    { "Start", softuniadaEvent.Start.ToString()},
+                    { "End", softuniadaEvent.End.ToString()},
+                    { "TotalTickets", softuniadaEvent.TotalTickets.ToString()},
+                    { "PricePerTicket", softuniadaEvent.PricePerTicket.ToString()}
                 });
 
             // Post event data
             var postResponse = await this.httpClient.PostAsync(
-                $"/Events/Edit/{newEvent.Id}", postContent);
+                $"/Events/Edit/{softuniadaEvent.Id}", postContent);
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
 
             // You should be on the "Edit Event" page
-            Assert.AreEqual($"/Events/Edit/{newEvent.Id}", postResponse.RequestMessage.RequestUri.LocalPath);
+            Assert.AreEqual($"/Events/Edit/{softuniadaEvent.Id}", postResponse.RequestMessage.RequestUri.LocalPath);
 
             // Event should not be edited in the database
-            var lastEvent = this.testDb.CreateDbContext().Events.Last();
-            Assert.AreEqual(lastEvent.Name, newEvent.Name);
+            var eventInDb = this.testDb.CreateDbContext().Events.FirstOrDefault(x => x.Id == softuniadaEvent.Id);
+            Assert.AreEqual(eventInDb.Name, softuniadaEvent.Name);
         }
 
         public async Task LoginUser(string username, string password)

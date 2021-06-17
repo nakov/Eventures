@@ -133,7 +133,7 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public void Test_Events_GetEventById()
         {
-            // Arrange
+            // Arrange: get the id of the "Softuniada" event
             int eventId = this.testDb.EventSoftuniada.Id;
 
             // Act
@@ -148,7 +148,7 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public void Test_Events_Create()
         {
-            // Arrange
+            // Arrange: create a new event binding model
             var newEventData = new EventCreateBindingModel()
             {
                 Name = "New Event " + DateTime.Now.Ticks,
@@ -239,18 +239,16 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public void Test_Edit_InvalidId()
         {
-            // Arrange: create a new event in the database for deleting
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
-
-            // Create event binding model with different event name
+            // Arrange: create event binding model with different event name
+            var changedName = "Softuniada 2021 (New Edition)";
             var changedEvent = new EventCreateBindingModel()
             {
-                Name = "House Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
+                Name = changedName,
+                Place = "Sofia",
                 Start = DateTime.Now.AddMonths(3),
                 End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m
+                TotalTickets = 200,
+                PricePerTicket = 12.00m
             };
             var invalidId = -1;
 
@@ -264,54 +262,34 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public void Test_Edit_UnauthorizedUser()
         {
-            // Arrange: create a new user in the database to use for authentication
-            var user = new EventuresUser()
-            {
-                FirstName = "Test",
-                LastName = "Test",
-                Email = "test@test.bg",
-                UserName = "test"
-            };
-            dbContext.Add(user);
+            // Arrange: get the "Open Fest" event with owner UserPeter
+            var openFestEvent = this.testDb.EventOpenFest;
 
-            // Arrange: create a new event in the database for editing
-            var newEvent = new Event()
-            {
-                Name = "Beach Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m,
-                OwnerId = testDb.UserMaria.Id
-            };
-            dbContext.Add(newEvent);
-            dbContext.SaveChanges();
-
-            // Assign the newly-created user to the controller
-            TestDb.AssignCurrentUserForController(controller, user);
+            // Assign UserMaria to the controller
+            TestDb.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Create event binding model with different event name
+            var changedName = "OpenFest 2021 (New Edition)";
             var changedEvent = new EventCreateBindingModel()
             {
-                Name = "House Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m
+                Name = changedName,
+                Place = "Online",
+                Start = DateTime.Now.AddDays(200),
+                End = DateTime.Now.AddDays(201),
+                TotalTickets = 5000,
+                PricePerTicket = 10.00m,
             };
 
             // Act
-            var result = controller.PutEvent(newEvent.Id, changedEvent) as UnauthorizedResult;
+            var result = controller.PutEvent(openFestEvent.Id, changedEvent) as UnauthorizedResult;
 
             // Assert user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);
 
             // Assert event is not edited in the database
             var newEventFromDb =
-               dbContext.Events.FirstOrDefault(e => e.Name == newEvent.Name);
-            Assert.AreEqual(newEvent.Place, newEventFromDb.Place);
+               dbContext.Events.FirstOrDefault(e => e.Name == openFestEvent.Name);
+            Assert.AreEqual(openFestEvent.Place, newEventFromDb.Place);
         }
 
         [Test]
@@ -373,37 +351,16 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public void Test_Delete_UnauthorizedUser()
         {
-            // Arrange: create a new user in the database to use for authentication
-            var user = new EventuresUser()
-            {
-                FirstName = "Test",
-                LastName = "Test",
-                Email = "test@test.bg",
-                UserName = "test"
-            };
-            dbContext.Add(user);
+            // Arrange: get the "Open Fest" event with owner UserPeter
+            var openFestEvent = this.testDb.EventOpenFest;
 
-            // Arrange: create a new event in the database for deleting
-            var newEvent = new Event()
-            {
-                Name = "Beach Party" + DateTime.Now.Ticks,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m,
-                OwnerId = testDb.UserMaria.Id
-            };
-            dbContext.Add(newEvent);
-            dbContext.SaveChanges();
+            // Assign UserMaria to the controller
+            TestDb.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             int eventsCountBefore = dbContext.Events.Count();
 
-            // Assign the newly-created user to the controller
-            TestDb.AssignCurrentUserForController(controller, user);
-
             // Act
-            var result = controller.DeleteEvent(newEvent.Id) as UnauthorizedResult;
+            var result = controller.DeleteEvent(openFestEvent.Id) as UnauthorizedResult;
 
             // Assert user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);

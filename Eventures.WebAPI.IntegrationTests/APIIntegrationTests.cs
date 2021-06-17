@@ -20,7 +20,6 @@ namespace Eventures.WebAPI.IntegrationTests
         ApplicationDbContext dbContext;
         TestingWebApiFactory testFactory;
         HttpClient httpClient;
-        EventuresUser testUserPeter;
 
         [OneTimeSetUp]
         public async Task Setup()
@@ -29,7 +28,6 @@ namespace Eventures.WebAPI.IntegrationTests
             this.dbContext = testDb.CreateDbContext();
             this.testFactory = new TestingWebApiFactory(testDb);
             this.httpClient = testFactory.Client;
-            CreateNewUserPeter();
             await this.testFactory.AuthenticateAsync();
         }
 
@@ -71,8 +69,8 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_GetEventById_ValidId()
         {
-            // Arrange
-            int eventId = 1;
+            // Arrange: get the "Softuniada" event id
+            int eventId = this.testDb.EventSoftuniada.Id;
 
             // Act
             var response = await this.httpClient.GetAsync($"api/events/{eventId}");
@@ -160,9 +158,7 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_EditEvent_ValidId()
         {
-            // Arrange
-
-            // Get the "Softuniada 2021" event 
+            // Arrange: get the "Softuniada 2021" event 
             var softuniadaEvent = this.testDb.EventSoftuniada;
             var eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == softuniadaEvent.Id);
 
@@ -223,32 +219,21 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_EditEvent_EditEventOfAnotherUser()
         {
-            // Arrange: create new event in the database for editing
-            // The owner of the name is TestUserPeter and the current user is UserMaria
-            var newEvent = new Event()
-            {
-                Name = "Party",
-                Place = "Beach",
-                Start = DateTime.UtcNow,
-                End = DateTime.UtcNow.AddHours(3),
-                TotalTickets = 120,
-                PricePerTicket = 20,
-                OwnerId = this.testUserPeter.Id
-            };
-            this.dbContext.Add(newEvent);
-            this.dbContext.SaveChanges();
+            // Note that current user is UserMaria
+            // Arrange: get the "Open Fest" event with owner UserPeter
+            var openFestEvent = this.testDb.EventOpenFest;
 
-            var eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == newEvent.Id);
+            var eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
 
-            var changedName = "Best Party";
+            var changedName = "OpenFest 2021 (New Edition)";
             var changedEvent = new EventCreateBindingModel()
             {
                 Name = changedName,
-                Place = "Beach",
-                Start = DateTime.UtcNow,
-                End = DateTime.UtcNow.AddHours(3),
-                TotalTickets = 120,
-                PricePerTicket = 20
+                Place = "Online",
+                Start = DateTime.Now.AddDays(200),
+                End = DateTime.Now.AddDays(201),
+                TotalTickets = 5000,
+                PricePerTicket = 10.00m,
             };
 
             // Act
@@ -259,8 +244,8 @@ namespace Eventures.WebAPI.IntegrationTests
             Assert.AreEqual(HttpStatusCode.Unauthorized, putResponse.StatusCode);
 
             this.dbContext = this.testDb.CreateDbContext();
-            eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == newEvent.Id);
-            Assert.AreEqual(newEvent.Name, eventInDb.Name);
+            eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
+            Assert.AreEqual(openFestEvent.Name, eventInDb.Name);
         }
 
         [Test]
@@ -315,21 +300,11 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_DeleteEvent_DeleteEventOfAnotherUser()
         {
-            // Arrange: create a new event in the database for deleting
-            var newEvent = new Event()
-            {
-                Name = "Party",
-                Place = "Beach",
-                Start = DateTime.UtcNow,
-                End = DateTime.UtcNow.AddHours(3),
-                TotalTickets = 120,
-                PricePerTicket = 20,
-                OwnerId = this.testUserPeter.Id
-            };
-            this.dbContext.Add(newEvent);
-            this.dbContext.SaveChanges();
+            // Note that current user is UserMaria
+            // Arrange: get the "Open Fest" event with owner UserPeter
+            var openFestEvent = this.testDb.EventOpenFest;
 
-            var eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == newEvent.Id);
+            var eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
 
             // Act
             var deleteResponse = await httpClient.DeleteAsync(
@@ -339,18 +314,6 @@ namespace Eventures.WebAPI.IntegrationTests
             Assert.AreEqual(HttpStatusCode.Unauthorized, deleteResponse.StatusCode);
 
             Assert.That(this.dbContext.Events.Contains(eventInDb));
-        }
-
-        private void CreateNewUserPeter()
-        {
-            this.testUserPeter = new EventuresUser()
-            {
-                FirstName = "Pesho",
-                LastName = "Peshov",
-                UserName = "pesho",
-            };
-            this.dbContext.Add(this.testUserPeter);
-            this.dbContext.SaveChanges();
         }
     }
 }
