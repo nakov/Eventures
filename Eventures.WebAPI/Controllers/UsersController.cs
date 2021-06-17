@@ -43,6 +43,22 @@ namespace WebApi.Controllers
                 userStore, null, hasher, null, null, normalizer, null, null, logger);
         }
 
+        /// <summary>
+        /// Logs a user in.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/users/login
+        ///     {
+        ///        "username": "someUsername",
+        ///        "password": "somePassword"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="model"></param>
+        /// <response code="200">Returns "OK" with JWT token with expiration date</response>
+        /// <response code="401">Returns "Unauthorized"</response>    
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] ApiLoginModel model)
         {
@@ -81,6 +97,24 @@ namespace WebApi.Controllers
             return Unauthorized();
         }
 
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/users/register
+        ///     {
+        ///         "username": "pesho",
+        ///         "email": "pesho@abv.bg",
+        ///         "firstName": "Pesho",
+        ///         "lastName": "Petrov",
+        ///         "password": "123123",
+        ///         "confirmPassword": "123123"
+        ///     }
+        /// </remarks>
+        /// <response code="200">Returns "OK" with "Success" status and "User created successfully! message"</response>
+        /// <response code="500">Returns "InternalServerError" when user exists or user creation failed</response>    
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] ApiRegisterModel model)
         {
@@ -103,6 +137,19 @@ namespace WebApi.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
+        /// <summary>
+        /// Gets a list with all users.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/users
+        ///     {
+        ///         
+        ///     }
+        /// </remarks>
+        /// <response code="200">Returns "OK" with list of all users</response>
+        /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>    
         [Authorize]
         [HttpGet]
         public IActionResult GetAll()
