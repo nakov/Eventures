@@ -67,13 +67,14 @@ namespace WebApi
                 {
                     Version = "v1",
                     Title = "Eventures Web API",
-                    Description = "A simple ASP.NET Core Web API for the Eventures App",
+                    Description = 
+                        "A simple ASP.NET Core Web API for the Eventures App",
                     Contact = new OpenApiContact
                     {
                         Name = "Softuni",
                         Email = string.Empty,
                         Url = new Uri("https://softuni.bg/"),
-                    }
+                    },
                 });
 
                 // Enables authorization using Swagger (JWT)  
@@ -84,7 +85,7 @@ namespace WebApi
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"\r\n\r\nGet token through successful login",
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -95,7 +96,7 @@ namespace WebApi
                             {
                                 Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer"
-                             }
+                            }
                        },
                        new string[] {}
                     }

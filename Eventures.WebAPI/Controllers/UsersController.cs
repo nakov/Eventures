@@ -57,8 +57,8 @@ namespace WebApi.Controllers
         ///
         /// </remarks>
         /// <param name="model"></param>
-        /// <response code="200">Returns "OK" with JWT token with expiration date</response>
-        /// <response code="401">Returns "Unauthorized"</response>    
+        /// <response code="200">Returns "OK" with JWT token with expiration date.</response>
+        /// <response code="401">Returns "Unauthorized".</response>    
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] ApiLoginModel model)
         {
@@ -105,16 +105,16 @@ namespace WebApi.Controllers
         ///
         ///     POST /api/users/register
         ///     {
-        ///         "username": "pesho",
-        ///         "email": "pesho@abv.bg",
-        ///         "firstName": "Pesho",
-        ///         "lastName": "Petrov",
-        ///         "password": "123123",
-        ///         "confirmPassword": "123123"
+        ///         "username": "someUsername",
+        ///         "email": "someUsername@mail.bg",
+        ///         "firstName": "someName",
+        ///         "lastName": "someLastName",
+        ///         "password": "somePassword",
+        ///         "confirmPassword": "somePassword"
         ///     }
         /// </remarks>
-        /// <response code="200">Returns "OK" with "Success" status and "User created successfully! message"</response>
-        /// <response code="500">Returns "InternalServerError" when user exists or user creation failed</response>    
+        /// <response code="200">Returns "OK" with "Success" status and "User created successfully! message".</response>
+        /// <response code="500">Returns "InternalServerError" when user already exists or user creation failed.</response>    
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] ApiRegisterModel model)
         {
@@ -141,6 +141,8 @@ namespace WebApi.Controllers
         /// Gets a list with all users.
         /// </summary>
         /// <remarks>
+        /// You should be an authenticated user!
+        /// 
         /// Sample request:
         ///
         ///     GET /api/users
@@ -148,8 +150,8 @@ namespace WebApi.Controllers
         ///         
         ///     }
         /// </remarks>
-        /// <response code="200">Returns "OK" with list of all users</response>
-        /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>    
+        /// <response code="200">Returns "OK" with a list of all users.</response>
+        /// <response code="401">Returns "Unauthorized" when user is not authenticated.</response>    
         [Authorize]
         [HttpGet]
         public IActionResult GetAll()

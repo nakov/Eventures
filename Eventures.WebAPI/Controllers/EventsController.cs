@@ -22,12 +22,39 @@ namespace Eventures.WebAPI.Controllers
             this.dbContext = context;
         }
 
+        /// <summary>
+        /// Gets events count.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/events/count
+        ///     {
+        ///         
+        ///     }
+        /// </remarks>
+        /// <response code="200">Returns "OK" with events count</response>  
         [HttpGet("count")] // GET: /api/events/count
         public int GetEventsCount()
         {
             return this.dbContext.Events.ToList().Count();
         }
 
+        /// <summary>
+        /// Gets a list with all events.
+        /// </summary>
+        /// <remarks>
+        /// You should be an authenticated user!
+        /// 
+        /// Sample request:
+        ///
+        ///     GET /api/events
+        ///     {
+        ///         
+        ///     }
+        /// </remarks>
+        /// <response code="200">Returns "OK" with a list of all events</response>
+        /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>    
         [Authorize]
         [HttpGet] // GET: /api/events
         public IActionResult GetEvents()
@@ -44,6 +71,22 @@ namespace Eventures.WebAPI.Controllers
             return Ok(events);
         }
 
+        /// <summary>
+        /// Gets an event by id.
+        /// </summary>
+        /// <remarks>
+        /// You should be an authenticated user!
+        /// 
+        /// Sample request:
+        ///
+        ///     GET /api/events/{id}
+        ///     {
+        ///         
+        ///     }
+        /// </remarks>
+        /// <response code="200">Returns "OK" with the event</response>
+        /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>    
+        /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>    
         [Authorize]
         [HttpGet("{id}")] // GET: /api/events/1
         public IActionResult GetEventById(int id)
@@ -58,8 +101,29 @@ namespace Eventures.WebAPI.Controllers
             return Ok(eventViewModel);
         }
 
+        /// <summary>
+        /// Creates an event.
+        /// </summary>
+        /// <remarks>
+        /// You should be an authenticated user!
+        /// 
+        /// Sample request:
+        ///
+        ///     POST /api/events/create
+        ///     {
+        ///             "name": "Party",
+        ///             "place": "Online",
+        ///             "start": "2012-04-23T18:25:43.511Z",
+        ///             "end": "2012-04-23T18:25:43.511Z",
+        ///             "totalTickets": "155",
+        ///             "pricePerTicket": "30.00"
+        ///     }
+        /// </remarks>
+        /// <response code="201">Returns "Created" with the created event</response>
+        /// <response code="400">Returns "Bad Request" when an invalid request is sent</response>   
+        /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>   
         [Authorize]
-        [HttpPost("create")] // POST: api/events/create
+        [HttpPost("create")]
         public IActionResult CreateEvent(EventCreateBindingModel bindingModel)
         {
             string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
@@ -83,8 +147,31 @@ namespace Eventures.WebAPI.Controllers
             return CreatedAtAction("GetEventById", new { id = ev.Id }, eventViewModel);
         }
 
+        /// <summary>
+        /// Edits an event.
+        /// </summary>
+        /// <remarks>
+        /// You should be an authenticated user!
+        /// You should be the owner of the edited event!
+        /// 
+        /// Sample request:
+        ///
+        ///     PUT /api/events/{id}
+        ///     {
+        ///             "name": "Changed Name",
+        ///             "place": "Online",
+        ///             "start": "2012-04-23T18:25:43.511Z",
+        ///             "end": "2012-04-23T18:25:43.511Z",
+        ///             "totalTickets": "155",
+        ///             "pricePerTicket": "30.00"
+        ///     }
+        /// </remarks>
+        /// <response code="204">Returns "No Content"</response>
+        /// <response code="400">Returns "Bad Request" when an invalid request is sent</response>   
+        /// <response code="401">Returns "Unauthorized" when user is not authenticated or is not the owner of the event</response>  
+        /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>  
         [Authorize]
-        [HttpPut("{id}")] // PUT: api/events/1
+        [HttpPut("{id}")]
         public IActionResult PutEvent(int id, EventCreateBindingModel eventModel)
         {
             var ev = dbContext.Events.Find(id);
@@ -111,6 +198,23 @@ namespace Eventures.WebAPI.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes an event.
+        /// </summary>
+        /// <remarks>
+        /// You should be an authenticated user!
+        /// You should be the owner of the edited event!
+        /// 
+        /// Sample request:
+        ///
+        ///     DELETE /api/events/{id}
+        ///     {
+        ///            
+        ///     }
+        /// </remarks>
+        /// <response code="200">Returns "OK" with the deleted event</response>
+        /// <response code="401">Returns "Unauthorized" when user is not authenticated or is not the owner of the event</response>  
+        /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>  
         [Authorize]
         [HttpDelete("{id}")] // DELETE: api/events/1
         public IActionResult DeleteEvent(int id)
