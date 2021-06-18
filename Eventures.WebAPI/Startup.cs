@@ -127,7 +127,10 @@ namespace WebApi
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                c.SerializeAsV2 = true;
+            });
 
             app.UseSwaggerUI(c =>
             {
