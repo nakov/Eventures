@@ -30,11 +30,11 @@ namespace Eventures.WebAPI.UnitTests
             testDb = new TestDb();
             dbContext = testDb.CreateDbContext();
             controller = new EventsController(dbContext);
-            
+
             // Get configuration from appsettings.json file in the Web API project
-            //var configurationPath = Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\..\Eventures.WebAPI\");
+            var configurationPath = Path.GetFullPath(Directory.GetCurrentDirectory() + @"/../../../../Eventures.WebAPI/");
             var configuration = new ConfigurationBuilder()
-                //.SetBasePath(configurationPath)
+                .SetBasePath(configurationPath)
                 .AddJsonFile("appsettings.json")
                 .Build();
             usersController = new UsersController(dbContext, configuration);
@@ -253,7 +253,7 @@ namespace Eventures.WebAPI.UnitTests
             var invalidId = -1;
 
             // Act: make request with invalid id
-            var result = controller.PutEvent(invalidId, changedEvent) as NotFoundResult;
+            var result = controller.PutEvent(invalidId, changedEvent) as NotFoundObjectResult;
 
             //Assert
             Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
@@ -281,7 +281,7 @@ namespace Eventures.WebAPI.UnitTests
             };
 
             // Act
-            var result = controller.PutEvent(openFestEvent.Id, changedEvent) as UnauthorizedResult;
+            var result = controller.PutEvent(openFestEvent.Id, changedEvent) as UnauthorizedObjectResult;
 
             // Assert user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);

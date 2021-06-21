@@ -177,14 +177,14 @@ namespace Eventures.WebAPI.Controllers
             var ev = dbContext.Events.Find(id);
             if (ev == null)
             {
-                return NotFound();
+                return NotFound(new { msg = $"Event #{id} not found." });
             }
 
             string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
             var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
             if(currentUser.Id != ev.OwnerId)
             {
-                return Unauthorized();
+                return Unauthorized(new { msg = "Cannot edit event, when not an owner." });
             }
 
             ev.Name = eventModel.Name;

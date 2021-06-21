@@ -76,13 +76,18 @@ namespace Eventures.App.Controllers
             Event ev = dbContext.Events.Find(id);
             string currentUser = this.User.FindFirstValue(ClaimTypes.Name);
             if (ev == null || currentUser != this.dbContext.Users.Find(ev.OwnerId).UserName)
+            {
+                // Not an owner -> display "Event not found"
                 return this.View();
+            }
             return this.View(CreateEventViewModel(ev));
         }
 
         [HttpPost]
         public IActionResult Delete(EventViewModel eventModel)
         {
+            // TODO: check the owner, and return "Unauthorized" when not an owner!
+
             Event ev = dbContext.Events.Find(eventModel.Id);
             if (ev != null)
             {
@@ -99,6 +104,7 @@ namespace Eventures.App.Controllers
             string currentUser = this.User.FindFirstValue(ClaimTypes.Name);
             if (ev == null || currentUser != this.dbContext.Users.Find(ev.OwnerId).UserName)
             {
+                // Not an owner -> display "Event not found"
                 return this.View();
             }
             EventCreateBindingModel model = new EventCreateBindingModel()
@@ -116,6 +122,8 @@ namespace Eventures.App.Controllers
         [HttpPost]
         public IActionResult Edit(int id, EventCreateBindingModel bindingModel)
         {
+            // TODO: check the owner, and return "Unauthorized" when not an owner!
+
             Event ev = dbContext.Events.Find(id);
             if (ev == null)
             {

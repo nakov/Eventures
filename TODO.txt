@@ -1,8 +1,31 @@
 TODO:
 
-0) At the home page, anonymous users should see the #count of events.
+1) Add at user's home page, after login (in the Web app):
+  - My events: 2
+  - All events: 5  
+  
+2) Implement patch (partial update, e.g. change title only) in the API
 
-1) GET https://localhost:44318/api/events -> return 
+3) Swagger UI -> better title, e.g. "Eventures API"
+
+4) in the API app: a simple ASP.NET Core Web API for the Eventures App
+"Softuni - Website" --> change to the GitHub app repo
+
+5) Better error handling in the API, like thhis:
+  return NotFound(new { msg = $"Event #{id} not found." });
+  
+6) API: edit event: check owner on POST
+
+7) API: delete event: check owner on POST
+
+8) Web app: Button [Back to List] -> use the brown background like in the "Delete" page
+
+9) Merge API with the main app
+
+
+[Done] 0) At the home page, anonymous users should see the #count of events.
+
+[Done] 1) GET https://localhost:44318/api/events -> return 
 "owner": {
       "firstName": "Mincho",
       "lastName": "Praznikov",
@@ -12,13 +35,12 @@ TODO:
 }
 map entity User -> UserViewModel
 
-2) In the Web App ->
-  users should be able to delete only their own events
+[Done] 2) In the Web App -> users should be able to delete only their own events
 
-3) In the Web App -> [Delete] shudl be available only for the event owner
+[Done] 3) In the Web App -> [Delete] should be available only for the event owner
   - Also check in the controllers
 
-4) In the Web App -> implement [Edit] button + edit form (similar to create form, but for editing)
+[Done] 4) In the Web App -> implement [Edit] button + edit form (similar to create form, but for editing)
 
 5) Merge API with the main app
 
