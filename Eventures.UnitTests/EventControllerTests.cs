@@ -3,9 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
+
 using Eventures.App.Controllers;
 using Eventures.App.Models;
 using Eventures.App.Data;
+using Eventures.Tests.Common;
 
 namespace Eventures.UnitTests
 {
@@ -71,7 +73,7 @@ namespace Eventures.UnitTests
                 PricePerTicket = 20
             };
             int eventsCountBefore = dbContext.Events.Count();
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
 
             // Act
             var result = controller.Create(newEventData);
@@ -110,7 +112,7 @@ namespace Eventures.UnitTests
 
             int eventsCountBefore = dbContext.Events.Count();
 
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
             controller.ModelState.AddModelError("Name", "The Name field is required");
 
             // Act
@@ -131,7 +133,7 @@ namespace Eventures.UnitTests
         public void Test_DeletePage_ValidId()
         {
             // Arrange: create a new event in the DB for deleting
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
             var newEvent = new Event()
             {
                 Name = "Beach Party" + DateTime.Now.Ticks,
@@ -162,7 +164,7 @@ namespace Eventures.UnitTests
         public void Test_DeletePage_InvalidId()
         {
             // Arrange
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
 
             // Act
             var result = controller.Delete(-1);
@@ -237,7 +239,7 @@ namespace Eventures.UnitTests
         {
             // Arrange: get the "Softuniada" event from the database for editing
             var softuniadaEvent = this.testDb.EventSoftuniada;
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
 
             // Act
             var result = controller.Edit(softuniadaEvent.Id);
@@ -261,7 +263,7 @@ namespace Eventures.UnitTests
         public void Test_Edit_InvalidId()
         {
             // Arrange
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
 
             // Act
             var result = controller.Edit(-1);
@@ -320,7 +322,7 @@ namespace Eventures.UnitTests
         {
             // Arrange: get the "Softuniada" event from the database for editing
             var softuniadaEvent = this.testDb.EventSoftuniada;
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
 
             // The changed name is invalid: name == empty string
             var invalidName = string.Empty;

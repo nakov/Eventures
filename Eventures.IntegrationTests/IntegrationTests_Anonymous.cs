@@ -9,20 +9,23 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 
 using Eventures.UnitTests;
+using Eventures.Tests.Common;
 
 namespace Eventures.IntegrationTests
 {
     public class IntegrationTests_Anonymous
     {
         TestDb testDb;
+        TestEventuresApp testEventuresApp;
         HttpClient httpClient;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             this.testDb = new TestDb();
-            var testingWebAppFactory  = new TestingWebAppFactory(testDb);
-            this.httpClient = testingWebAppFactory.CreateClient();
+            this.testEventuresApp = new TestEventuresApp(testDb);
+            this.httpClient = new HttpClient();
+            this.httpClient.BaseAddress = new Uri(this.testEventuresApp.ServerUri);
         }
 
         [Test]
@@ -140,6 +143,12 @@ namespace Eventures.IntegrationTests
         {
             Match match = Regex.Match(htmlResponseText, @"\<input name=""__RequestVerificationToken"" type=""hidden"" value=""([^""]+)"" \/\>");
             return match.Success ? match.Groups[1].Captures[0].Value : null;
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            this.testEventuresApp.Dispose();
         }
     }
 }

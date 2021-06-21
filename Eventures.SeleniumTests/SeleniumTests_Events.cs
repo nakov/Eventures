@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using Eventures.Tests.Common;
+using Eventures.UnitTests;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
@@ -8,18 +10,29 @@ namespace Eventures.SeleniumTests
 {
     public class SeleniumTests_Events
     {
+        TestDb testDb;
         IWebDriver driver;
-        string username = "pesho" + DateTime.UtcNow.Ticks;
-        string password = "pass123123";
+        string username = "testuser" + DateTime.UtcNow.Ticks;
+        string password = "password" + DateTime.UtcNow.Ticks;
+        TestEventuresApp testEventuresApp;
+        string baseUrl;
 
         [OneTimeSetUp]
         public void Setup()
         {
+            // Run the Web app in a local Web server
+            this.testDb = new TestDb();
+            this.testEventuresApp = new TestEventuresApp(testDb);
+            this.baseUrl = this.testEventuresApp.ServerUri;
+
+            // Setup the ChromeDriver
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArguments("headless");
+            chromeOptions.AddArguments("--start-maximized");
             this.driver = new ChromeDriver(chromeOptions);
-            this.driver.Manage().Window.Maximize();
             this.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+
+            // Register a new user to be used during the tests
             RegisterUser();
         }
 
@@ -27,14 +40,15 @@ namespace Eventures.SeleniumTests
         public void Test_HomePage_AllEventsLink()
         {
             // Arrange: go to the "Home" page and find the link to the "All Events" page
-            driver.Url = "https://localhost:44395/";
-            var allEventsPageLink = driver.FindElement(By.XPath("//a[@href='/Events/All'][contains(.,'all events')]"));
+            driver.Navigate().GoToUrl(this.baseUrl);
+            var allEventsPageLink = driver.FindElement(
+                By.XPath("//a[@href='/Events/All'][contains(.,'all events')]"));
 
             // Act: click on the link
             allEventsPageLink.Click();
 
             // Assert user is redirected to the "All Events" page
-            Assert.AreEqual("https://localhost:44395/Events/All", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.Title.Contains("All Events"));
             Assert.That(driver.PageSource.Contains("<h1>All Events</h1>"));
             Assert.That(driver.PageSource.Contains(@"<a href=""/Events/Create"">Create New</a>"));
@@ -44,7 +58,7 @@ namespace Eventures.SeleniumTests
         public void Test_AllEventsPage_ThroughNavigation()
         {
             // Arrange: go to the "Home" page
-            driver.Url = "https://localhost:44395/";
+            driver.Navigate().GoToUrl(this.baseUrl);
 
             // Locate the dropdown menu and click on it
             driver.FindElement(By.Id("dropdownMenuLink")).Click();
@@ -57,7 +71,7 @@ namespace Eventures.SeleniumTests
             allEventsLinkItem.Click();
 
             // Assert user is redirected to the "All Events" page
-            Assert.AreEqual("https://localhost:44395/Events/All", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.Title.Contains("All Events"));
             Assert.That(driver.PageSource.Contains("<h1>All Events</h1>"));
             Assert.That(driver.PageSource.Contains(@"<a href=""/Events/Create"">Create New</a>"));
@@ -67,8 +81,9 @@ namespace Eventures.SeleniumTests
         public void Test_AllEventsPage_ThroughUrl()
         {
             // Arrange
+
             // Act
-            driver.Url = "https://localhost:44395/Events/All";
+            driver.Navigate().GoToUrl(this.baseUrl + "/Events/All");
 
             // Assert
             Assert.That(driver.Title.Contains("All Events"));
@@ -80,14 +95,14 @@ namespace Eventures.SeleniumTests
         public void Test_HomePage_CreateEventPageLink()
         {
             // Arrange: go to the "Home" page and find the link to the "Create Event" page
-            driver.Url = "https://localhost:44395/";
+            driver.Navigate().GoToUrl(this.baseUrl);
             var createEventPageLink = driver.FindElement(By.XPath("//a[@href='/Events/Create'][contains(.,'new event')]"));
 
             // Act: click on the link
             createEventPageLink.Click();
 
             // Assert user is redirected to the "Create Event" page
-            Assert.AreEqual("https://localhost:44395/Events/Create", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/Create", driver.Url);
             Assert.That(driver.Title.Contains("Create Event"));
             Assert.That(driver.PageSource.Contains("<h1>Create New Event</h1>"));
             Assert.That(driver.PageSource.Contains(@"<a href=""/Events/All"">Back to List</a>"));
@@ -97,7 +112,7 @@ namespace Eventures.SeleniumTests
         public void Test_CreateEventPage_ThroughNavigation()
         {
             // Arrange: go to the "Home" page
-            driver.Url = "https://localhost:44395/";
+            driver.Navigate().GoToUrl(this.baseUrl);
 
             // Locate the dropdown menu and click on it
             driver.FindElement(By.Id("dropdownMenuLink")).Click();
@@ -110,7 +125,7 @@ namespace Eventures.SeleniumTests
             createEventLinkItem.Click();
 
             // Assert user is redirected to the "Create Event" page
-            Assert.AreEqual("https://localhost:44395/Events/Create", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/Create", driver.Url);
             Assert.That(driver.Title.Contains("Create Event"));
             Assert.That(driver.PageSource.Contains("<h1>Create New Event</h1>"));
             Assert.That(driver.PageSource.Contains(@"<a href=""/Events/All"">Back to List</a>"));
@@ -120,8 +135,9 @@ namespace Eventures.SeleniumTests
         public void Test_CreateEventPage_ThroughUrl()
         {
             // Arrange
+
             // Act
-            driver.Url = "https://localhost:44395/Events/Create";
+            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
 
             // Assert
             Assert.That(driver.Title.Contains("Create Event"));
@@ -133,14 +149,14 @@ namespace Eventures.SeleniumTests
         public void Test_CreateEventPage_BackToListLink()
         {
             // Arrange: go to the "Create Event" page
-            driver.Url = "https://localhost:44395/Events/Create";
+            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
             Assert.That(driver.Title.Contains("Create Event"));
 
             // Act: click on the "Back to List" link
             driver.FindElement(By.XPath("//a[@href='/Events/All'][contains(.,'Back to List')]")).Click();
 
             // Assert user is redirected to the "All Events" page
-            Assert.AreEqual("https://localhost:44395/Events/All", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.Title.Contains("All Events"));
             Assert.That(driver.PageSource.Contains("<h1>All Events</h1>"));
         }
@@ -149,7 +165,7 @@ namespace Eventures.SeleniumTests
         public void Test_CreateEventPage_CreateEvent_ValidData()
         {
             // Arrange: go to the "Create Event" page
-            driver.Url = "https://localhost:44395/Events/Create";
+            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
             Assert.That(driver.Title.Contains("Create Event"));
 
             // Locate fields and fill them in with event data
@@ -187,7 +203,7 @@ namespace Eventures.SeleniumTests
             createButton.Click();
 
             // Assert user is redirected to the "All Events" page
-            Assert.AreEqual("https://localhost:44395/Events/All", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.Title.Contains("All Events"));
             Assert.That(driver.PageSource.Contains("<h1>All Events</h1>"));
 
@@ -207,7 +223,7 @@ namespace Eventures.SeleniumTests
         public void Test_CreateEventPage_CreateEvent_InvalidData()
         {
             // Arrange: go to the "Create Event" page
-            driver.Url = "https://localhost:44395/Events/Create";
+            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
             Assert.That(driver.Title.Contains("Create Event"));
 
             // Locate fields and fill them in with event data
@@ -223,8 +239,8 @@ namespace Eventures.SeleniumTests
             // Click on the button
             createButton.Click();
 
-            // Assert the user is on the same page
-            Assert.AreEqual("https://localhost:44395/Events/Create", driver.Url);
+            // Assert the user stays on the same page
+            Assert.AreEqual(this.baseUrl + "/Events/Create", driver.Url);
 
             // Assert that an error message appears on the page
             Assert.That(driver.PageSource.Contains("The Name field is required."));
@@ -234,7 +250,7 @@ namespace Eventures.SeleniumTests
         public void Test_DeleteEvent()
         {
             // Arrange: go to the "Create Event" page and create a new event for deleting
-            driver.Url = "https://localhost:44395/Events/Create";
+            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
             Assert.That(driver.Title.Contains("Create Event"));
             
             var eventName = "Best Show" + DateTime.UtcNow.Ticks;
@@ -246,7 +262,7 @@ namespace Eventures.SeleniumTests
             createButton.Click();
 
             // Assert user is redirected to the "All Events" page and the new event appears on the page
-            Assert.AreEqual("https://localhost:44395/Events/All", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.PageSource.Contains(eventName));
 
             // Get the last row with the event and locate the "Delete" button of the event
@@ -258,7 +274,7 @@ namespace Eventures.SeleniumTests
             deleteBtn.Click();
 
             // Assert the user is redirected to the "Delete Event" page
-            Assert.That(driver.Url.Contains("https://localhost:44395/Events/Delete/"));
+            Assert.That(driver.Url.Contains("/Events/Delete/"));
             Assert.That(driver.Title.Contains("Delete Event"));
             Assert.That(driver.PageSource.Contains(eventName));
 
@@ -267,7 +283,7 @@ namespace Eventures.SeleniumTests
             confirmDeleteButton.Click();
 
             // Assert the user is redirected to the "All Events" page
-            Assert.AreEqual("https://localhost:44395/Events/All", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
 
             // Assert that the event doesn't appear on the page
             Assert.That(!driver.PageSource.Contains(eventName));
@@ -277,7 +293,7 @@ namespace Eventures.SeleniumTests
         public void Test_EditEvent_ValidData()
         {
             // Arrange: go to the "Create Event" page and create a new event for editing
-            driver.Url = "https://localhost:44395/Events/Create";
+            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
             Assert.That(driver.Title.Contains("Create Event"));
 
             var eventName = "Best Show" + DateTime.UtcNow.Ticks;
@@ -289,7 +305,7 @@ namespace Eventures.SeleniumTests
             createButton.Click();
 
             // Assert user is redirected to the "All Events" page and the new event appears on the page
-            Assert.AreEqual("https://localhost:44395/Events/All", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.PageSource.Contains(eventName));
 
             // Get the last row with the event and locate the "Edit" button of the event
@@ -301,7 +317,7 @@ namespace Eventures.SeleniumTests
             editButton.Click();
 
             // Assert the user is redirected to the "Edit Event" page
-            Assert.That(driver.Url.Contains("https://localhost:44395/Events/Edit/"));
+            Assert.That(driver.Url.Contains("/Events/Edit/"));
             Assert.That(driver.Title.Contains("Edit Event"));
 
             // Change the name of the event
@@ -316,7 +332,7 @@ namespace Eventures.SeleniumTests
             confirmEditButton.Click();
 
             // Assert the user is redirected to the "All Events" page
-            Assert.AreEqual("https://localhost:44395/Events/All", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
 
             // Assert that the page contains the new event name and not the old one
             Assert.That(driver.PageSource.Contains(changedName));
@@ -327,7 +343,7 @@ namespace Eventures.SeleniumTests
         public void Test_EditEvent_InvalidData()
         {
             // Arrange: go to the "Create Event" page and create a new event for editing
-            driver.Url = "https://localhost:44395/Events/Create";
+            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
             Assert.That(driver.Title.Contains("Create Event"));
 
             var eventName = "Best Show" + DateTime.UtcNow.Ticks;
@@ -339,7 +355,7 @@ namespace Eventures.SeleniumTests
             createButton.Click();
 
             // Assert user is redirected to the "All Events" page and the new event appears on the page
-            Assert.AreEqual("https://localhost:44395/Events/All", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.PageSource.Contains(eventName));
 
             // Get the last row with the event and locate the "Edit" button of the event
@@ -351,7 +367,7 @@ namespace Eventures.SeleniumTests
             editButton.Click();
 
             // Assert the user is redirected to the "Edit Event" page
-            Assert.That(driver.Url.Contains("https://localhost:44395/Events/Edit/"));
+            Assert.That(driver.Url.Contains("/Events/Edit/"));
             Assert.That(driver.Title.Contains("Edit Event"));
 
             // Change the name of the event with invalid one: name == empty string
@@ -366,21 +382,15 @@ namespace Eventures.SeleniumTests
             confirmEditButton.Click();
 
             // Assert the user is on the same page
-            Assert.That(driver.Url.Contains("https://localhost:44395/Events/Edit/"));
+            Assert.That(driver.Url.Contains("/Events/Edit/"));
 
             // Assert an error message appears on the page
             Assert.That(driver.PageSource.Contains("The Name field is required."));
         }
 
-        [OneTimeTearDown]
-        public void TearDown()
-        {
-            driver.Quit();
-        }
-
         private void RegisterUser()
         {
-            driver.Url = "https://localhost:44395/Identity/Account/Register";
+            driver.Navigate().GoToUrl(this.baseUrl + "/Identity/Account/Register");
 
             driver.FindElement(By.Id("Input_Username")).SendKeys(username);
             driver.FindElement(By.Id("Input_Email")).SendKeys($"{username}@mail.com");
@@ -390,8 +400,15 @@ namespace Eventures.SeleniumTests
             driver.FindElement(By.Id("Input_LastName")).SendKeys("Petrov");
             driver.FindElement(By.XPath("//button[@type='submit'][contains(.,'Register')]")).Click();
 
-            Assert.AreEqual("https://localhost:44395/", driver.Url);
+            Assert.AreEqual(this.baseUrl + "/", driver.Url);
             Assert.That(driver.PageSource.Contains($"Welcome, {username}"));
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            driver.Quit();
+            this.testEventuresApp.Dispose();
         }
     }
 }

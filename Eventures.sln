@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.UnitTests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.IntegrationTests", "Eventures.WebAPI.IntegrationTests\Eventures.WebAPI.IntegrationTests.csproj", "{32D156D1-81CC-4C21-A710-61031F3FB655}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.SeleniumTests", "Eventures.SeleniumTests\Eventures.SeleniumTests.csproj", "{8C46501C-D333-4C97-8179-BFF34D53195C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.SeleniumTests", "Eventures.SeleniumTests\Eventures.SeleniumTests.csproj", "{8C46501C-D333-4C97-8179-BFF34D53195C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.Tests.Common", "Eventures.Tests.Common\Eventures.Tests.Common.csproj", "{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{8C46501C-D333-4C97-8179-BFF34D53195C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C46501C-D333-4C97-8179-BFF34D53195C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C46501C-D333-4C97-8179-BFF34D53195C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

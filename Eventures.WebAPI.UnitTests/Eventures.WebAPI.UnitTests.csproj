@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Eventures.UnitTests\Eventures.UnitTests.csproj" />
     <ProjectReference Include="..\Eventures.WebAPI\Eventures.WebAPI.csproj" />
+    <ProjectReference Include="..\Eventures.Tests.Common\Eventures.Tests.Common.csproj" />
   </ItemGroup>
 
 </Project>

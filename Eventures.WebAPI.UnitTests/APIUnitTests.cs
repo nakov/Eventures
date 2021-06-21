@@ -1,5 +1,6 @@
 using Eventures.App.Data;
 using Eventures.App.Models;
+using Eventures.Tests.Common;
 using Eventures.UnitTests;
 using Eventures.WebAPI.Controllers;
 using Eventures.WebAPI.Models;
@@ -158,7 +159,7 @@ namespace Eventures.WebAPI.UnitTests
                 PricePerTicket = 20
             };
             int eventsCountBefore = dbContext.Events.Count();
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
 
             // Act
             var result = controller.CreateEvent(newEventData) as CreatedAtActionResult;
@@ -217,7 +218,7 @@ namespace Eventures.WebAPI.UnitTests
                 PricePerTicket = 120.00m
             };
 
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
 
             // Act
             var result = controller.PutEvent(newEvent.Id, changedEvent) as NoContentResult;
@@ -265,7 +266,7 @@ namespace Eventures.WebAPI.UnitTests
             var openFestEvent = this.testDb.EventOpenFest;
 
             // Assign UserMaria to the controller
-            TestDb.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Create event binding model with different event name
             var changedName = "OpenFest 2021 (New Edition)";
@@ -308,7 +309,7 @@ namespace Eventures.WebAPI.UnitTests
             dbContext.Add(newEvent);
             dbContext.SaveChanges();
 
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
             int eventsCountBefore = dbContext.Events.Count();
 
             // Act
@@ -334,7 +335,7 @@ namespace Eventures.WebAPI.UnitTests
         public void Test_Delete_InvalidId()
         {
             // Arrange: create a new event in the DB for deleting
-            TestDb.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
 
             int eventsCountBefore = dbContext.Events.Count();
             int invalidId = -1;
@@ -354,7 +355,7 @@ namespace Eventures.WebAPI.UnitTests
             var openFestEvent = this.testDb.EventOpenFest;
 
             // Assign UserMaria to the controller
-            TestDb.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             int eventsCountBefore = dbContext.Events.Count();
 

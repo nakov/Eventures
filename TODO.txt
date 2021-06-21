@@ -8,7 +8,7 @@ TODO:
 
 3) Swagger UI -> better title, e.g. "Eventures API"
 
-4) in the API app: a simple ASP.NET Core Web API for the Eventures App
+4) In the API app: a simple ASP.NET Core Web API for the Eventures App
 "Softuni - Website" --> change to the GitHub app repo
 
 5) Better error handling in the API, like thhis:
@@ -20,7 +20,15 @@ TODO:
 
 8) Web app: Button [Back to List] -> use the brown background like in the "Delete" page
 
-9) Merge API with the main app
+9) API (Swagger): change https://localhost:44318/index.html -> https://localhost:44318/api/index.html
+
+10) API (Swagger): change https://localhost:44318/api -> show the same as https://localhost:44318/swagger/v1/swagger.json
+
+11) Docs to be here: https://localhost:44318/api/docs/index.html, but redirect the home page to this URL automatically: https://localhost:44318/ --> https://localhost:44318/api/docs
+
+12) Merge API with the main app
+
+
 
 
 [Done] 0) At the home page, anonymous users should see the #count of events.
@@ -42,13 +50,11 @@ map entity User -> UserViewModel
 
 [Done] 4) In the Web App -> implement [Edit] button + edit form (similar to create form, but for editing)
 
-5) Merge API with the main app
+[Done] 6) Fix the unit tests for the Web App
 
-6) Fix the unit tests for the Web App
+[Done] 7) Add unit tests for the Web API
 
-7) Add unit tests for the Web API
-
-8) Add API help page (auto-generated): GET /api -> return JSON endpoints
+[Done] 8) Add API help page (auto-generated): GET /api -> return JSON endpoints
 Example: https://shorturl.nakov.repl.co/api
 Web API Help Page: https://docs.microsoft.com/en-us/aspnet/web-api/overview/getting-started-with-aspnet-web-api/creating-api-help-pages
 
