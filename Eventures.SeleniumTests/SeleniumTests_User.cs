@@ -14,7 +14,9 @@ namespace Eventures.SeleniumTests
         [OneTimeSetUp]
         public void Setup()
         {
-            this.driver = new ChromeDriver();
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.AddArguments("headless");
+            this.driver = new ChromeDriver(chromeOptions);
             this.driver.Manage().Window.Maximize();
         }
 
