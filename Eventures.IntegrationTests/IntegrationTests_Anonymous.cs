@@ -9,21 +9,19 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 
 using Eventures.UnitTests;
-using Microsoft.Net.Http.Headers;
 
 namespace Eventures.IntegrationTests
 {
     public class IntegrationTests_Anonymous
     {
         TestDb testDb;
-        TestingWebAppFactory testingWebAppFactory;
         HttpClient httpClient;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             this.testDb = new TestDb();
-            testingWebAppFactory = new TestingWebAppFactory(testDb);
+            var testingWebAppFactory  = new TestingWebAppFactory(testDb);
             this.httpClient = testingWebAppFactory.CreateClient();
         }
 

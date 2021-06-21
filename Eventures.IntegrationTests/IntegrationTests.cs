@@ -14,14 +14,13 @@ namespace Eventures.IntegrationTests
     public class IntegrationTests
     {
         HttpClient httpClient;
-        TestingWebAppFactory testingWebAppFactory;
         TestDb testDb;
 
         [OneTimeSetUp]
         public async Task OneTimeSetUp()
         {
             this.testDb = new TestDb();
-            testingWebAppFactory = new TestingWebAppFactory(testDb);
+            var testingWebAppFactory = new TestingWebAppFactory(testDb);
             this.httpClient = testingWebAppFactory.CreateClient();
             // Login UserMaria
             await LoginUser(this.testDb.UserMaria.UserName, this.testDb.UserMaria.UserName);
