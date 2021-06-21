@@ -240,7 +240,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var putResponse = await this.httpClient.PutAsJsonAsync(
                 $"/api/events/{eventInDb.Id}", changedEvent);
 
-            // Assert
+            // Assert user is unauthroized because UserMaria is not the owner of the "Open Fest" event
             Assert.AreEqual(HttpStatusCode.Unauthorized, putResponse.StatusCode);
 
             this.dbContext = this.testDb.CreateDbContext();
@@ -310,9 +310,8 @@ namespace Eventures.WebAPI.IntegrationTests
             var deleteResponse = await httpClient.DeleteAsync(
                 $"/api/events/{eventInDb.Id}");
 
-            // Assert
+            // Assert user is unauthroized because UserMaria is not the owner of the "Open Fest" event
             Assert.AreEqual(HttpStatusCode.Unauthorized, deleteResponse.StatusCode);
-
             Assert.That(this.dbContext.Events.Contains(eventInDb));
         }
     }

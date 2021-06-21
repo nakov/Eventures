@@ -43,7 +43,7 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public async Task Test_User_Register()
         {
-            // Arrange: create new user
+            // Arrange: create a new register model
             var newUser = new ApiRegisterModel()
             {
                 Username = "newUser",
@@ -58,7 +58,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act
             var result = await usersController.Register(newUser) as OkObjectResult;
 
-            // Assert
+            // Assert the user is registered and logged-in successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
             var resultValues = result.Value as Response;
             Assert.AreEqual("Success", resultValues.Status);
@@ -71,7 +71,7 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public async Task Test_User_Login()
         {
-            // Arrange: create new user
+            // Arrange: create a login model
             var user = new ApiLoginModel()
             {
                 Username = this.testDb.UserMaria.UserName,
@@ -81,7 +81,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act
             var result = await usersController.Login(user) as OkObjectResult;
 
-            // Assert
+            // Assert the user is logged in and has a valid token
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
 
             var resultValue = result.Value as ResponseWithToken;

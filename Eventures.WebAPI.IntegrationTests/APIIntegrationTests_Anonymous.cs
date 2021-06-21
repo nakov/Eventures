@@ -58,7 +58,7 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Users_Register_ValidData()
         {
-            // Arrange
+            // Arrange: create a new register model
             string username = "user" + DateTime.Now.Ticks;
             string password = "pass" + DateTime.Now.Ticks;
             var newUser = new ApiRegisterModel()
@@ -76,7 +76,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var postResponse = await this.htttClient.PostAsJsonAsync(
                 "/api/users/register", newUser);
 
-            // Assert
+            // Assert the user is registered and logged-in successfully
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
 
             var postResponseContent = postResponse.Content.ReadAsAsync<Response>();
@@ -91,8 +91,8 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Users_Register_InvalidData()
         {
-            // Arrange
-            string username = "user" + DateTime.Now.Ticks;
+            // Arrange: create a register model with invalid username: username == empty string
+            string username = string.Empty;
             string password = "pass" + DateTime.Now.Ticks;
             var newUser = new ApiRegisterModel()
             {
@@ -110,15 +110,14 @@ namespace Eventures.WebAPI.IntegrationTests
                 "/api/users/register", newUser);
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
+            Assert.AreEqual(HttpStatusCode.BadRequest, postResponse.StatusCode);
 
-            var postResponseContent = postResponse.Content.ReadAsAsync<Response>();
+            var postResponseContent = postResponse.Content.ReadAsStringAsync();
             var postResponseResult = postResponseContent.Result;
-            Assert.AreEqual("Success", postResponseResult.Status);
-            Assert.AreEqual("User created successfully!", postResponseResult.Message);
+            Assert.That(postResponseResult.Contains("Username is required!"));
 
             var usersCountAfter = this.dbContext.Users.Count();
-            Assert.AreEqual(usersCountBefore + 1, usersCountAfter);
+            Assert.AreEqual(usersCountBefore, usersCountAfter);
         }
 
         [Test]
