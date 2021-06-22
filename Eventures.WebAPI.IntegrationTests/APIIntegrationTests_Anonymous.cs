@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using WebApi.Models;
 using Eventures.App.Data;
 using Eventures.UnitTests;
 using Eventures.WebAPI.IntegraionTests;
@@ -79,7 +78,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Assert the user is registered and logged-in successfully
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
 
-            var postResponseContent = postResponse.Content.ReadAsAsync<Response>();
+            var postResponseContent = postResponse.Content.ReadAsAsync<ResponseMsg>();
             var postResponseResult = postResponseContent.Result;
             Assert.AreEqual("Success", postResponseResult.Status);
             Assert.AreEqual("User created successfully!", postResponseResult.Message);

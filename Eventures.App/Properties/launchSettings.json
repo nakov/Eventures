@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:64615",
-      "sslPort": 44395
+      "applicationUrl": "http://localhost:50002",
+      "sslPort": 50003
     }
   },
   "profiles": {
@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Eventures.App": {
+    "Eventures.App Console": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

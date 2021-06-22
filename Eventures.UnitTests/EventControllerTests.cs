@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+
 using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
 
-using Eventures.App.Controllers;
-using Eventures.App.Models;
 using Eventures.App.Data;
+using Eventures.App.Models;
+using Eventures.App.Controllers;
 using Eventures.Tests.Common;
 
 namespace Eventures.UnitTests

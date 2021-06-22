@@ -9,7 +9,6 @@ using WebApi;
 using Eventures.App.Data;
 using Eventures.UnitTests;
 using Eventures.WebAPI.Models;
-using WebApi.Models;
 
 namespace Eventures.WebAPI.IntegraionTests
 {

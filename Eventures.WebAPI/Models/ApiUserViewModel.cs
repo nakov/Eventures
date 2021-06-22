@@ -1,6 +1,4 @@
-using System.Text.Json.Serialization;
-
-namespace WebApi.Models
+namespace Eventures.WebAPI.Models
 {
     public class ApiUserViewModel
     {

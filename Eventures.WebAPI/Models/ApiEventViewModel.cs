@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using WebApi.Models;
 
 namespace Eventures.WebAPI.Models
 {
@@ -12,6 +11,7 @@ namespace Eventures.WebAPI.Models
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public int TotalTickets { get; set; }
+
         [Column(TypeName = "decimal(12,3)")]
         public decimal PricePerTicket { get; set; }
 

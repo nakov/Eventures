@@ -13,8 +13,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using WebApi.Controllers;
-using WebApi.Models;
 
 namespace Eventures.WebAPI.UnitTests
 {
@@ -60,7 +58,7 @@ namespace Eventures.WebAPI.UnitTests
 
             // Assert the user is registered and logged-in successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
-            var resultValues = result.Value as Response;
+            var resultValues = result.Value as ResponseMsg;
             Assert.AreEqual("Success", resultValues.Status);
             Assert.AreEqual("User created successfully!", resultValues.Message);
 

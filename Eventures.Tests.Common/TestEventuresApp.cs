@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Diagnostics;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -36,18 +37,20 @@ namespace Eventures.Tests.Common
                     services.AddScoped<ApplicationDbContext>(
                         provider => this.testDb.CreateDbContext());
                 });
+                webHostBuilder.UseUrls("http://127.0.0.1:0");
             });
             this.host = hostBuilder.Build();
             this.host.Start();
             var server = this.host.Services.GetRequiredService<IServer>();
-            this.ServerUri =
-                server.Features.Get<IServerAddressesFeature>()
-                .Addresses.FirstOrDefault();
+            var serverAddresses = server.Features.Get<IServerAddressesFeature>().Addresses;
+            this.ServerUri = serverAddresses.Where(a => a.Contains("http://")).FirstOrDefault();
+            Debug.WriteLine($"Testing server started: {this.ServerUri}");
         }
 
         public void Dispose()
         {
             this.host.Dispose();
+            Debug.WriteLine($"Testing server stopped: {this.ServerUri}");
         }
     }
 }

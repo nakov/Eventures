@@ -1,11 +1,10 @@
+using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-using NUnit.Framework;
-
-using Eventures.App.Controllers;
-using Eventures.App.Models;
 using Eventures.App.Data;
+using Eventures.App.Models;
+using Eventures.App.Controllers;
 
 namespace Eventures.UnitTests
 {

@@ -1,10 +1,12 @@
-﻿using Eventures.Tests.Common;
-using Eventures.UnitTests;
+﻿using System;
+using System.Linq;
+
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System;
-using System.Linq;
+
+using Eventures.Tests.Common;
+using Eventures.UnitTests;
 
 namespace Eventures.SeleniumTests
 {
