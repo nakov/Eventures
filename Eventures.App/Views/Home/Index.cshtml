@@ -1,8 +1,12 @@
 ﻿@model IEnumerable<Eventures.App.Data.Event>
+@using System.Linq;
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Home Page";
 }
+
+@{var userEvents = Model.Where(x => x.OwnerId == User.FindFirst(ClaimTypes.NameIdentifier).Value);}
 
 @if (!this.User.Identity.IsAuthenticated)
 {
@@ -23,5 +27,8 @@ else
         <h4 class="mt-4 text-secondary text-center">Eventures wishes you an exciting experience.</h4>
         <h3 class="mt-4">View <a href="/Events/All">all events</a>.</h3>
         <h3 class="mt-4">Create a <a href="/Events/Create">new event</a>.</h3>
+        <hr class="hr-2 bg-dark" />
+        <h5 class="mt-4">We already have <b>@Model.Count()</b> events on our Eventures App!</h5>
+        <h5 class="mt-4">Your have <b>@userEvents.Count()</b> event(s)!</h5>
     </div>
 }
