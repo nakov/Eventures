@@ -1,42 +1,17 @@
 ﻿using System;
 using System.Linq;
-using System.Diagnostics;
 
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-
-using Eventures.Tests.Common;
 
 namespace Eventures.SeleniumTests
 {
-    public class SeleniumTests_Events
+    public class SeleniumTestsEvents : SeleniumTestsBase
     {
-        TestDb testDb;
-        IWebDriver driver;
-        string username = "testuser" + DateTime.UtcNow.Ticks;
-        string password = "password" + DateTime.UtcNow.Ticks;
-        TestEventuresApp testEventuresApp;
-        string baseUrl;
-
         [OneTimeSetUp]
-        public void Setup()
+        public void SetupUser()
         {
-            // Run the Web app in a local Web server
-            this.testDb = new TestDb();
-            this.testEventuresApp = new TestEventuresApp(testDb);
-            this.baseUrl = this.testEventuresApp.ServerUri;
-
-            // Setup the ChromeDriver
-            var chromeOptions = new ChromeOptions();
-            if (! Debugger.IsAttached)
-                chromeOptions.AddArguments("headless");
-            chromeOptions.AddArguments("--start-maximized");
-            this.driver = new ChromeDriver(chromeOptions);
-            this.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-
-            // Register a new user to be used during the tests
-            RegisterUser();
+            RegisterUserForTesting();
         }
 
         [Test]
@@ -391,7 +366,7 @@ namespace Eventures.SeleniumTests
             Assert.That(driver.PageSource.Contains("The Name field is required."));
         }
 
-        private void RegisterUser()
+        private void RegisterUserForTesting()
         {
             driver.Navigate().GoToUrl(this.baseUrl + "/Identity/Account/Register");
 
@@ -405,13 +380,6 @@ namespace Eventures.SeleniumTests
 
             Assert.AreEqual(this.baseUrl + "/", driver.Url);
             Assert.That(driver.PageSource.Contains($"Welcome, {username}"));
-        }
-
-        [OneTimeTearDown]
-        public void TearDown()
-        {
-            driver.Quit();
-            this.testEventuresApp.Dispose();
         }
     }
 }

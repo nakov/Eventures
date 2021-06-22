@@ -1,40 +1,10 @@
-using System;
-using System.Diagnostics;
-
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-
-using Eventures.Tests.Common;
 
 namespace Eventures.SeleniumTests
 {
-    public class SeleniumTests_User
+    public class SeleniumTestsUser : SeleniumTestsBase
     {
-        TestDb testDb;
-        IWebDriver driver;
-        string username = "testuser" + DateTime.UtcNow.Ticks;
-        string password = "password" + DateTime.UtcNow.Ticks;
-        TestEventuresApp testEventuresApp;
-        string baseUrl;
-
-        [OneTimeSetUp]
-        public void Setup()
-        {
-            // Run the Web app in a local Web server
-            this.testDb = new TestDb();
-            this.testEventuresApp = new TestEventuresApp(testDb);
-            this.baseUrl = this.testEventuresApp.ServerUri;
-
-            // Setup the ChromeDriver
-            var chromeOptions = new ChromeOptions();
-            if (! Debugger.IsAttached)
-                chromeOptions.AddArguments("headless");
-            chromeOptions.AddArguments("--start-maximized");
-            this.driver = new ChromeDriver(chromeOptions);
-            this.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-        }
-
         [Test, Order(1)]
         public void Test_User_Register()
         {
@@ -166,13 +136,6 @@ namespace Eventures.SeleniumTests
             Assert.That(driver.Title.Contains("Log in"));
             Assert.That(driver.PageSource.Contains("Log in"));
             Assert.That(driver.PageSource.Contains("Use a local account to log in"));
-        }
-
-        [OneTimeTearDown]
-        public void TearDown()
-        {
-            driver.Quit();
-            this.testEventuresApp.Dispose();
         }
     }
 }
