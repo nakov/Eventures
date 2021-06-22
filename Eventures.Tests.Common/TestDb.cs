@@ -14,6 +14,7 @@ namespace Eventures.Tests.Common
         public EventuresUser UserPeter { get; private set; }
         public Event EventSoftuniada { get; private set; }
         public Event EventOpenFest { get; private set; }
+        public Event EventMSBuild { get; private set; }        
         private string uniqueDbName;
 
         /// <summary>
@@ -93,6 +94,19 @@ namespace Eventures.Tests.Common
                 OwnerId = UserPeter.Id
             };
             dbContext.Add(this.EventOpenFest);
+
+            // EventOpenFest has owner UserPeter
+            this.EventMSBuild = new Event()
+            {
+                Name = "Microsoft Build 2021",
+                Place = "Online",
+                Start = DateTime.Now.AddDays(300),
+                End = DateTime.Now.AddDays(302),
+                TotalTickets = 25000,
+                PricePerTicket = 0.00m,
+                OwnerId = UserPeter.Id
+            };
+            dbContext.Add(this.EventMSBuild);
 
             dbContext.SaveChanges();
         }

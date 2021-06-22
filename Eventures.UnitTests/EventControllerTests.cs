@@ -40,7 +40,7 @@ namespace Eventures.UnitTests
 
             var model = viewResult.Model as List<EventViewModel>;
             Assert.IsNotNull(model);
-            Assert.AreEqual(2, model.Count);
+            Assert.AreEqual(3, model.Count);
             Assert.AreEqual(testDb.EventSoftuniada.Name, model[0].Name);
             Assert.AreEqual(testDb.EventOpenFest.Name, model[1].Name);
         }
