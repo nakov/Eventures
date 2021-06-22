@@ -56,9 +56,11 @@ namespace Eventures.SeleniumTests
         }
 
         [Test]
-        public void Test_User_Login()
+        public void Test_User_Login_Selenium()
         {
             RegisterUser();
+            driver.Navigate().GoToUrl(this.baseUrl);
+            driver.FindElement(By.XPath("//button[@type='submit'][contains(.,'Logout')]")).Click();
             // Arrange: go to the "Login" page
             driver.Navigate().GoToUrl(this.baseUrl + "/Identity/Account/Login");
 
