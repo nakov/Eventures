@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Text;
-
+﻿using Eventures.App.Data;
+using Eventures.WebAPI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,8 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-
-using Eventures.App.Data;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
 
 namespace WebApi
 {
@@ -38,16 +38,16 @@ namespace WebApi
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Add ASP.NE Core authentication
-            var auth = services.AddAuthentication(options =>
+            // Adding Authentication  
+            services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            });
+            })
 
-            // Add JWT Bearer authentication
-            auth.AddJwtBearer(options =>
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
@@ -61,24 +61,24 @@ namespace WebApi
                 };
             });
 
-            // Add Swagger API documentation
-            services.AddSwaggerGen(options =>
+            services.AddSwaggerGen(c =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Eventures Web API",
-                    Description = "A simple ASP.NET Core Web API for the Eventures App",
+                    Description =
+                        "A simple ASP.NET Core Web API for the Eventures App",
                     Contact = new OpenApiContact
                     {
-                        Name = "Eventures App",
+                        Name = "Softuni",
                         Email = string.Empty,
-                        Url = new Uri("https://github.com/nakov/Eventures"),
+                        Url = new Uri("https://softuni.bg/"),
                     },
                 });
 
                 // Enables authorization using Swagger (JWT)  
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey,
@@ -87,7 +87,7 @@ namespace WebApi
                     In = ParameterLocation.Header,
                     Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"\r\n\r\nGet token through successful login",
                 });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                        new OpenApiSecurityScheme
@@ -102,14 +102,14 @@ namespace WebApi
                     }
                 });
 
-                // Set the comments path for the Swagger JSON and UI
+                // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
-        // Configure the HTTP request pipeline
+        // configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -127,15 +127,12 @@ namespace WebApi
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger(c =>
-            {
-                c.SerializeAsV2 = true;
-            });
+            app.UseSwagger();
 
-            app.UseSwaggerUI(options =>
+            app.UseSwaggerUI(c =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Eventures Web API");
-                options.RoutePrefix = "api/docs";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Eventures Web API");
+                c.RoutePrefix = string.Empty;
             });
         }
     }
