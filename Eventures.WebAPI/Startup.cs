@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using Eventures.App.Data;
 
-namespace WebApi
+namespace Eventures.WebAPI
 {
     public class Startup
     {

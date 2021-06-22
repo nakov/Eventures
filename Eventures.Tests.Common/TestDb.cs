@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using Eventures.App.Data;
 
-namespace Eventures.UnitTests
+namespace Eventures.Tests.Common
 {
     public class TestDb
     {
@@ -16,6 +16,11 @@ namespace Eventures.UnitTests
         public Event EventOpenFest { get; private set; }
         private string uniqueDbName;
 
+        /// <summary>
+        /// Creates a new ApplicationDbContext, which connects to the existing database, 
+        /// which was already created and initialized with the constructor `new TestDb()`.
+        /// </summary>
+        /// <returns></returns>
         public ApplicationDbContext CreateDbContext()
         {
             // Use in-memory database for testing
@@ -27,13 +32,16 @@ namespace Eventures.UnitTests
             return dbContext;
         }
 
+        /// <summary>
+        /// Creates a new testing database and resets its data to its initial state.
+        /// </summary>
         public TestDb()
         {
             this.uniqueDbName = "Eventures-TestDb-" + DateTime.Now.Ticks;
             this.SeedDatabase();
         }
 
-        public void SeedDatabase()
+        private void SeedDatabase()
         {
             var dbContext = this.CreateDbContext();
             var userStore = new UserStore<EventuresUser>(dbContext);

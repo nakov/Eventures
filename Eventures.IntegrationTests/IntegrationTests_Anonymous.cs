@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 using NUnit.Framework;
 
-using Eventures.UnitTests;
 using Eventures.Tests.Common;
 
 namespace Eventures.IntegrationTests

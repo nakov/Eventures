@@ -9,9 +9,9 @@ using NUnit.Framework;
 
 using Eventures.App.Data;
 using Eventures.App.Models;
-using Eventures.UnitTests;
 using Eventures.WebAPI.IntegraionTests;
 using Eventures.WebAPI.Models;
+using Eventures.Tests.Common;
 
 namespace Eventures.WebAPI.IntegrationTests
 {

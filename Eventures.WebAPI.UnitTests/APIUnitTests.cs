@@ -1,18 +1,19 @@
-using Eventures.App.Data;
-using Eventures.App.Models;
-using Eventures.Tests.Common;
-using Eventures.UnitTests;
-using Eventures.WebAPI.Controllers;
-using Eventures.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+
+using NUnit.Framework;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+
+using Eventures.App.Data;
+using Eventures.App.Models;
+using Eventures.Tests.Common;
+using Eventures.WebAPI.Controllers;
+using Eventures.WebAPI.Models;
 
 namespace Eventures.WebAPI.UnitTests
 {

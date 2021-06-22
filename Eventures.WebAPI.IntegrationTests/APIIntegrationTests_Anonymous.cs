@@ -3,11 +3,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using NUnit.Framework;
+
 using Eventures.App.Data;
-using Eventures.UnitTests;
 using Eventures.WebAPI.IntegraionTests;
 using Eventures.WebAPI.Models;
+using Eventures.Tests.Common;
 
 namespace Eventures.WebAPI.IntegrationTests
 {

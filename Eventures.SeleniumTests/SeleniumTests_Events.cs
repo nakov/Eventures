@@ -7,7 +7,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 using Eventures.Tests.Common;
-using Eventures.UnitTests;
 
 namespace Eventures.SeleniumTests
 {

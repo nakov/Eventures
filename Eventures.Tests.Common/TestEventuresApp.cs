@@ -10,19 +10,18 @@ using Microsoft.Extensions.Hosting;
 
 using Eventures.App;
 using Eventures.App.Data;
-using Eventures.UnitTests;
 
 namespace Eventures.Tests.Common
 {
     public class TestEventuresApp : IDisposable
     {
-        private TestDb testDb;
         private IHost host;
+        public TestDb TestDb { get; set; }
         public string ServerUri { get; private set; }
 
         public TestEventuresApp(TestDb testDb)
         {
-            this.testDb = testDb;
+            this.TestDb = testDb;
         
             var hostBuilder = Host.CreateDefaultBuilder();
             hostBuilder.ConfigureWebHostDefaults(webHostBuilder =>
@@ -35,7 +34,7 @@ namespace Eventures.Tests.Common
                         descr => descr.ServiceType == typeof(ApplicationDbContext));
                     services.Remove(oldDbContext);
                     services.AddScoped<ApplicationDbContext>(
-                        provider => this.testDb.CreateDbContext());
+                        provider => this.TestDb.CreateDbContext());
                 });
                 webHostBuilder.UseUrls("http://127.0.0.1:0");
             });

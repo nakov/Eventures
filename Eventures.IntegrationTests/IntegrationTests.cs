@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 
 using NUnit.Framework;
 
-using Eventures.UnitTests;
 using Eventures.App.Data;
 using Eventures.Tests.Common;
 
