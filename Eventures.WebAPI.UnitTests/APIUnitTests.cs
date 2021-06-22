@@ -34,7 +34,7 @@ namespace Eventures.WebAPI.UnitTests
 
             // Get configuration from appsettings.json file in the Web API project
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                //.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
             usersController = new UsersController(dbContext, configuration);
