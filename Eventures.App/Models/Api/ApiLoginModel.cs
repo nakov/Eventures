@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Eventures.WebAPI.Models
+namespace Eventures.App.Models.Api
 {
     public class ApiLoginModel
     {

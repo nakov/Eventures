@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Eventures.App.Data;
 using Eventures.App.Models;
 
-namespace Eventures.App.Controllers
+namespace Eventures.App.ControllersApi
 {
     [Authorize]
     public class EventsController : Controller

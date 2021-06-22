@@ -16,19 +16,20 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 using Eventures.App.Data;
-using Eventures.WebAPI.Models;
+using Eventures.App.Models;
+using Eventures.App.Models.Api;
 
-namespace Eventures.WebAPI.Controllers
+namespace Eventures.App.Controllers.Api
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController : Controller
+    [Route("api/users")]
+    public class UsersApiController : Controller
     {
         private ApplicationDbContext dbContext;
         private UserManager<EventuresUser> userManager;
         private readonly IConfiguration _configuration;
 
-        public UsersController(ApplicationDbContext context,
+        public UsersApiController(ApplicationDbContext context,
             IConfiguration configuration)
         {
             this.dbContext = context;

@@ -7,17 +7,17 @@ using Microsoft.AspNetCore.Authorization;
 
 using Eventures.App.Data;
 using Eventures.App.Models;
-using Eventures.WebAPI.Models;
+using Eventures.App.Models.Api;
 
-namespace Eventures.WebAPI.Controllers
+namespace Eventures.App.Controllers.Api
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class EventsController : Controller
+    [Route("api/events")]
+    public class EventsApiController : Controller
     {
         private readonly ApplicationDbContext dbContext;
 
-        public EventsController(ApplicationDbContext context)
+        public EventsApiController(ApplicationDbContext context)
         {
             this.dbContext = context;
         }

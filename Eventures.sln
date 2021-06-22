@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.UnitTests", "Even
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.IntegrationTests", "Eventures.IntegrationTests\Eventures.IntegrationTests.csproj", "{BDAED536-4EBC-4D78-B844-845D34AD5746}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI", "Eventures.WebAPI\Eventures.WebAPI.csproj", "{010DD5B0-DD50-4026-9030-6301ECD97FC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "---old---Eventures.WebAPI", "Eventures.WebAPI\---old---Eventures.WebAPI.csproj", "{010DD5B0-DD50-4026-9030-6301ECD97FC1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.UnitTests", "Eventures.WebAPI.UnitTests\Eventures.WebAPI.UnitTests.csproj", "{B87ACAE2-CF97-41A3-9778-B77F680B63FF}"
 EndProject
@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.Integratio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.SeleniumTests", "Eventures.SeleniumTests\Eventures.SeleniumTests.csproj", "{8C46501C-D333-4C97-8179-BFF34D53195C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.Tests.Common", "Eventures.Tests.Common\Eventures.Tests.Common.csproj", "{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Tests.Common", "Eventures.Tests.Common\Eventures.Tests.Common.csproj", "{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Eventures.App.Data;
 using Eventures.App.Models;
-using Eventures.App.Controllers;
+using Eventures.App.ControllersApi;
 using Eventures.Tests.Common;
 
 namespace Eventures.UnitTests

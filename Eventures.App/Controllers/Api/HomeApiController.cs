@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Eventures.WebAPI.Controllers
+namespace Eventures.App.Controllers.Api
 {
     [ApiController]
     [Route("api")]
-    public class ApiHomeController : Controller
+    public class HomeApiController : Controller
     {
         /// <summary>
         /// Gets API info.

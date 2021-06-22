@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eventures.WebAPI.Models
+namespace Eventures.App.Models.Api
 {
     public class ApiEventViewModel
     {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Eventures.App.Models;
 using Eventures.App.Data;
 
-namespace Eventures.App.Controllers
+namespace Eventures.App.ControllersApi
 {
     public class HomeController : Controller
     {

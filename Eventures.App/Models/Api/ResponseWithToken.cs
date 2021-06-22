@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Eventures.WebAPI.Models
+namespace Eventures.App.Models.Api
 {
     public class ResponseWithToken
     {

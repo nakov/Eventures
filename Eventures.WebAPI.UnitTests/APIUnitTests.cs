@@ -12,8 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Eventures.App.Data;
 using Eventures.App.Models;
 using Eventures.Tests.Common;
-using Eventures.WebAPI.Controllers;
-using Eventures.WebAPI.Models;
+using Eventures.App.Controllers.Api;
+using Eventures.App.Models.Api;
 
 namespace Eventures.WebAPI.UnitTests
 {
@@ -21,22 +21,22 @@ namespace Eventures.WebAPI.UnitTests
     {
         TestDb testDb;
         ApplicationDbContext dbContext;
-        EventsController controller;
-        UsersController usersController;
+        EventsApiController controller;
+        UsersApiController usersController;
 
         [OneTimeSetUp]
         public void Setup()
         {
             testDb = new TestDb();
             dbContext = testDb.CreateDbContext();
-            controller = new EventsController(dbContext);
+            controller = new EventsApiController(dbContext);
 
             // Get configuration from appsettings.json file in the Web API project
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
-            usersController = new UsersController(dbContext, configuration);
+            usersController = new UsersApiController(dbContext, configuration);
         }
 
         [Test]

@@ -4,14 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using System.Net.Http.Headers;
 using NUnit.Framework;
 
 using Eventures.App.Data;
 using Eventures.App.Models;
-using Eventures.WebAPI.IntegraionTests;
-using Eventures.WebAPI.Models;
 using Eventures.Tests.Common;
+using Eventures.App.Models.Api;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
@@ -19,7 +18,7 @@ namespace Eventures.WebAPI.IntegrationTests
     {
         TestDb testDb;
         ApplicationDbContext dbContext;
-        TestingWebApiFactory testFactory;
+        TestEventuresApp testEventuresApp;
         HttpClient httpClient;
 
         [OneTimeSetUp]
@@ -27,9 +26,33 @@ namespace Eventures.WebAPI.IntegrationTests
         {
             this.testDb = new TestDb();
             this.dbContext = testDb.CreateDbContext();
-            this.testFactory = new TestingWebApiFactory(testDb);
-            this.httpClient = testFactory.Client;
-            await this.testFactory.AuthenticateAsync();
+            this.testEventuresApp = new TestEventuresApp(testDb);
+            this.httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri(this.testEventuresApp.ServerUri)
+            };
+            await this.AuthenticateAsync(
+                this.testDb.UserMaria.UserName, this.testDb.UserMaria.UserName);
+        }
+
+        private async Task AuthenticateAsync(string username, string password)
+        {
+            var jwtToken = await GetJWTTokenAsync(username, password);
+            this.httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("bearer", jwtToken);
+        }
+
+        private async Task<string> GetJWTTokenAsync(string username, string password)
+        {
+            var response = await this.httpClient.PostAsJsonAsync("api/users/login", new ApiLoginModel
+            {
+                Username = username,
+                Password = password
+            });
+
+            var loginResponse = await response.Content.ReadAsAsync<ResponseWithToken>();
+
+            return loginResponse.Token;
         }
 
         [Test]
