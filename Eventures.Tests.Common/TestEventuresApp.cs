@@ -42,7 +42,7 @@ namespace Eventures.Tests.Common
             var server = this.host.Services.GetRequiredService<IServer>();
             this.ServerUri =
                 server.Features.Get<IServerAddressesFeature>()
-                .Addresses.FirstOrDefault();
+                .Addresses.LastOrDefault();
         }
 
         public void Dispose()

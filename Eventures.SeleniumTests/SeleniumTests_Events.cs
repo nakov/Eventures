@@ -29,6 +29,7 @@ namespace Eventures.SeleniumTests
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArguments("headless");
             chromeOptions.AddArguments("--start-maximized");
+            chromeOptions.AddArguments("--allow-insecure-localhost");
             this.driver = new ChromeDriver(chromeOptions);
             this.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 

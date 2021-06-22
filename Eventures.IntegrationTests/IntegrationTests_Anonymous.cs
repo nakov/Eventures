@@ -18,13 +18,20 @@ namespace Eventures.IntegrationTests
         TestDb testDb;
         TestEventuresApp testEventuresApp;
         HttpClient httpClient;
+        HttpClientHandler httpClientHandler;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             this.testDb = new TestDb();
             this.testEventuresApp = new TestEventuresApp(testDb);
-            this.httpClient = new HttpClient();
+            this.httpClientHandler = new HttpClientHandler();
+            this.httpClientHandler.ServerCertificateCustomValidationCallback +=
+               (sender, certificate, chain, errors) =>
+               {
+                   return true;
+               };
+            this.httpClient = new HttpClient(httpClientHandler);
             this.httpClient.BaseAddress = new Uri(this.testEventuresApp.ServerUri);
         }
 
