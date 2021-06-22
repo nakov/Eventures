@@ -106,7 +106,8 @@ namespace Eventures.SeleniumTests
             Assert.AreEqual(this.baseUrl + "/Events/Create", driver.Url);
             Assert.That(driver.Title.Contains("Create Event"));
             Assert.That(driver.PageSource.Contains("<h1>Create New Event</h1>"));
-            Assert.That(driver.PageSource.Contains(@"<a href=""/Events/All"">Back to List</a>"));
+            Assert.That(driver.PageSource.Contains(@"<a class=""btn btn-secondary"" href=""/Events/All"">Back to List</a>"));
+            
         }
 
         [Test]
@@ -129,7 +130,7 @@ namespace Eventures.SeleniumTests
             Assert.AreEqual(this.baseUrl + "/Events/Create", driver.Url);
             Assert.That(driver.Title.Contains("Create Event"));
             Assert.That(driver.PageSource.Contains("<h1>Create New Event</h1>"));
-            Assert.That(driver.PageSource.Contains(@"<a href=""/Events/All"">Back to List</a>"));
+            Assert.That(driver.PageSource.Contains(@"<a class=""btn btn-secondary"" href=""/Events/All"">Back to List</a>"));
         }
 
         [Test]
@@ -143,7 +144,7 @@ namespace Eventures.SeleniumTests
             // Assert
             Assert.That(driver.Title.Contains("Create Event"));
             Assert.That(driver.PageSource.Contains("<h1>Create New Event</h1>"));
-            Assert.That(driver.PageSource.Contains(@"<a href=""/Events/All"">Back to List</a>"));
+            Assert.That(driver.PageSource.Contains(@"<a class=""btn btn-secondary"" href=""/Events/All"">Back to List</a>"));
         }
 
         [Test]
