@@ -253,7 +253,7 @@ namespace Eventures.SeleniumTests
             // Arrange: go to the "Create Event" page and create a new event for deleting
             driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
             Assert.That(driver.Title.Contains("Create Event"));
-            
+
             var eventName = "Best Show" + DateTime.UtcNow.Ticks;
             var nameField = driver.FindElement(By.Id("Name"));
             nameField.Clear();
