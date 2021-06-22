@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Diagnostics;
 
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -29,7 +30,8 @@ namespace Eventures.SeleniumTests
 
             // Setup the ChromeDriver
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("headless");
+            if (! Debugger.IsAttached)
+                chromeOptions.AddArguments("headless");
             chromeOptions.AddArguments("--start-maximized");
             this.driver = new ChromeDriver(chromeOptions);
             this.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
