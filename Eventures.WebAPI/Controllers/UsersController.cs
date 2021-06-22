@@ -78,8 +78,9 @@ namespace Eventures.WebAPI.Controllers
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var authSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                string jwtSecret = _configuration["JWT:Secret"];
+                byte[] jwtSecretBytes = Encoding.UTF8.GetBytes(jwtSecret);
+                var authSigningKey = new SymmetricSecurityKey(jwtSecretBytes);
 
                 var token = new JwtSecurityToken(
                     issuer: _configuration["JWT:ValidIssuer"],
