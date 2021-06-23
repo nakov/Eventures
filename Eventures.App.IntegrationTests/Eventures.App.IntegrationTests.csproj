@@ -4,18 +4,19 @@
     <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.6" />
     <PackageReference Include="NUnit" Version="3.13.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Eventures.App\Eventures.App.csproj" />
-    <ProjectReference Include="..\Eventures.UnitTests\Eventures.UnitTests.csproj" />
+    <ProjectReference Include="..\Eventures.Tests.Common\Eventures.Tests.Common.csproj" />
   </ItemGroup>
 
 </Project>

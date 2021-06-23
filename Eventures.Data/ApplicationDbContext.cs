@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace Eventures.App.Data
+namespace Eventures.Data
 {
     public class ApplicationDbContext : IdentityDbContext<EventuresUser>
     {

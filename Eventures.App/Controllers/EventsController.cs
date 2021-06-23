@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Eventures.App.Data;
+using Eventures.Data;
 using Eventures.App.Models;
 
 namespace Eventures.App.Controllers
@@ -74,14 +74,20 @@ namespace Eventures.App.Controllers
         public IActionResult Delete(int id)
         {
             Event ev = dbContext.Events.Find(id);
-            if (ev != null)
-                return this.View(CreateEventViewModel(ev));
-            return this.View();
+            string currentUser = this.User.FindFirstValue(ClaimTypes.Name);
+            if (ev == null || currentUser != this.dbContext.Users.Find(ev.OwnerId).UserName)
+            {
+                // Not an owner -> display "Event not found"
+                return this.View();
+            }
+            return this.View(CreateEventViewModel(ev));
         }
 
         [HttpPost]
         public IActionResult Delete(EventViewModel eventModel)
         {
+            // TODO: check the owner, and return "Unauthorized" when not an owner!
+
             Event ev = dbContext.Events.Find(eventModel.Id);
             if (ev != null)
             {
@@ -89,6 +95,53 @@ namespace Eventures.App.Controllers
                 dbContext.SaveChanges();
                 return this.RedirectToAction("All");
             }
+            return this.View();
+        }
+
+        public IActionResult Edit(int id)
+        {
+            Event ev = dbContext.Events.Find(id);
+            string currentUser = this.User.FindFirstValue(ClaimTypes.Name);
+            if (ev == null || currentUser != this.dbContext.Users.Find(ev.OwnerId).UserName)
+            {
+                // Not an owner -> display "Event not found"
+                return this.View();
+            }
+            EventCreateBindingModel model = new EventCreateBindingModel()
+            {
+                Name = ev.Name,
+                Place = ev.Place,
+                Start = ev.Start,
+                End = ev.End,
+                PricePerTicket = ev.PricePerTicket,
+                TotalTickets = ev.TotalTickets
+            };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, EventCreateBindingModel bindingModel)
+        {
+            // TODO: check the owner, and return "Unauthorized" when not an owner!
+
+            Event ev = dbContext.Events.Find(id);
+            if (ev == null)
+            {
+                return this.View();
+            }
+            if (this.ModelState.IsValid)
+            {
+                ev.Name = bindingModel.Name;
+                ev.Place = bindingModel.Place;
+                ev.Start = bindingModel.Start;
+                ev.End = bindingModel.End;
+                ev.TotalTickets = bindingModel.TotalTickets;
+                ev.PricePerTicket = bindingModel.PricePerTicket;
+
+                dbContext.SaveChanges();
+                return this.RedirectToAction("All");
+            }
+
             return this.View();
         }
 

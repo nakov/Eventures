@@ -1,20 +1,19 @@
+using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-using NUnit.Framework;
-
-using Eventures.App.Controllers;
 using Eventures.App.Models;
+using Eventures.App.Controllers;
 
-namespace Eventures.UnitTests
+namespace Eventures.App.UnitTests
 {
-    public class HomeControllerTests
+    public class HomeControllerTests : UnitTestsBase
     {
         [Test]
         public void Test_Index()
         {
             // Arrange
-            var controller = new HomeController();
+            var controller = new HomeController(dbContext);
 
             // Act
             var result = controller.Index();
@@ -28,7 +27,7 @@ namespace Eventures.UnitTests
         public void Test_Error()
         {
             // Arrange
-            var controller = new HomeController();
+            var controller = new HomeController(dbContext);
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
             // Act

@@ -1,32 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
 
-using Eventures.UnitTests;
-using Microsoft.Net.Http.Headers;
-
-namespace Eventures.IntegrationTests
+namespace Eventures.App.IntegrationTests
 {
-    public class IntegrationTests_Anonymous
+    public class WebIntegrationTestsAnonymous : WebIntegrationTestsBase
     {
-        TestDb testDb;
-        TestingWebAppFactory testingWebAppFactory;
-        HttpClient httpClient;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            this.testDb = new TestDb();
-            testingWebAppFactory = new TestingWebAppFactory(testDb);
-            this.httpClient = testingWebAppFactory.CreateClient();
-        }
-
         [Test]
         public async Task Test_UserRegistration()
         {
@@ -136,12 +119,6 @@ namespace Eventures.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             var responseBody = await response.Content.ReadAsStringAsync();
             Assert.That(responseBody, Does.Contain("<h1>Log in</h1>"));
-        }
-
-        private static string ExtractAntiForgeryToken(string htmlResponseText)
-        {
-            Match match = Regex.Match(htmlResponseText, @"\<input name=""__RequestVerificationToken"" type=""hidden"" value=""([^""]+)"" \/\>");
-            return match.Success ? match.Groups[1].Captures[0].Value : null;
         }
     }
 }

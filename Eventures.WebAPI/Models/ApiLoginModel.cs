@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Models
+namespace Eventures.WebAPI.Models
 {
-    public class LoginModel
+    public class ApiLoginModel
     {
         [Required(ErrorMessage = "Username is required!")]
         public string Username { get; set; }

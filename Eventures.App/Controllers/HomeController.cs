@@ -1,16 +1,23 @@
 ﻿using System.Diagnostics;
-
 using Microsoft.AspNetCore.Mvc;
 
+using Eventures.Data;
 using Eventures.App.Models;
 
 namespace Eventures.App.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext dbContext;
+
+        public HomeController(ApplicationDbContext context)
+        {
+            this.dbContext = context;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            return View(this.dbContext.Events);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

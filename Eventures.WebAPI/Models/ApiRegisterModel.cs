@@ -2,7 +2,7 @@
 
 namespace Eventures.WebAPI.Models
 {
-    public class AuthRegisterModel
+    public class ApiRegisterModel
     {
         [Required(ErrorMessage = "Username is required!")]
         public string Username { get; set; }
