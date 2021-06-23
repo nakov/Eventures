@@ -9,6 +9,7 @@ using Eventures.Data;
 using Eventures.App.Models;
 using Eventures.App.Controllers;
 using Eventures.Tests.Common;
+using System.Net;
 
 namespace Eventures.App.UnitTests
 {
@@ -233,6 +234,36 @@ namespace Eventures.App.UnitTests
         }
 
         [Test]
+        public void Test_Delete_UnauthorizedUser()
+        {
+            // Arrange: get the "Open Fest" event with owner UserPeter
+            var openFestEvent = this.testDb.EventOpenFest;
+
+            EventViewModel model = new EventViewModel()
+            {
+                Id = openFestEvent.Id
+            };
+
+            // Assign UserMaria to the controller
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+
+            int eventsCountBefore = dbContext.Events.Count();
+
+            // Act
+            var result = controller.Delete(model);
+
+            // Assert "Unautorized" error message appears 
+            // because UserMaria is not the owner of the "Open Fest" event
+            var unauthorizedResult = result as UnauthorizedResult;
+            Assert.AreEqual((int)HttpStatusCode.Unauthorized, unauthorizedResult.StatusCode);
+            Assert.IsNotNull(unauthorizedResult);
+
+            // Assert the event is not deleted from the database
+            int eventsCountAfter = dbContext.Events.Count();
+            Assert.That(eventsCountBefore == eventsCountAfter);
+        }
+
+        [Test]
         public void Test_Edit_ValidId()
         {
             // Arrange: get the "Softuniada" event from the database for editing
@@ -351,6 +382,42 @@ namespace Eventures.App.UnitTests
 
             // Remove ModelState error for next tests
             controller.ModelState.Remove("Name");
+        }
+
+        [Test]
+        public void Test_Edit_UnauthorizedUser()
+        {
+            // Arrange: get the "Open Fest" event with owner UserPeter
+            var openFestEvent = this.testDb.EventOpenFest;
+
+            // Assign UserMaria to the controller
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+
+            // Create event binding model with different event name
+            var changedName = "OpenFest 2021 (New Edition)";
+            var changedEvent = new EventCreateBindingModel()
+            {
+                Name = changedName,
+                Place = "Online",
+                Start = DateTime.Now.AddDays(200),
+                End = DateTime.Now.AddDays(201),
+                TotalTickets = 5000,
+                PricePerTicket = 10.00m,
+            };
+
+            // Act
+            var result = controller.Edit(openFestEvent.Id, changedEvent);
+
+            // Assert "Unautorized" error message appears 
+            // because UserMaria is not the owner of the "Open Fest" event
+            var unauthorizedResult = result as UnauthorizedResult;
+            Assert.AreEqual((int)HttpStatusCode.Unauthorized, unauthorizedResult.StatusCode);
+            Assert.IsNotNull(unauthorizedResult);
+
+            // Assert that event's name is not edited
+            var editedEvent = dbContext.Events.Find(openFestEvent.Id);
+            Assert.IsNotNull(editedEvent);
+            Assert.AreEqual(openFestEvent.Name, editedEvent.Name);
         }
     }
 }
