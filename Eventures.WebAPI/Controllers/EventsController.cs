@@ -93,7 +93,7 @@ namespace Eventures.WebAPI.Controllers
             var dbEvent = this.dbContext.Events.Find(id);
             if (dbEvent == null)
             {
-                return NotFound();
+                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
             }
             dbEvent.Owner = this.dbContext.Users.Find(dbEvent.OwnerId);
             var eventViewModel = CreateViewModel(dbEvent);
@@ -176,14 +176,14 @@ namespace Eventures.WebAPI.Controllers
             var ev = dbContext.Events.Find(id);
             if (ev == null)
             {
-                return NotFound(new { msg = $"Event #{id} not found." });
+                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
             }
 
             string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
             var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
             if(currentUser.Id != ev.OwnerId)
             {
-                return Unauthorized(new { msg = "Cannot edit event, when not an owner." });
+                return Unauthorized(new ResponseMsg { Message = "Cannot edit event, when not an owner." });
             }
 
             ev.Name = eventModel.Name;
@@ -221,14 +221,14 @@ namespace Eventures.WebAPI.Controllers
             Event ev = dbContext.Events.Find(id);
             if (ev == null)
             {
-                return NotFound();
+                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
             };
 
             string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
             var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
             if (currentUser.Id != ev.OwnerId)
             {
-                return Unauthorized();
+                return Unauthorized(new ResponseMsg { Message = "Cannot delete event, when not an owner." });
             }
             dbContext.Events.Remove(ev);
             dbContext.SaveChanges();

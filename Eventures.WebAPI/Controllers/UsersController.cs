@@ -96,7 +96,7 @@ namespace Eventures.WebAPI.Controllers
                     Expiration = token.ValidTo
                 });
             }
-            return Unauthorized();
+            return Unauthorized(new ResponseMsg { Message = "Invalid username or password!" });
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Eventures.WebAPI.Controllers
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMsg { Status = "Error", Message = "User already exists!" });
+                return BadRequest(new ResponseMsg { Message = "User already exists!" });
 
             EventuresUser user = new EventuresUser()
             {
@@ -134,9 +134,9 @@ namespace Eventures.WebAPI.Controllers
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMsg { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+                return BadRequest(new ResponseMsg { Message = "User creation failed! Please check user details and try again." });
 
-            return Ok(new ResponseMsg { Status = "Success", Message = "User created successfully!" });
+            return Ok(new ResponseMsg { Message = "User created successfully!" });
         }
 
         /// <summary>
