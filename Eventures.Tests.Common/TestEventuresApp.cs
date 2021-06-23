@@ -1,53 +1,54 @@
 ﻿using System;
 using System.Linq;
+using System.Diagnostics;
 
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Hosting.Server;
 
-using Eventures.App;
-using Eventures.App.Data;
-using Eventures.UnitTests;
+using Eventures.Data;
 
 namespace Eventures.Tests.Common
 {
-    public class TestEventuresApp : IDisposable
+    public class TestEventuresApp<TStartup> : IDisposable where TStartup : class
     {
-        private TestDb testDb;
         private IHost host;
+        public TestDb TestDb { get; set; }
         public string ServerUri { get; private set; }
 
         public TestEventuresApp(TestDb testDb)
         {
-            this.testDb = testDb;
+            this.TestDb = testDb;
         
-            var hostBuilder = Host.CreateDefaultBuilder();
+            IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
             hostBuilder.ConfigureWebHostDefaults(webHostBuilder =>
             {
                 webHostBuilder.UseContentRoot("../../../../Eventures.App");
-                webHostBuilder.UseStartup<Startup>();
+                webHostBuilder.UseStartup<TStartup>();
                 webHostBuilder.ConfigureServices(services =>
                 {
                     var oldDbContext = services.SingleOrDefault(
                         descr => descr.ServiceType == typeof(ApplicationDbContext));
                     services.Remove(oldDbContext);
                     services.AddScoped<ApplicationDbContext>(
-                        provider => this.testDb.CreateDbContext());
+                        provider => this.TestDb.CreateDbContext());
                 });
+                webHostBuilder.UseUrls("http://127.0.0.1:0");
             });
             this.host = hostBuilder.Build();
             this.host.Start();
             var server = this.host.Services.GetRequiredService<IServer>();
-            this.ServerUri =
-                server.Features.Get<IServerAddressesFeature>()
-                .Addresses.LastOrDefault();
+            var serverAddresses = server.Features.Get<IServerAddressesFeature>().Addresses;
+            this.ServerUri = serverAddresses.Where(a => a.Contains("http://")).FirstOrDefault();
+            Debug.WriteLine($"Testing server started: {this.ServerUri}");
         }
 
         public void Dispose()
         {
             this.host.Dispose();
+            Debug.WriteLine($"Testing server stopped: {this.ServerUri}");
         }
     }
 }

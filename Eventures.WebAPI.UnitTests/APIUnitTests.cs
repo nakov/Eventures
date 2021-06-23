@@ -1,24 +1,22 @@
-using Eventures.App.Data;
-using Eventures.App.Models;
-using Eventures.Tests.Common;
-using Eventures.UnitTests;
-using Eventures.WebAPI.Controllers;
-using Eventures.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using WebApi.Controllers;
-using WebApi.Models;
+
+using NUnit.Framework;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+
+using Eventures.Data;
+using Eventures.Tests.Common;
+using Eventures.WebAPI.Controllers;
+using Eventures.WebAPI.Models;
 
 namespace Eventures.WebAPI.UnitTests
 {
-    public class APIUnitTests
+    public class ApiUnitTests
     {
         TestDb testDb;
         ApplicationDbContext dbContext;
@@ -34,7 +32,7 @@ namespace Eventures.WebAPI.UnitTests
 
             // Get configuration from appsettings.json file in the Web API project
             var configuration = new ConfigurationBuilder()
-                //.SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
             usersController = new UsersController(dbContext, configuration);
@@ -60,7 +58,7 @@ namespace Eventures.WebAPI.UnitTests
 
             // Assert the user is registered and logged-in successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
-            var resultValues = result.Value as Response;
+            var resultValues = result.Value as ResponseMsg;
             Assert.AreEqual("Success", resultValues.Status);
             Assert.AreEqual("User created successfully!", resultValues.Message);
 

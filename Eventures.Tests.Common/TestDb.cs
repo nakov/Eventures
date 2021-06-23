@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-using Eventures.App.Data;
+using Eventures.Data;
 
-namespace Eventures.UnitTests
+namespace Eventures.Tests.Common
 {
     public class TestDb
     {
@@ -14,8 +14,14 @@ namespace Eventures.UnitTests
         public EventuresUser UserPeter { get; private set; }
         public Event EventSoftuniada { get; private set; }
         public Event EventOpenFest { get; private set; }
+        public Event EventMSBuild { get; private set; }        
         private string uniqueDbName;
 
+        /// <summary>
+        /// Creates a new ApplicationDbContext, which connects to the existing database, 
+        /// which was already created and initialized with the constructor `new TestDb()`.
+        /// </summary>
+        /// <returns></returns>
         public ApplicationDbContext CreateDbContext()
         {
             // Use in-memory database for testing
@@ -27,13 +33,16 @@ namespace Eventures.UnitTests
             return dbContext;
         }
 
+        /// <summary>
+        /// Creates a new testing database and resets its data to its initial state.
+        /// </summary>
         public TestDb()
         {
             this.uniqueDbName = "Eventures-TestDb-" + DateTime.Now.Ticks;
             this.SeedDatabase();
         }
 
-        public void SeedDatabase()
+        private void SeedDatabase()
         {
             var dbContext = this.CreateDbContext();
             var userStore = new UserStore<EventuresUser>(dbContext);
@@ -85,6 +94,19 @@ namespace Eventures.UnitTests
                 OwnerId = UserPeter.Id
             };
             dbContext.Add(this.EventOpenFest);
+
+            // EventOpenFest has owner UserPeter
+            this.EventMSBuild = new Event()
+            {
+                Name = "Microsoft Build 2021",
+                Place = "Online",
+                Start = DateTime.Now.AddDays(300),
+                End = DateTime.Now.AddDays(302),
+                TotalTickets = 25000,
+                PricePerTicket = 0.00m,
+                OwnerId = UserPeter.Id
+            };
+            dbContext.Add(this.EventMSBuild);
 
             dbContext.SaveChanges();
         }

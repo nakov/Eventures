@@ -1,39 +1,22 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+
 using NUnit.Framework;
-using Eventures.UnitTests;
-using Eventures.App.Data;
-using Eventures.Tests.Common;
 
-namespace Eventures.IntegrationTests
+using Eventures.Data;
+
+namespace Eventures.App.IntegrationTests
 {
-    public class IntegrationTests
+    public class WebIntegrationTestsWithUser : WebIntegrationTestsBase
     {
-        TestDb testDb;
-        TestEventuresApp testEventuresApp;
-        HttpClient httpClient;
-        HttpClientHandler httpClientHandler;
-
         [OneTimeSetUp]
-        public async Task OneTimeSetUp()
+        public async Task SetUpUser()
         {
-            this.testDb = new TestDb();
-            this.testEventuresApp = new TestEventuresApp(testDb);
-            this.httpClientHandler = new HttpClientHandler();
-            this.httpClientHandler.ServerCertificateCustomValidationCallback +=
-                (sender, certificate, chain, errors) =>
-                {
-                   return true;
-                };
-            this.httpClient = new HttpClient(httpClientHandler);
-            this.httpClient.BaseAddress = new Uri(this.testEventuresApp.ServerUri);
-
-            // Login UserMaria
+            // Login user "UserMaria"
             await LoginUser(this.testDb.UserMaria.UserName, this.testDb.UserMaria.UserName);
         }
 
@@ -395,18 +378,6 @@ namespace Eventures.IntegrationTests
             // Assert the user is redirected to the "Home" page
             Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(postResponseBody.Contains($"Welcome, {username}"));
-        }
-
-        private static string ExtractAntiForgeryToken(string htmlResponseText)
-        {
-            Match match = Regex.Match(htmlResponseText, @"\<input name=""__RequestVerificationToken"" type=""hidden"" value=""([^""]+)"" \/\>");
-            return match.Success ? match.Groups[1].Captures[0].Value : null;
-        }
-
-        [OneTimeTearDown]
-        public void TearDown()
-        {
-            this.testEventuresApp.Dispose();
         }
     }
 }

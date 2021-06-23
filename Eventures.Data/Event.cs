@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eventures.App.Data
+namespace Eventures.Data
 {
     public class Event
     {
@@ -12,6 +12,7 @@ namespace Eventures.App.Data
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public int TotalTickets { get; set; }
+
         [Column(TypeName = "decimal(12,3)")]
         public decimal PricePerTicket { get; set; }
 

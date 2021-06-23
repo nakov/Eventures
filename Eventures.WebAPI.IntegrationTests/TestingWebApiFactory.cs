@@ -3,15 +3,15 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using WebApi;
-using Eventures.App.Data;
-using Eventures.UnitTests;
-using Eventures.WebAPI.Models;
-using WebApi.Models;
 
-namespace Eventures.WebAPI.IntegraionTests
+using Eventures.Data;
+using Eventures.WebAPI.Models;
+using Eventures.Tests.Common;
+
+namespace Eventures.WebAPI.IntegrationTests
 {
     public class TestingWebApiFactory
     {

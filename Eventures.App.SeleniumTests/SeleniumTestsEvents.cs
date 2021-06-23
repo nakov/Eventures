@@ -1,40 +1,17 @@
-﻿using Eventures.Tests.Common;
-using Eventures.UnitTests;
-using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using System;
+﻿using System;
 using System.Linq;
 
-namespace Eventures.SeleniumTests
+using NUnit.Framework;
+using OpenQA.Selenium;
+
+namespace Eventures.App.SeleniumTests
 {
-    public class SeleniumTests_Events
+    public class SeleniumTestsEvents : SeleniumTestsBase
     {
-        TestDb testDb;
-        IWebDriver driver;
-        string username = "testuser" + DateTime.UtcNow.Ticks;
-        string password = "password" + DateTime.UtcNow.Ticks;
-        TestEventuresApp testEventuresApp;
-        string baseUrl;
-
         [OneTimeSetUp]
-        public void Setup()
+        public void SetupUser()
         {
-            // Run the Web app in a local Web server
-            this.testDb = new TestDb();
-            this.testEventuresApp = new TestEventuresApp(testDb);
-            this.baseUrl = this.testEventuresApp.ServerUri;
-
-            // Setup the ChromeDriver
-            var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("headless");
-            chromeOptions.AddArguments("--start-maximized");
-            chromeOptions.AddArguments("--allow-insecure-localhost");
-            this.driver = new ChromeDriver(chromeOptions);
-            this.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-
-            // Register a new user to be used during the tests
-            RegisterUser();
+            RegisterUserForTesting();
         }
 
         [Test]
@@ -107,7 +84,6 @@ namespace Eventures.SeleniumTests
             Assert.That(driver.Title.Contains("Create Event"));
             Assert.That(driver.PageSource.Contains("<h1>Create New Event</h1>"));
             Assert.That(driver.PageSource.Contains(@"<a class=""btn btn-secondary"" href=""/Events/All"">Back to List</a>"));
-            
         }
 
         [Test]
@@ -254,7 +230,7 @@ namespace Eventures.SeleniumTests
             // Arrange: go to the "Create Event" page and create a new event for deleting
             driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
             Assert.That(driver.Title.Contains("Create Event"));
-
+            
             var eventName = "Best Show" + DateTime.UtcNow.Ticks;
             var nameField = driver.FindElement(By.Id("Name"));
             nameField.Clear();
@@ -390,7 +366,7 @@ namespace Eventures.SeleniumTests
             Assert.That(driver.PageSource.Contains("The Name field is required."));
         }
 
-        private void RegisterUser()
+        private void RegisterUserForTesting()
         {
             driver.Navigate().GoToUrl(this.baseUrl + "/Identity/Account/Register");
 
@@ -404,13 +380,6 @@ namespace Eventures.SeleniumTests
 
             Assert.AreEqual(this.baseUrl + "/", driver.Url);
             Assert.That(driver.PageSource.Contains($"Welcome, {username}"));
-        }
-
-        [OneTimeTearDown]
-        public void TearDown()
-        {
-            driver.Quit();
-            this.testEventuresApp.Dispose();
         }
     }
 }

@@ -1,27 +1,27 @@
-﻿using Eventures.App.Data;
-using Eventures.WebAPI;
-using Eventures.WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using WebApi.Models;
 
-namespace WebApi.Controllers
+using Eventures.Data;
+using Eventures.WebAPI.Models;
+
+namespace Eventures.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UsersController : Controller
     {
         private ApplicationDbContext dbContext;
@@ -78,7 +78,9 @@ namespace WebApi.Controllers
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                string jwtSecret = _configuration["JWT:Secret"];
+                byte[] jwtSecretBytes = Encoding.UTF8.GetBytes(jwtSecret);
+                var authSigningKey = new SymmetricSecurityKey(jwtSecretBytes);
 
                 var token = new JwtSecurityToken(
                     issuer: _configuration["JWT:ValidIssuer"],
@@ -120,7 +122,7 @@ namespace WebApi.Controllers
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMsg { Status = "Error", Message = "User already exists!" });
 
             EventuresUser user = new EventuresUser()
             {
@@ -132,9 +134,9 @@ namespace WebApi.Controllers
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMsg { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+            return Ok(new ResponseMsg { Status = "Success", Message = "User created successfully!" });
         }
 
         /// <summary>

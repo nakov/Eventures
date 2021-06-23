@@ -4,30 +4,19 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using NUnit.Framework;
-using Eventures.App.Data;
-using Eventures.App.Models;
-using Eventures.UnitTests;
-using Eventures.WebAPI.IntegraionTests;
+
+using Eventures.Data;
 using Eventures.WebAPI.Models;
-using WebApi.Models;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
-    public class APIIntegrationTests
+    public class ApiTestsWithUser : ApiTestsBase
     {
-        TestDb testDb;
-        ApplicationDbContext dbContext;
-        TestingWebApiFactory testFactory;
-        HttpClient httpClient;
-
         [OneTimeSetUp]
         public async Task Setup()
         {
-            this.testDb = new TestDb();
-            this.dbContext = testDb.CreateDbContext();
-            this.testFactory = new TestingWebApiFactory(testDb);
-            this.httpClient = testFactory.Client;
             await this.testFactory.AuthenticateAsync();
         }
 

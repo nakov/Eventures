@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Eventures.App.Data
+namespace Eventures.Data
 {
     public class EventuresUser : IdentityUser
     {
