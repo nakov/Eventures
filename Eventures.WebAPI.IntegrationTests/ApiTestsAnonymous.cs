@@ -65,7 +65,6 @@ namespace Eventures.WebAPI.IntegrationTests
 
             var postResponseContent = postResponse.Content.ReadAsAsync<ResponseMsg>();
             var postResponseResult = postResponseContent.Result;
-            Assert.AreEqual("Success", postResponseResult.Status);
             Assert.AreEqual("User created successfully!", postResponseResult.Message);
 
             var usersCountAfter = this.dbContext.Users.Count();
@@ -141,6 +140,9 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, postResponse.StatusCode);
+
+            var postResponseContent = await postResponse.Content.ReadAsAsync<ResponseMsg>();
+            Assert.AreEqual("Invalid username or password!", postResponseContent.Message);
         }
     }
 }

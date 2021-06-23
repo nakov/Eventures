@@ -59,7 +59,6 @@ namespace Eventures.WebAPI.UnitTests
             // Assert the user is registered and logged-in successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
             var resultValues = result.Value as ResponseMsg;
-            Assert.AreEqual("Success", resultValues.Status);
             Assert.AreEqual("User created successfully!", resultValues.Message);
 
             var usersAfter = this.dbContext.Users.Count();
@@ -255,6 +254,9 @@ namespace Eventures.WebAPI.UnitTests
 
             //Assert
             Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
+
+            var resultValue = result.Value as ResponseMsg;
+            Assert.AreEqual($"Event #{invalidId} not found.", resultValue.Message);
         }
 
         [Test]
@@ -283,6 +285,9 @@ namespace Eventures.WebAPI.UnitTests
 
             // Assert user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);
+
+            var resultValue = result.Value as ResponseMsg;
+            Assert.AreEqual($"Cannot edit event, when not an owner.", resultValue.Message);
 
             // Assert event is not edited in the database
             var newEventFromDb =
@@ -338,10 +343,14 @@ namespace Eventures.WebAPI.UnitTests
             int eventsCountBefore = dbContext.Events.Count();
             int invalidId = -1;
             // Act: create request with invalid id
-            var result = controller.DeleteEvent(invalidId) as NotFoundResult;
+            var result = controller.DeleteEvent(invalidId) as NotFoundObjectResult;
 
             // Assert
             Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
+
+            var resultValue = result.Value as ResponseMsg;
+            Assert.AreEqual($"Event #{invalidId} not found.", resultValue.Message);
+
             int eventsCountAfter = dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
         }
@@ -358,10 +367,13 @@ namespace Eventures.WebAPI.UnitTests
             int eventsCountBefore = dbContext.Events.Count();
 
             // Act
-            var result = controller.DeleteEvent(openFestEvent.Id) as UnauthorizedResult;
+            var result = controller.DeleteEvent(openFestEvent.Id) as UnauthorizedObjectResult;
 
             // Assert user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);
+
+            var resultValue = result.Value as ResponseMsg;
+            Assert.AreEqual($"Cannot delete event, when not an owner.", resultValue.Message);
 
             // Assert the event is not deleted from the database
             int eventsCountAfter = dbContext.Events.Count();

@@ -82,6 +82,9 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+
+            var responseContent = await response.Content.ReadAsAsync<ResponseMsg>();
+            Assert.AreEqual($"Event #{invalidEventId} not found.", responseContent.Message);
         }
 
         [Test]
@@ -203,6 +206,9 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NotFound, putResponse.StatusCode);
+
+            var putResponseContent = await putResponse.Content.ReadAsAsync<ResponseMsg>();
+            Assert.AreEqual($"Event #{invalidId} not found.", putResponseContent.Message);
         }
 
         [Test]
@@ -231,6 +237,9 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Assert user is unauthroized because UserMaria is not the owner of the "Open Fest" event
             Assert.AreEqual(HttpStatusCode.Unauthorized, putResponse.StatusCode);
+
+            var putResponseContent = await putResponse.Content.ReadAsAsync<ResponseMsg>();
+            Assert.AreEqual($"Cannot edit event, when not an owner.", putResponseContent.Message);
 
             this.dbContext = this.testDb.CreateDbContext();
             eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
@@ -276,14 +285,17 @@ namespace Eventures.WebAPI.IntegrationTests
         public async Task Test_Events_DeleteEvent_InvalidId()
         {
             // Arrange
-            var invalidEventId = -1;
+            var invalidId = -1;
 
             // Act
             var deleteResponse = await this.httpClient.DeleteAsync(
-                $"/api/events/{invalidEventId}");
+                $"/api/events/{invalidId}");
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NotFound, deleteResponse.StatusCode);
+
+            var deleteResponseContent = await deleteResponse.Content.ReadAsAsync<ResponseMsg>();
+            Assert.AreEqual($"Event #{invalidId} not found.", deleteResponseContent.Message);
         }
 
         [Test]
@@ -301,6 +313,10 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Assert user is unauthroized because UserMaria is not the owner of the "Open Fest" event
             Assert.AreEqual(HttpStatusCode.Unauthorized, deleteResponse.StatusCode);
+
+            var deleteResponseContent = await deleteResponse.Content.ReadAsAsync<ResponseMsg>();
+            Assert.AreEqual($"Cannot delete event, when not an owner.", deleteResponseContent.Message);
+
             Assert.That(this.dbContext.Events.Contains(eventInDb));
         }
     }
