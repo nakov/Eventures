@@ -6,19 +6,19 @@ using NUnit.Framework;
 using Eventures.Tests.Common;
 using System.Text.RegularExpressions;
 
-namespace Eventures.IntegrationTests
+namespace Eventures.App.IntegrationTests
 {
     public class WebIntegrationTestsBase
     {
         protected TestDb testDb;
-        protected TestEventuresApp testEventuresApp;
+        protected TestEventuresApp<Startup> testEventuresApp;
         protected HttpClient httpClient;
 
         [OneTimeSetUp]
         public void SetUp()
         {
             this.testDb = new TestDb();
-            this.testEventuresApp = new TestEventuresApp(testDb);
+            this.testEventuresApp = new TestEventuresApp<Startup>(testDb);
             this.httpClient = new HttpClient()
             {
                 BaseAddress = new Uri(this.testEventuresApp.ServerUri)

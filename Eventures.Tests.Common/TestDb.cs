@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-using Eventures.App.Data;
+using Eventures.Data;
 
 namespace Eventures.Tests.Common
 {

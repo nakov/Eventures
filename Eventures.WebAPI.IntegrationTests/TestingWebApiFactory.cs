@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
-using Eventures.App.Data;
+using Eventures.Data;
 using Eventures.WebAPI.Models;
 using Eventures.Tests.Common;
 
-namespace Eventures.WebAPI.IntegraionTests
+namespace Eventures.WebAPI.IntegrationTests
 {
     public class TestingWebApiFactory
     {

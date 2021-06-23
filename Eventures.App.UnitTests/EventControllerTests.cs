@@ -5,25 +5,21 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
 
-using Eventures.App.Data;
+using Eventures.Data;
 using Eventures.App.Models;
 using Eventures.App.Controllers;
 using Eventures.Tests.Common;
 
-namespace Eventures.UnitTests
+namespace Eventures.App.UnitTests
 {
-    public class EventControllerTests
+    public class EventControllerTests : UnitTestsBase
     {
-        TestDb testDb;
-        ApplicationDbContext dbContext;
-        EventsController controller;
+        private EventsController controller;
 
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
-            testDb = new TestDb();
-            dbContext = testDb.CreateDbContext();
-            controller = new EventsController(dbContext);
+            this.controller = new EventsController(this.testDb.CreateDbContext());
         }
 
         [Test]
@@ -207,6 +203,7 @@ namespace Eventures.UnitTests
             // Assert
             var redirectResult = result as RedirectToActionResult;
             Assert.AreEqual("All", redirectResult.ActionName);
+            dbContext = this.testDb.CreateDbContext();
             int eventsCountAfter = dbContext.Events.Count();
             Assert.That(eventsCountAfter == eventsCountBefore - 1);
             var deletedEvent = dbContext.Events.Find(model.Id);
@@ -313,6 +310,7 @@ namespace Eventures.UnitTests
             Assert.AreEqual("All", redirectResult.ActionName);
 
             // Assert that name of the event is changed in the database
+            dbContext = this.testDb.CreateDbContext();
             var editedEvent = dbContext.Events.Find(newEvent.Id);
             Assert.IsNotNull(editedEvent);
             Assert.AreEqual(model.Name, editedEvent.Name);

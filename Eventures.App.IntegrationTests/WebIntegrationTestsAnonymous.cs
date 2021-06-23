@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using NUnit.Framework;
 
-namespace Eventures.IntegrationTests
+namespace Eventures.App.IntegrationTests
 {
     public class WebIntegrationTestsAnonymous : WebIntegrationTestsBase
     {

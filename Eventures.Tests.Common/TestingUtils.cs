@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Eventures.App.Data;
+using Eventures.Data;
 
 namespace Eventures.Tests.Common
 {

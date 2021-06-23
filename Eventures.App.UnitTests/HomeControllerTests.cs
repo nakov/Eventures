@@ -2,25 +2,13 @@ using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-using Eventures.App.Data;
 using Eventures.App.Models;
 using Eventures.App.Controllers;
-using Eventures.Tests.Common;
 
-namespace Eventures.UnitTests
+namespace Eventures.App.UnitTests
 {
-    public class HomeControllerTests
+    public class HomeControllerTests : UnitTestsBase
     {
-        TestDb testDb;
-        ApplicationDbContext dbContext;
-
-        [OneTimeSetUp]
-        public void Setup()
-        {
-            testDb = new TestDb();
-            dbContext = testDb.CreateDbContext();
-        }
-
         [Test]
         public void Test_Index()
         {

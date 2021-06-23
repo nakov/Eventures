@@ -6,36 +6,19 @@ using System.Threading.Tasks;
 
 using NUnit.Framework;
 
-using Eventures.App.Data;
-using Eventures.WebAPI.IntegraionTests;
 using Eventures.WebAPI.Models;
-using Eventures.Tests.Common;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
-    public class APIIntegrationTests_Anonymous
+    public class ApiTestsAnonymous : ApiTestsBase
     {
-        TestDb testDb;
-        ApplicationDbContext dbContext;
-        TestingWebApiFactory testFactory;
-        HttpClient htttClient;
-
-        [OneTimeSetUp]
-        public void Setup()
-        {
-            this.testDb = new TestDb();
-            this.dbContext = testDb.CreateDbContext();
-            this.testFactory = new TestingWebApiFactory(testDb);
-            this.htttClient = testFactory.Client;
-        }
-
         [Test]
         public async Task Test_Events_GetAll_Unauthorized()
         {
             // Arrange
 
             // Act
-            var response = await htttClient.GetAsync("api/events");
+            var response = await httpClient.GetAsync("api/events");
 
             // Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -47,7 +30,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Arrange
 
             // Act
-            var response = await this.htttClient.GetAsync("api/events/count");
+            var response = await this.httpClient.GetAsync("api/events/count");
             var responseContent = response.Content.ReadAsStringAsync();
             int responseResult = int.Parse(responseContent.Result);
 
@@ -74,7 +57,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var usersCountBefore = this.dbContext.Users.Count();
 
             // Act
-            var postResponse = await this.htttClient.PostAsJsonAsync(
+            var postResponse = await this.httpClient.PostAsJsonAsync(
                 "/api/users/register", newUser);
 
             // Assert the user is registered and logged-in successfully
@@ -107,7 +90,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var usersCountBefore = this.dbContext.Users.Count();
 
             // Act
-            var postResponse = await this.htttClient.PostAsJsonAsync(
+            var postResponse = await this.httpClient.PostAsJsonAsync(
                 "/api/users/register", newUser);
 
             // Assert
@@ -128,7 +111,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var userMaria = this.testDb.UserMaria;
 
             // Act
-            var postResponse = await htttClient.PostAsJsonAsync("api/users/login", new ApiLoginModel
+            var postResponse = await httpClient.PostAsJsonAsync("api/users/login", new ApiLoginModel
             {
                 Username = userMaria.UserName,
                 Password = userMaria.UserName
@@ -150,7 +133,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var wrongPassword = "wrongPass";
 
             // Act
-            var postResponse = await htttClient.PostAsJsonAsync("api/users/login", new ApiLoginModel
+            var postResponse = await httpClient.PostAsJsonAsync("api/users/login", new ApiLoginModel
             {
                 Username = userMaria.UserName,
                 Password = wrongPassword

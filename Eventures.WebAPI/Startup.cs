@@ -14,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using Eventures.App.Data;
+using Eventures.Data;
 
 namespace Eventures.WebAPI
 {
@@ -74,7 +74,7 @@ namespace Eventures.WebAPI
                         Name = "Eventures App",
                         Email = string.Empty,
                         Url = new Uri("https://github.com/nakov/Eventures"),
-                    },
+                    }
                 });
 
                 // Enables authorization using Swagger (JWT)  
@@ -137,6 +137,7 @@ namespace Eventures.WebAPI
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Eventures Web API");
                 options.RoutePrefix = "api/docs";
+                options.DocumentTitle = "Eventures Web API";
             });
         }
     }

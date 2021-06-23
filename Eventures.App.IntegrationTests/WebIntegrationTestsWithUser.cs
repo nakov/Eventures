@@ -4,13 +4,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 using NUnit.Framework;
 
-using Eventures.App.Data;
+using Eventures.Data;
 
-namespace Eventures.IntegrationTests
+namespace Eventures.App.IntegrationTests
 {
     public class WebIntegrationTestsWithUser : WebIntegrationTestsBase
     {

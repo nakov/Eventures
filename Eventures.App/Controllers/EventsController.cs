@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Eventures.App.Data;
+using Eventures.Data;
 using Eventures.App.Models;
 
 namespace Eventures.App.Controllers

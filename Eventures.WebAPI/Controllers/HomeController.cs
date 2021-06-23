@@ -3,21 +3,22 @@
 namespace Eventures.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api")]
-    public class ApiHomeController : Controller
+    public class HomeController : Controller
     {
         /// <summary>
-        /// Gets API info.
+        /// Gets API info (Swagger UI).
         /// </summary>
         /// <remarks>
         /// Sample request:
-        ///     GET /api
+        ///     GET /
         /// </remarks>
-        /// <response code="200">Returns "OK" with events count</response>
+        /// <response code="200">Returns "OK" with API info.</response>
         [HttpGet]
+        [Route("/")]
+        [Route("api")]
         public IActionResult Index()
         {
-            return LocalRedirect(@"/swagger/v1/swagger.json");
+            return LocalRedirect(@"/api/docs/index.html");
         }
     }
 }

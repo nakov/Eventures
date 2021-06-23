@@ -4,7 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 
-namespace Eventures.SeleniumTests
+namespace Eventures.App.SeleniumTests
 {
     public class SeleniumTestsEvents : SeleniumTestsBase
     {

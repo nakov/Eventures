@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App", "Eventures.App\Eventures.App.csproj", "{0ACB3FB7-5965-4B50-A392-4CB50A96E222}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.UnitTests", "Eventures.UnitTests\Eventures.UnitTests.csproj", "{1E2F7824-77B5-457D-9BEC-DB8A765F9044}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App.UnitTests", "Eventures.App.UnitTests\Eventures.App.UnitTests.csproj", "{1E2F7824-77B5-457D-9BEC-DB8A765F9044}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.IntegrationTests", "Eventures.IntegrationTests\Eventures.IntegrationTests.csproj", "{BDAED536-4EBC-4D78-B844-845D34AD5746}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App.IntegrationTests", "Eventures.App.IntegrationTests\Eventures.App.IntegrationTests.csproj", "{BDAED536-4EBC-4D78-B844-845D34AD5746}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI", "Eventures.WebAPI\Eventures.WebAPI.csproj", "{010DD5B0-DD50-4026-9030-6301ECD97FC1}"
 EndProject
@@ -15,9 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.UnitTests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.IntegrationTests", "Eventures.WebAPI.IntegrationTests\Eventures.WebAPI.IntegrationTests.csproj", "{32D156D1-81CC-4C21-A710-61031F3FB655}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.SeleniumTests", "Eventures.SeleniumTests\Eventures.SeleniumTests.csproj", "{8C46501C-D333-4C97-8179-BFF34D53195C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App.SeleniumTests", "Eventures.App.SeleniumTests\Eventures.App.SeleniumTests.csproj", "{8C46501C-D333-4C97-8179-BFF34D53195C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.Tests.Common", "Eventures.Tests.Common\Eventures.Tests.Common.csproj", "{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Tests.Common", "Eventures.Tests.Common\Eventures.Tests.Common.csproj", "{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Data", "Eventures.Data\Eventures.Data.csproj", "{B4FD2B43-692B-4863-8B3B-F530CA4643EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

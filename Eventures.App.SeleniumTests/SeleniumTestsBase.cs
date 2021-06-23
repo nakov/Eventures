@@ -7,13 +7,13 @@ using OpenQA.Selenium.Chrome;
 
 using Eventures.Tests.Common;
 
-namespace Eventures.SeleniumTests
+namespace Eventures.App.SeleniumTests
 {
     public abstract class SeleniumTestsBase
     {
         protected TestDb testDb;
         protected IWebDriver driver;
-        protected TestEventuresApp testEventuresApp;
+        protected TestEventuresApp<Startup> testEventuresApp;
         protected string baseUrl;
         protected string username = "testuser" + DateTime.UtcNow.Ticks;
         protected string password = "password" + DateTime.UtcNow.Ticks;
@@ -23,7 +23,7 @@ namespace Eventures.SeleniumTests
         {
             // Run the Web app in a local Web server
             this.testDb = new TestDb();
-            this.testEventuresApp = new TestEventuresApp(testDb);
+            this.testEventuresApp = new TestEventuresApp<Startup>(testDb);
             this.baseUrl = this.testEventuresApp.ServerUri;
 
             // Setup the ChromeDriver

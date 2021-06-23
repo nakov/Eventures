@@ -5,14 +5,13 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-using Eventures.App.Data;
-using Eventures.App.Models;
+using Eventures.Data;
 using Eventures.WebAPI.Models;
 
 namespace Eventures.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/events")]
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext dbContext;

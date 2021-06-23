@@ -9,15 +9,14 @@ using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-using Eventures.App.Data;
-using Eventures.App.Models;
+using Eventures.Data;
 using Eventures.Tests.Common;
 using Eventures.WebAPI.Controllers;
 using Eventures.WebAPI.Models;
 
 namespace Eventures.WebAPI.UnitTests
 {
-    public class APIUnitTests
+    public class ApiUnitTests
     {
         TestDb testDb;
         ApplicationDbContext dbContext;

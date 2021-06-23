@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eventures.App.Data
+namespace Eventures.Data
 {
     public class Event
     {

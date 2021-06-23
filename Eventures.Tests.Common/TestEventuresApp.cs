@@ -3,17 +3,16 @@ using System.Linq;
 using System.Diagnostics;
 
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Hosting.Server;
 
-using Eventures.App;
-using Eventures.App.Data;
+using Eventures.Data;
 
 namespace Eventures.Tests.Common
 {
-    public class TestEventuresApp : IDisposable
+    public class TestEventuresApp<TStartup> : IDisposable where TStartup : class
     {
         private IHost host;
         public TestDb TestDb { get; set; }
@@ -23,11 +22,11 @@ namespace Eventures.Tests.Common
         {
             this.TestDb = testDb;
         
-            var hostBuilder = Host.CreateDefaultBuilder();
+            IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
             hostBuilder.ConfigureWebHostDefaults(webHostBuilder =>
             {
                 webHostBuilder.UseContentRoot("../../../../Eventures.App");
-                webHostBuilder.UseStartup<Startup>();
+                webHostBuilder.UseStartup<TStartup>();
                 webHostBuilder.ConfigureServices(services =>
                 {
                     var oldDbContext = services.SingleOrDefault(

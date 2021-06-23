@@ -15,13 +15,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-using Eventures.App.Data;
+using Eventures.Data;
 using Eventures.WebAPI.Models;
 
 namespace Eventures.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UsersController : Controller
     {
         private ApplicationDbContext dbContext;
