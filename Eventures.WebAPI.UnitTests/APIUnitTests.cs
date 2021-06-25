@@ -190,7 +190,7 @@ namespace Eventures.WebAPI.UnitTests
         }
 
         [Test]
-        public void Test_Edit_ValidId()
+        public void Test_Put_ValidId()
         {
             // Arrange: create a new event in the database for editing
             var newEvent = new Event()
@@ -236,7 +236,7 @@ namespace Eventures.WebAPI.UnitTests
         }
 
         [Test]
-        public void Test_Edit_InvalidId()
+        public void Test_Put_InvalidId()
         {
             // Arrange: create event binding model with different event name
             var changedName = "Softuniada 2021 (New Edition)";
@@ -262,7 +262,7 @@ namespace Eventures.WebAPI.UnitTests
         }
 
         [Test]
-        public void Test_Edit_UnauthorizedUser()
+        public void Test_Put_UnauthorizedUser()
         {
             // Arrange: get the "Open Fest" event with owner UserPeter
             var openFestEvent = this.testDb.EventOpenFest;
@@ -284,6 +284,99 @@ namespace Eventures.WebAPI.UnitTests
 
             // Act
             var result = controller.PutEvent(openFestEvent.Id, changedEvent) as UnauthorizedObjectResult;
+
+            // Assert user is unauthorized
+            Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);
+
+            var resultValue = result.Value as ResponseMsg;
+            Assert.AreEqual($"Cannot edit event, when not an owner.", resultValue.Message);
+
+            // Assert event is not edited in the database
+            var newEventFromDb =
+               dbContext.Events.FirstOrDefault(e => e.Name == openFestEvent.Name);
+            Assert.AreEqual(openFestEvent.Place, newEventFromDb.Place);
+        }
+
+        [Test]
+        public void Test_Patch_ValidId()
+        {
+            // Arrange: create a new event in the database for partial editing with PATCH
+            var newEvent = new Event()
+            {
+                Name = "Beach Party" + DateTime.Now.Ticks,
+                Place = "Ibiza",
+                Start = DateTime.Now.AddMonths(3),
+                End = DateTime.Now.AddMonths(3),
+                TotalTickets = 20,
+                PricePerTicket = 120.00m,
+                OwnerId = testDb.UserMaria.Id
+            };
+            dbContext.Add(newEvent);
+            dbContext.SaveChanges();
+
+            // Create event model with different event name
+            var changedEvent = new PatchEventModel()
+            {
+                Name = "House Party" + DateTime.Now.Ticks
+            };
+
+            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+
+            // Act
+            var result = controller.PatchEvent(newEvent.Id, changedEvent) as NoContentResult;
+
+            // Assert
+            Assert.AreEqual((int)HttpStatusCode.NoContent, result.StatusCode);
+
+            // Assert the event in the database has correct data
+            var newEventFromDb =
+               dbContext.Events.FirstOrDefault(e => e.Name == changedEvent.Name);
+            Assert.AreEqual(newEventFromDb.Place, newEvent.Place);
+            Assert.AreEqual(newEventFromDb.Start, newEvent.Start);
+            Assert.AreEqual(newEventFromDb.End, newEvent.End);
+            Assert.AreEqual(newEventFromDb.PricePerTicket, newEvent.PricePerTicket);
+            Assert.AreEqual(newEventFromDb.TotalTickets, newEvent.TotalTickets);
+        }
+
+        [Test]
+        public void Test_Patch_InvalidId()
+        {
+            // Arrange: create event model with different event name
+            var changedName = "Softuniada 2021 (New Edition)";
+            var changedEvent = new PatchEventModel()
+            {
+                Name = changedName
+            };
+            var invalidId = -1;
+
+            // Act: make request with invalid id
+            var result = controller.PatchEvent(invalidId, changedEvent) as NotFoundObjectResult;
+
+            //Assert
+            Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
+
+            var resultValue = result.Value as ResponseMsg;
+            Assert.AreEqual($"Event #{invalidId} not found.", resultValue.Message);
+        }
+
+        [Test]
+        public void Test_Patch_UnauthorizedUser()
+        {
+            // Arrange: get the "Open Fest" event with owner UserPeter
+            var openFestEvent = this.testDb.EventOpenFest;
+
+            // Assign UserMaria to the controller
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+
+            // Create event model with different event name
+            var changedName = "OpenFest 2021 (New Edition)";
+            var changedEvent = new PatchEventModel()
+            {
+                Name = changedName
+            };
+
+            // Act
+            var result = controller.PatchEvent(openFestEvent.Id, changedEvent) as UnauthorizedObjectResult;
 
             // Assert user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);

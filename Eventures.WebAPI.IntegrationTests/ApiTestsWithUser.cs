@@ -9,6 +9,8 @@ using NUnit.Framework;
 
 using Eventures.Data;
 using Eventures.WebAPI.Models;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
@@ -240,6 +242,94 @@ namespace Eventures.WebAPI.IntegrationTests
 
             var putResponseContent = await putResponse.Content.ReadAsAsync<ResponseMsg>();
             Assert.AreEqual($"Cannot edit event, when not an owner.", putResponseContent.Message);
+
+            this.dbContext = this.testDb.CreateDbContext();
+            eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
+            Assert.AreEqual(openFestEvent.Name, eventInDb.Name);
+        }
+
+        [Test]
+        public async Task Test_Events_PartialEditEvent_ValidId()
+        {
+            // Arrange: get the "Softuniada 2021" event 
+            var softuniadaEvent = this.testDb.EventSoftuniada;
+            var eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == softuniadaEvent.Id);
+
+            // Create new event model, where only the event name is changed
+            var changedName = "Softuniada 2021 (New Edition)";
+            var changedEvent = new PatchEventModel()
+            {
+                Name = changedName
+            };
+
+            var eventsCountBefore = this.dbContext.Events.Count();
+
+            // Act: send PATCH request with the changed event as StringContent
+            var requestContent = new StringContent(JsonConvert.SerializeObject(changedEvent), Encoding.UTF8, "application/json");
+            var patchResponse = await this.httpClient.PatchAsync(
+                $"/api/events/{eventInDb.Id}", requestContent);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, patchResponse.StatusCode);
+
+            this.dbContext = this.testDb.CreateDbContext();
+            var eventsCountAfter = this.dbContext.Events.Count();
+            Assert.AreEqual(eventsCountBefore, eventsCountAfter);
+
+            eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == softuniadaEvent.Id);
+            Assert.AreEqual(changedName, eventInDb.Name);
+            Assert.AreEqual(softuniadaEvent.Place, eventInDb.Place);
+        }
+
+        [Test]
+        public async Task Test_Events_PartialEditEvent_InvalidId()
+        {
+            // Arrange
+            var changedName = "Softuniada 2021 (New Edition)";
+            var changedEvent = new PatchEventModel()
+            {
+                Name = changedName
+            };
+
+            var invalidId = -1;
+
+            // Act
+            var requestContent = new StringContent(JsonConvert.SerializeObject(changedEvent), Encoding.UTF8, "application/json");
+            var patchResponse = await this.httpClient.PatchAsync(
+                $"/api/events/{invalidId}", requestContent);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, patchResponse.StatusCode);
+
+            var putResponseContent = await patchResponse.Content.ReadAsAsync<ResponseMsg>();
+            Assert.AreEqual($"Event #{invalidId} not found.", putResponseContent.Message);
+        }
+
+        [Test]
+        public async Task Test_Events_PartialEditEvent_EditEventOfAnotherUser()
+        {
+            // Note that current user is UserMaria
+            // Arrange: get the "Open Fest" event with owner UserPeter
+            var openFestEvent = this.testDb.EventOpenFest;
+
+            var eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
+
+            var changedName = "OpenFest 2021 (New Edition)";
+            var changedEvent = new PatchEventModel()
+            {
+                Name = changedName
+            };
+
+            // Act
+            var requestContent = new StringContent(JsonConvert.SerializeObject(changedEvent), Encoding.UTF8, "application/json");
+            var patchResponse = await this.httpClient.PatchAsync(
+                $"/api/events/{eventInDb.Id}", requestContent);
+
+            // Assert user is unauthroized because UserMaria is not the owner of the "Open Fest" event
+            Assert.AreEqual(HttpStatusCode.Unauthorized, patchResponse.StatusCode);
+
+            var patchResponseContent = await patchResponse.Content.ReadAsAsync<ResponseMsg>();
+            Assert.AreEqual($"Cannot edit event, when not an owner.", patchResponseContent.Message);
 
             this.dbContext = this.testDb.CreateDbContext();
             eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
