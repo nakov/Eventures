@@ -34,9 +34,9 @@ namespace Eventures.WebAPI.Controllers
         /// </remarks>
         /// <response code="200">Returns "OK" with events count</response>  
         [HttpGet("count")] // GET: /api/events/count
-        public int GetEventsCount()
+        public IActionResult GetEventsCount()
         {
-            return this.dbContext.Events.ToList().Count();
+            return Ok(this.dbContext.Events.ToList().Count());
         }
 
         /// <summary>
