@@ -78,7 +78,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act
             var result = await usersController.Login(user) as OkObjectResult;
 
-            // Assert the user is logged in and has a valid token
+            // Assert the user is logged in and a valid token is returned
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
 
             var resultValue = result.Value as ResponseWithToken;
@@ -94,7 +94,7 @@ namespace Eventures.WebAPI.UnitTests
             //Act
             var result = usersController.GetAll() as OkObjectResult;
 
-            // Assert
+            // Assert the users are returned successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
 
             var resultValue = result.Value as IEnumerable<ApiUserViewModel>;
@@ -109,7 +109,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act
             var result = controller.GetEventsCount() as OkObjectResult;
 
-            // Assert
+            // Assert the events count is correct
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
             var resultValue = (int)result.Value;
             Assert.AreEqual(this.dbContext.Events.Count(), resultValue);
@@ -123,7 +123,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act
             var result = controller.GetEvents() as OkObjectResult;
 
-            // Assert
+            // Assert the events are returned successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
             var resultValues = result.Value as IEnumerable<ApiEventViewModel>;
             Assert.AreEqual(this.dbContext.Events.Count(), resultValues.Count());
@@ -138,7 +138,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act
             var result = controller.GetEventById(eventId) as OkObjectResult;
 
-            // Assert
+            // Assert the correct event is returned
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
             var resultValue = result.Value as ApiEventViewModel;
             Assert.AreEqual(this.testDb.EventSoftuniada.Id, resultValue.Id);
@@ -175,7 +175,7 @@ namespace Eventures.WebAPI.UnitTests
             Assert.AreEqual(newEventData.PricePerTicket, resultValue.PricePerTicket);
             Assert.AreEqual(newEventData.TotalTickets, resultValue.TotalTickets);
 
-            // Check the new event in the database
+            // Assert the new event is created in the database
             int eventsCountAfter = dbContext.Events.Count();
             Assert.That(eventsCountAfter == eventsCountBefore + 1);
 
@@ -206,7 +206,7 @@ namespace Eventures.WebAPI.UnitTests
             dbContext.Add(newEvent);
             dbContext.SaveChanges();
 
-            // Create event binding model with different event name
+            // Create an event binding model with changed event name
             var changedEvent = new EventCreateBindingModel()
             {
                 Name = "House Party" + DateTime.Now.Ticks,
@@ -225,7 +225,7 @@ namespace Eventures.WebAPI.UnitTests
             // Assert
             Assert.AreEqual((int)HttpStatusCode.NoContent, result.StatusCode);
 
-            // Assert the event in the database has correct data
+            // Assert the event in the database has a changed name
             var newEventFromDb =
                dbContext.Events.FirstOrDefault(e => e.Name == changedEvent.Name);
             Assert.AreEqual(newEventFromDb.Place, changedEvent.Place);
@@ -238,7 +238,7 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public void Test_Put_InvalidId()
         {
-            // Arrange: create event binding model with different event name
+            // Arrange: create event binding model with chnaged event name
             var changedName = "Softuniada 2021 (New Edition)";
             var changedEvent = new EventCreateBindingModel()
             {
@@ -254,7 +254,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act: make request with invalid id
             var result = controller.PutEvent(invalidId, changedEvent) as NotFoundObjectResult;
 
-            //Assert
+            //Assert a "Not Found" error appears
             Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
 
             var resultValue = result.Value as ResponseMsg;
@@ -270,7 +270,7 @@ namespace Eventures.WebAPI.UnitTests
             // Assign UserMaria to the controller
             TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
-            // Create event binding model with different event name
+            // Create event binding model with changed event name
             var changedName = "OpenFest 2021 (New Edition)";
             var changedEvent = new EventCreateBindingModel()
             {
@@ -285,13 +285,13 @@ namespace Eventures.WebAPI.UnitTests
             // Act
             var result = controller.PutEvent(openFestEvent.Id, changedEvent) as UnauthorizedObjectResult;
 
-            // Assert user is unauthorized
+            // Assert the user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);
 
             var resultValue = result.Value as ResponseMsg;
             Assert.AreEqual($"Cannot edit event, when not an owner.", resultValue.Message);
 
-            // Assert event is not edited in the database
+            // Assert the event is not edited in the database
             var newEventFromDb =
                dbContext.Events.FirstOrDefault(e => e.Name == openFestEvent.Name);
             Assert.AreEqual(openFestEvent.Place, newEventFromDb.Place);
@@ -300,7 +300,7 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public void Test_Patch_ValidId()
         {
-            // Arrange: create a new event in the database for partial editing with PATCH
+            // Arrange: create a new event in the database for partial editing
             var newEvent = new Event()
             {
                 Name = "Beach Party" + DateTime.Now.Ticks,
@@ -314,7 +314,7 @@ namespace Eventures.WebAPI.UnitTests
             dbContext.Add(newEvent);
             dbContext.SaveChanges();
 
-            // Create event model with different event name
+            // Create event model with chnaged event name
             var changedEvent = new PatchEventModel()
             {
                 Name = "House Party" + DateTime.Now.Ticks
@@ -322,13 +322,13 @@ namespace Eventures.WebAPI.UnitTests
 
             TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
 
-            // Act
+            // Act: send a PATCH request for partial update
             var result = controller.PatchEvent(newEvent.Id, changedEvent) as NoContentResult;
 
-            // Assert
+            // Assert the request returns "No Content"
             Assert.AreEqual((int)HttpStatusCode.NoContent, result.StatusCode);
 
-            // Assert the event in the database has correct data
+            // Assert the event in the database has changed name
             var newEventFromDb =
                dbContext.Events.FirstOrDefault(e => e.Name == changedEvent.Name);
             Assert.AreEqual(newEventFromDb.Place, newEvent.Place);
@@ -341,7 +341,7 @@ namespace Eventures.WebAPI.UnitTests
         [Test]
         public void Test_Patch_InvalidId()
         {
-            // Arrange: create event model with different event name
+            // Arrange: create event model with changed event name
             var changedName = "Softuniada 2021 (New Edition)";
             var changedEvent = new PatchEventModel()
             {
@@ -352,7 +352,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act: make request with invalid id
             var result = controller.PatchEvent(invalidId, changedEvent) as NotFoundObjectResult;
 
-            //Assert
+            //Assert an "Not Found" error appears
             Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
 
             var resultValue = result.Value as ResponseMsg;
@@ -368,7 +368,7 @@ namespace Eventures.WebAPI.UnitTests
             // Assign UserMaria to the controller
             TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
-            // Create event model with different event name
+            // Create event model with changed event name
             var changedName = "OpenFest 2021 (New Edition)";
             var changedEvent = new PatchEventModel()
             {
@@ -421,7 +421,7 @@ namespace Eventures.WebAPI.UnitTests
             Assert.That(eventsCountBefore == eventsCountAfter + 1);
             Assert.That(this.dbContext.Events.Find(newEvent.Id) == null);
 
-            // Assert the response holds the event data
+            // Assert the event is returned
             var resultValue = result.Value as ApiEventViewModel;
             Assert.IsNotNull(resultValue);
             Assert.That(resultValue.Id == newEvent.Id);
@@ -440,7 +440,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act: create request with invalid id
             var result = controller.DeleteEvent(invalidId) as NotFoundObjectResult;
 
-            // Assert
+            // Assert a "Not Found" error appears
             Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
 
             var resultValue = result.Value as ResponseMsg;

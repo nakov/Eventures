@@ -1,16 +1,16 @@
 using System;
-using System.Collections.Generic;
+using System.Text;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using NUnit.Framework;
+using Newtonsoft.Json;
 
 using Eventures.Data;
 using Eventures.WebAPI.Models;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
@@ -27,10 +27,10 @@ namespace Eventures.WebAPI.IntegrationTests
         {
             // Arrange
 
-            // Act
+            // Act: send a GET request
             var response = await this.httpClient.GetAsync("api/users");
 
-            // Assert
+            // Assert users are returned successfully
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             var resposeContent = response.Content.ReadAsAsync<List<ApiUserViewModel>>();
@@ -47,10 +47,9 @@ namespace Eventures.WebAPI.IntegrationTests
             // Act
             var response = await this.httpClient.GetAsync("api/events");
 
-            // Assert
+            // Assert the events are returned successfully
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            // Get response content with events
             var responseContent = response.Content.ReadAsAsync<List<ApiEventViewModel>>().Result;
             Assert.AreEqual(this.dbContext.Events.Count(), responseContent.Count());
             Assert.AreEqual(this.dbContext.Events.FirstOrDefault().Name, responseContent.FirstOrDefault().Name);
@@ -66,7 +65,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Act
             var response = await this.httpClient.GetAsync($"api/events/{eventId}");
 
-            // Assert
+            // Assert the returned event is correct
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             var responseContent = response.Content.ReadAsAsync<ApiEventViewModel>().Result;
@@ -79,10 +78,10 @@ namespace Eventures.WebAPI.IntegrationTests
             // Arrange
             int invalidEventId = -1;
 
-            // Act
+            // Act: send request wuth invalid id
             var response = await this.httpClient.GetAsync($"api/events/{invalidEventId}");
 
-            // Assert
+            // Assert a "Not Found" error is returned
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
             var responseContent = await response.Content.ReadAsAsync<ResponseMsg>();
@@ -110,7 +109,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var postResponse = await this.httpClient.PostAsJsonAsync(
                 "/api/events/create", newEvent);
 
-            // Assert
+            // Assert the event is created successfully
             Assert.AreEqual(HttpStatusCode.Created, postResponse.StatusCode);
 
             this.dbContext = this.testDb.CreateDbContext();
@@ -121,7 +120,7 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_CreateEvent_InvalidData()
         {
-            // Arrange: create event binding model with invalid name
+            // Arrange: create event binding model with invalid name: name == empty string
             var invalidEventName = string.Empty;
             var eventPlace = "Beach";
             var newEvent = new EventCreateBindingModel()
@@ -139,7 +138,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var postResponse = await this.httpClient.PostAsJsonAsync(
                 "/api/events/create", newEvent);
 
-            // Assert
+            // Assert a "Bad Request" error is returned
             Assert.AreEqual(HttpStatusCode.BadRequest, postResponse.StatusCode);
 
             var postResponseContent = await postResponse.Content.ReadAsStringAsync();
@@ -188,7 +187,7 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_EditEvent_InvalidId()
         {
-            // Arrange
+            // Arrange: create an event binding model with changed name
             var changedName = "Softuniada 2021 (New Edition)";
             var changedEvent = new EventCreateBindingModel()
             {
@@ -202,7 +201,7 @@ namespace Eventures.WebAPI.IntegrationTests
 
             var invalidId = -1;
 
-            // Act
+            // Act: send a PUT request with invalid id
             var putResponse = await this.httpClient.PutAsJsonAsync(
                 $"/api/events/{invalidId}", changedEvent);
 
@@ -222,6 +221,7 @@ namespace Eventures.WebAPI.IntegrationTests
 
             var eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
 
+            // Create an event binding model with changed name
             var changedName = "OpenFest 2021 (New Edition)";
             var changedEvent = new EventCreateBindingModel()
             {
@@ -237,12 +237,13 @@ namespace Eventures.WebAPI.IntegrationTests
             var putResponse = await this.httpClient.PutAsJsonAsync(
                 $"/api/events/{eventInDb.Id}", changedEvent);
 
-            // Assert user is unauthroized because UserMaria is not the owner of the "Open Fest" event
+            // Assert user is unauthorized because UserMaria is not the owner of the "Open Fest" event
             Assert.AreEqual(HttpStatusCode.Unauthorized, putResponse.StatusCode);
 
             var putResponseContent = await putResponse.Content.ReadAsAsync<ResponseMsg>();
             Assert.AreEqual($"Cannot edit event, when not an owner.", putResponseContent.Message);
 
+            // Assert the event in not edited in the database
             this.dbContext = this.testDb.CreateDbContext();
             eventInDb = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
             Assert.AreEqual(openFestEvent.Name, eventInDb.Name);
@@ -284,7 +285,7 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_PartialEditEvent_InvalidId()
         {
-            // Arrange
+            // Arrange: create an event model with changed name
             var changedName = "Softuniada 2021 (New Edition)";
             var changedEvent = new PatchEventModel()
             {
@@ -292,9 +293,9 @@ namespace Eventures.WebAPI.IntegrationTests
             };
 
             var invalidId = -1;
-
-            // Act
             var requestContent = new StringContent(JsonConvert.SerializeObject(changedEvent), Encoding.UTF8, "application/json");
+
+            // Act: send a PATCH request with invalid id
             var patchResponse = await this.httpClient.PatchAsync(
                 $"/api/events/{invalidId}", requestContent);
 
@@ -320,8 +321,9 @@ namespace Eventures.WebAPI.IntegrationTests
                 Name = changedName
             };
 
-            // Act
             var requestContent = new StringContent(JsonConvert.SerializeObject(changedEvent), Encoding.UTF8, "application/json");
+            
+            // Act
             var patchResponse = await this.httpClient.PatchAsync(
                 $"/api/events/{eventInDb.Id}", requestContent);
 
@@ -361,7 +363,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var deleteResponse = await this.httpClient.DeleteAsync(
                 $"/api/events/{eventInDb.Id}");
 
-            // Assert
+            // Assert the deletion is successfull
             Assert.AreEqual(HttpStatusCode.OK, deleteResponse.StatusCode);
 
             var deleteResponseContent = deleteResponse.Content.ReadAsAsync<ApiEventViewModel>().Result;
@@ -377,7 +379,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Arrange
             var invalidId = -1;
 
-            // Act
+            // Act: send a DELETE request with invalid id
             var deleteResponse = await this.httpClient.DeleteAsync(
                 $"/api/events/{invalidId}");
 
