@@ -107,10 +107,12 @@ namespace Eventures.WebAPI.UnitTests
             // Arrange
 
             // Act
-            var result = controller.GetEventsCount();
+            var result = controller.GetEventsCount() as OkObjectResult;
 
             // Assert
-            Assert.AreEqual(this.dbContext.Events.Count(), result);
+            Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
+            var resultValue = (int)result.Value;
+            Assert.AreEqual(this.dbContext.Events.Count(), resultValue);
         }
 
         [Test]

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 
 using Eventures.WebAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
@@ -32,7 +33,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Act
             var response = await this.httpClient.GetAsync("api/events/count");
             var responseContent = response.Content.ReadAsStringAsync();
-            int responseResult = int.Parse(responseContent.Result);
+            var responseResult = int.Parse(responseContent.Result);
 
             // Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
