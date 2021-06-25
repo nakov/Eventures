@@ -58,7 +58,7 @@ namespace Eventures.WebAPI.Controllers
         /// </remarks>
         /// <param name="model"></param>
         /// <response code="200">Returns "OK" with JWT token with expiration date.</response>
-        /// <response code="401">Returns "Unauthorized".</response>    
+        /// <response code="401">Returns "Unauthorized" when username or password doesn't match.</response>    
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] ApiLoginModel model)
         {
@@ -116,7 +116,7 @@ namespace Eventures.WebAPI.Controllers
         ///     }
         /// </remarks>
         /// <response code="200">Returns "OK" with "Success" status and "User created successfully! message".</response>
-        /// <response code="500">Returns "InternalServerError" when user already exists or user creation failed.</response>    
+        /// <response code="400">Returns "Bad Request" when user already exists or user creation failed.</response>    
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] ApiRegisterModel model)
         {
