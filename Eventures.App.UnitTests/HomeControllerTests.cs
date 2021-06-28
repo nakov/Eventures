@@ -36,8 +36,8 @@ namespace Eventures.App.UnitTests
             // Assert
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
-            var model = viewResult.Model as ErrorViewModel;
-            Assert.IsNotNull(model);
+            var resultModel = viewResult.Model as ErrorViewModel;
+            Assert.IsNotNull(resultModel);
         }
     }
 }

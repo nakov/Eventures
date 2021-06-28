@@ -18,14 +18,14 @@ namespace Eventures.Tests.Common
         public TestDb TestDb { get; set; }
         public string ServerUri { get; private set; }
 
-        public TestEventuresApp(TestDb testDb)
+        public TestEventuresApp(TestDb testDb, string appContentRoot)
         {
             this.TestDb = testDb;
         
             IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
             hostBuilder.ConfigureWebHostDefaults(webHostBuilder =>
             {
-                webHostBuilder.UseContentRoot("../../../../Eventures.App");
+                webHostBuilder.UseContentRoot(appContentRoot);
                 webHostBuilder.UseStartup<TStartup>();
                 webHostBuilder.ConfigureServices(services =>
                 {
@@ -35,6 +35,7 @@ namespace Eventures.Tests.Common
                     services.AddScoped<ApplicationDbContext>(
                         provider => this.TestDb.CreateDbContext());
                 });
+                // Use randome free TCP port for the Web server
                 webHostBuilder.UseUrls("http://127.0.0.1:0");
             });
             this.host = hostBuilder.Build();

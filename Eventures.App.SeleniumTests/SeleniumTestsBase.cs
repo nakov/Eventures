@@ -23,7 +23,8 @@ namespace Eventures.App.SeleniumTests
         {
             // Run the Web app in a local Web server
             this.testDb = new TestDb();
-            this.testEventuresApp = new TestEventuresApp<Startup>(testDb);
+            this.testEventuresApp = new TestEventuresApp<Startup>(
+                testDb, "../../../../Eventures.App");
             this.baseUrl = this.testEventuresApp.ServerUri;
 
             // Setup the ChromeDriver

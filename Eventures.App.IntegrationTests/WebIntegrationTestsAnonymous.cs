@@ -13,13 +13,13 @@ namespace Eventures.App.IntegrationTests
         [Test]
         public async Task Test_UserRegistration()
         {
-            // Load the registration form
+            // Arrange: load the registration form
             var response = await this.httpClient.GetAsync("/Identity/Account/Register");
             var responseBody = await response.Content.ReadAsStringAsync();
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.That(responseBody, Does.Contain("<h1>Register</h1>"));
 
-            // Fill the registration form and submit it
+            // Fill the registration form
             string username = "user" + DateTime.Now.Ticks;
             string password = "pass" + DateTime.Now.Ticks;
             var antiForgeryToken = ExtractAntiForgeryToken(responseBody);
@@ -34,12 +34,14 @@ namespace Eventures.App.IntegrationTests
                     { "Input.LastName", "User" },
                     { "__RequestVerificationToken", antiForgeryToken }
                 });
+
+            // Act: send a POST request with content
             var postResponse = await this.httpClient.PostAsync(
                 "/Identity/Account/Register", postContent);
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
             var postResponseBody = await postResponse.Content.ReadAsStringAsync();
             
-            // Assert that the client was redirected to the Home page
+            // Assert that the user was redirected to the "Home" page
             Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(postResponseBody, Does.Contain($"Welcome, {username}"));
 
@@ -53,7 +55,7 @@ namespace Eventures.App.IntegrationTests
         [Test]
         public async Task Test_UserLogin()
         {
-            // Load the login form
+            // Arrange: load the login form
             var loginFormResponse =
                 await this.httpClient.GetAsync("/Identity/Account/Login");
             var loginFormResponseBody =
@@ -61,7 +63,7 @@ namespace Eventures.App.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, loginFormResponse.StatusCode);
             Assert.That(loginFormResponseBody.Contains("<h1>Log in</h1>"));
 
-            // Fill the login form and send a POST request
+            // Fill the login form
             string username = this.testDb.UserMaria.UserName;
             string password = this.testDb.UserMaria.UserName;
             var antiForgeryToken = ExtractAntiForgeryToken(loginFormResponseBody);
@@ -73,6 +75,8 @@ namespace Eventures.App.IntegrationTests
                     { "Input.RememberMe", "false" },
                     { "__RequestVerificationToken", antiForgeryToken }
                 });
+
+            // Act: send a POST request
             var postResponse = await this.httpClient.PostAsync(
                 "/Identity/Account/Login", postContent);
 
@@ -80,7 +84,7 @@ namespace Eventures.App.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
             var responseBody = await postResponse.Content.ReadAsStringAsync();
 
-            // Assert that the client was redirected to the Home page
+            // Assert that the user was redirected to the "Home" page
             Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(responseBody.Contains($"Welcome, {username}"));
 
@@ -97,7 +101,7 @@ namespace Eventures.App.IntegrationTests
         {
             // Arrange
 
-            // Act
+            // Act: send a GET request to the "Home" page
             var response = await this.httpClient.GetAsync("/");
 
             // Assert
@@ -115,7 +119,7 @@ namespace Eventures.App.IntegrationTests
             // Act
             var response = await this.httpClient.GetAsync("/Events/All");
 
-            // Assert that login is required
+            // Assert the user is redirected to the "Login" page
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             var responseBody = await response.Content.ReadAsStringAsync();
             Assert.That(responseBody, Does.Contain("<h1>Log in</h1>"));

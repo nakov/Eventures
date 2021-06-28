@@ -34,9 +34,9 @@ namespace Eventures.WebAPI.Controllers
         /// </remarks>
         /// <response code="200">Returns "OK" with events count</response>  
         [HttpGet("count")] // GET: /api/events/count
-        public int GetEventsCount()
+        public IActionResult GetEventsCount()
         {
-            return this.dbContext.Events.ToList().Count();
+            return Ok(this.dbContext.Events.ToList().Count());
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Eventures.WebAPI.Controllers
             var dbEvent = this.dbContext.Events.Find(id);
             if (dbEvent == null)
             {
-                return NotFound();
+                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
             }
             dbEvent.Owner = this.dbContext.Users.Find(dbEvent.OwnerId);
             var eventViewModel = CreateViewModel(dbEvent);
@@ -176,14 +176,14 @@ namespace Eventures.WebAPI.Controllers
             var ev = dbContext.Events.Find(id);
             if (ev == null)
             {
-                return NotFound(new { msg = $"Event #{id} not found." });
+                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
             }
 
             string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
             var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
             if(currentUser.Id != ev.OwnerId)
             {
-                return Unauthorized(new { msg = "Cannot edit event, when not an owner." });
+                return Unauthorized(new ResponseMsg { Message = "Cannot edit event, when not an owner." });
             }
 
             ev.Name = eventModel.Name;
@@ -192,6 +192,52 @@ namespace Eventures.WebAPI.Controllers
             ev.End = eventModel.End;
             ev.TotalTickets = eventModel.TotalTickets;
             ev.PricePerTicket = eventModel.PricePerTicket;
+            dbContext.SaveChanges();
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Partially edits an event.
+        /// </summary>
+        /// <remarks>
+        /// You should be an authenticated user!
+        /// You should be the owner of the edited event!
+        /// 
+        /// Sample request:
+        ///
+        ///     PATCH /api/events/{id}
+        ///     {
+        ///             "name": "Changed Name"
+        ///     }
+        /// </remarks>
+        /// <response code="204">Returns "No Content"</response>
+        /// <response code="400">Returns "Bad Request" when an invalid request is sent</response>   
+        /// <response code="401">Returns "Unauthorized" when user is not authenticated or is not the owner of the event</response>  
+        /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>  
+        [Authorize]
+        [HttpPatch("{id}")]
+        public IActionResult PatchEvent(int id, PatchEventModel eventModel)
+        {
+            var ev = dbContext.Events.Find(id);
+            if (ev == null)
+            {
+                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
+            }
+
+            string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
+            var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
+            if (currentUser.Id != ev.OwnerId)
+            {
+                return Unauthorized(new ResponseMsg { Message = "Cannot edit event, when not an owner." });
+            }
+
+            ev.Name = eventModel.Name == null ? ev.Name : eventModel.Name;
+            ev.Place = eventModel.Place == null || eventModel.Place == string.Empty ? ev.Place : eventModel.Place;
+            ev.Start = eventModel.Start == null ? ev.Start : eventModel.Start.Value;
+            ev.End = eventModel.End == null ? ev.End : eventModel.End.Value;
+            ev.TotalTickets = eventModel.TotalTickets == null ? ev.TotalTickets : eventModel.TotalTickets.Value;
+            ev.PricePerTicket = eventModel.PricePerTicket == null ? ev.PricePerTicket : eventModel.PricePerTicket.Value;
             dbContext.SaveChanges();
 
             return NoContent();
@@ -221,14 +267,14 @@ namespace Eventures.WebAPI.Controllers
             Event ev = dbContext.Events.Find(id);
             if (ev == null)
             {
-                return NotFound();
+                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
             };
 
             string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
             var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
             if (currentUser.Id != ev.OwnerId)
             {
-                return Unauthorized();
+                return Unauthorized(new ResponseMsg { Message = "Cannot delete event, when not an owner." });
             }
             dbContext.Events.Remove(ev);
             dbContext.SaveChanges();

@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
@@ -58,7 +57,7 @@ namespace Eventures.WebAPI.Controllers
         /// </remarks>
         /// <param name="model"></param>
         /// <response code="200">Returns "OK" with JWT token with expiration date.</response>
-        /// <response code="401">Returns "Unauthorized".</response>    
+        /// <response code="401">Returns "Unauthorized" when username or password doesn't match.</response>    
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] ApiLoginModel model)
         {
@@ -96,7 +95,7 @@ namespace Eventures.WebAPI.Controllers
                     Expiration = token.ValidTo
                 });
             }
-            return Unauthorized();
+            return Unauthorized(new ResponseMsg { Message = "Invalid username or password!" });
         }
 
         /// <summary>
@@ -116,13 +115,13 @@ namespace Eventures.WebAPI.Controllers
         ///     }
         /// </remarks>
         /// <response code="200">Returns "OK" with "Success" status and "User created successfully! message".</response>
-        /// <response code="500">Returns "InternalServerError" when user already exists or user creation failed.</response>    
+        /// <response code="400">Returns "Bad Request" when user already exists or user creation failed.</response>    
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] ApiRegisterModel model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMsg { Status = "Error", Message = "User already exists!" });
+                return BadRequest(new ResponseMsg { Message = "User already exists!" });
 
             EventuresUser user = new EventuresUser()
             {
@@ -134,9 +133,9 @@ namespace Eventures.WebAPI.Controllers
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMsg { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+                return BadRequest(new ResponseMsg { Message = "User creation failed! Please check user details and try again." });
 
-            return Ok(new ResponseMsg { Status = "Success", Message = "User created successfully!" });
+            return Ok(new ResponseMsg { Message = "User created successfully!" });
         }
 
         /// <summary>

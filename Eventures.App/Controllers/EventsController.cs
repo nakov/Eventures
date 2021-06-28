@@ -74,10 +74,10 @@ namespace Eventures.App.Controllers
         public IActionResult Delete(int id)
         {
             Event ev = dbContext.Events.Find(id);
-            string currentUser = this.User.FindFirstValue(ClaimTypes.Name);
-            if (ev == null || currentUser != this.dbContext.Users.Find(ev.OwnerId).UserName)
+            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (ev == null || currentUserId != ev.OwnerId)
             {
-                // Not an owner -> display "Event not found"
+                // Not an owner or event with this id doesn't exist -> display "Event not found"
                 return this.View();
             }
             return this.View(CreateEventViewModel(ev));
@@ -86,25 +86,30 @@ namespace Eventures.App.Controllers
         [HttpPost]
         public IActionResult Delete(EventViewModel eventModel)
         {
-            // TODO: check the owner, and return "Unauthorized" when not an owner!
-
             Event ev = dbContext.Events.Find(eventModel.Id);
-            if (ev != null)
+            if (ev == null)
             {
-                dbContext.Events.Remove(ev);
-                dbContext.SaveChanges();
-                return this.RedirectToAction("All");
+                return this.View();
+                
             }
-            return this.View();
+            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != ev.OwnerId)
+            {
+                // Not an owner -> return "Unauthorized"
+                return Unauthorized();
+            }
+            dbContext.Events.Remove(ev);
+            dbContext.SaveChanges();
+            return this.RedirectToAction("All");
         }
 
         public IActionResult Edit(int id)
         {
             Event ev = dbContext.Events.Find(id);
-            string currentUser = this.User.FindFirstValue(ClaimTypes.Name);
-            if (ev == null || currentUser != this.dbContext.Users.Find(ev.OwnerId).UserName)
+            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (ev == null || currentUserId != ev.OwnerId)
             {
-                // Not an owner -> display "Event not found"
+                // Not an owner or event with this id doesn't exist -> display "Event not found"
                 return this.View();
             }
             EventCreateBindingModel model = new EventCreateBindingModel()
@@ -122,27 +127,30 @@ namespace Eventures.App.Controllers
         [HttpPost]
         public IActionResult Edit(int id, EventCreateBindingModel bindingModel)
         {
-            // TODO: check the owner, and return "Unauthorized" when not an owner!
-
             Event ev = dbContext.Events.Find(id);
             if (ev == null)
             {
                 return this.View();
             }
-            if (this.ModelState.IsValid)
+            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != ev.OwnerId)
             {
-                ev.Name = bindingModel.Name;
-                ev.Place = bindingModel.Place;
-                ev.Start = bindingModel.Start;
-                ev.End = bindingModel.End;
-                ev.TotalTickets = bindingModel.TotalTickets;
-                ev.PricePerTicket = bindingModel.PricePerTicket;
-
-                dbContext.SaveChanges();
-                return this.RedirectToAction("All");
+                // Not an owner -> return "Unauthorized"
+                return Unauthorized();
             }
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(); 
+            }
+            ev.Name = bindingModel.Name;
+            ev.Place = bindingModel.Place;
+            ev.Start = bindingModel.Start;
+            ev.End = bindingModel.End;
+            ev.TotalTickets = bindingModel.TotalTickets;
+            ev.PricePerTicket = bindingModel.PricePerTicket;
 
-            return this.View();
+            dbContext.SaveChanges();
+            return this.RedirectToAction("All");
         }
 
         private static EventViewModel CreateEventViewModel(Event ev)

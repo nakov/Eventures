@@ -36,13 +36,13 @@ namespace Eventures.App.IntegrationTests
                     { "__RequestVerificationToken", antiForgeryToken }
                 });
 
-            // Send a post request to log out client
+            // Send a POST request to log out the user
             var postResponse = await this.httpClient.PostAsync(
                  "/Identity/Account/Logout?returnUrl=%2F", postContent);
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
             var postResponseBody = await postResponse.Content.ReadAsStringAsync();
 
-            // Assert that the client was redirected to the Home page
+            // Assert that the user was redirected to the "Home" page
             Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(postResponseBody.Contains("<h1>Eventures: Events and Tickets</h1>"));
         }
@@ -55,9 +55,10 @@ namespace Eventures.App.IntegrationTests
             // Act
             var response = await this.httpClient.GetAsync("/");
 
-            // Assert the user is logged-in and there is a "Welcome" message 
+            // Assert the user is logged-in
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
+            // Assert a "Welcome" message appears
             var responseBody = await response.Content.ReadAsStringAsync();
             Assert.That(responseBody.Contains($"Welcome, {this.testDb.UserMaria.UserName}"));
         }
@@ -133,10 +134,11 @@ namespace Eventures.App.IntegrationTests
             var eventsCountBefore = this.testDb.CreateDbContext().Events.Count();
 
             // Prepare content for creating a new event with invalid name: name == empty string
+            var invalidName = string.Empty;
             var postContent = new FormUrlEncodedContent(
                 new Dictionary<string, string>
                 {
-                    { "Name", string.Empty },
+                    { "Name", invalidName },
                     { "Place", "Beach" },
                     { "Start", $"{DateTime.UtcNow}"},
                     { "End", $"{DateTime.UtcNow.AddHours(3)}"},
@@ -163,21 +165,21 @@ namespace Eventures.App.IntegrationTests
         public async Task Test_DeletePage_DeleteEventOfAnotherUser_ShouldBeUnsuccessful()
         {
             // Arrange: get the "EventOpenFest" event with owner UserPeter
-            var eventOpenFest = this.testDb.EventOpenFest;
+            var openFestEvent = this.testDb.EventOpenFest;
 
             // Go to "All Events" page and assert the event exists
             var allresponse = await this.httpClient.GetAsync("/Events/All");
             var allresponseBody = await allresponse.Content.ReadAsStringAsync();
-            Assert.That(allresponseBody.Contains(eventOpenFest.Name));
+            Assert.That(allresponseBody.Contains(openFestEvent.Name));
 
             // Act: load the "Delete Event" page for the event
             var deleteResponse = await this.httpClient.GetAsync(
-               $"/Events/Delete/{eventOpenFest.Id}");
+               $"/Events/Delete/{openFestEvent.Id}");
             Assert.AreEqual(HttpStatusCode.OK, deleteResponse.StatusCode);
 
             var deleteResponseBody = await deleteResponse.Content.ReadAsStringAsync();
 
-            // Assert that the an "Event not found." message appears
+            // Assert that the an "Event not found" message appears
             // because our current logged-in user is UserMaria, not the owner of the event
             Assert.That(deleteResponseBody.Contains("Event not found."));
         }
@@ -201,9 +203,9 @@ namespace Eventures.App.IntegrationTests
             dbContext.SaveChanges();
 
             // Go to "All Events" page and assert the event exists
-            var allresponse = await this.httpClient.GetAsync("/Events/All");
-            var allresponseBody = await allresponse.Content.ReadAsStringAsync();
-            Assert.That(allresponseBody.Contains(newEvent.Name));
+            var allResponse = await this.httpClient.GetAsync("/Events/All");
+            var allResponseBody = await allResponse.Content.ReadAsStringAsync();
+            Assert.That(allResponseBody.Contains(newEvent.Name));
 
             // Load the "Delete Event" page with the new event id
             var deleteResponse = await this.httpClient.GetAsync(
@@ -253,7 +255,7 @@ namespace Eventures.App.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, editResponse.StatusCode);
             var editResponseBody = await editResponse.Content.ReadAsStringAsync();
 
-            // Assert that an "Event not found." message appears on the page
+            // Assert that an "Event not found" message appears on the page
             // because our current logged-in user is UserMaria, not the owner of the event
             Assert.That(editResponseBody.Contains("Event not found."));
         }
@@ -265,9 +267,9 @@ namespace Eventures.App.IntegrationTests
             var softuniadaEvent = this.testDb.EventSoftuniada;
 
             // Go to "All Events" page and assert the event exists
-            var allresponse = await this.httpClient.GetAsync("/Events/All");
-            var allresponseBody = await allresponse.Content.ReadAsStringAsync();
-            Assert.That(allresponseBody.Contains(softuniadaEvent.Name));
+            var allResponse = await this.httpClient.GetAsync("/Events/All");
+            var allResponseBody = await allResponse.Content.ReadAsStringAsync();
+            Assert.That(allResponseBody.Contains(softuniadaEvent.Name));
 
             // Go to the "Edit Event" page with the new event id
             var editResponse = await this.httpClient.GetAsync(
@@ -295,7 +297,7 @@ namespace Eventures.App.IntegrationTests
             // Assert the user is redirected to the "All Events" page
             Assert.AreEqual("/Events/All", postResponse.RequestMessage.RequestUri.LocalPath);
 
-            // Assert the event has a new name
+            // Assert the event has a changed name
             var postResponseBody = await postResponse.Content.ReadAsStringAsync();
             Assert.That(postResponseBody, Does.Contain(editedEventName));
 
@@ -311,9 +313,9 @@ namespace Eventures.App.IntegrationTests
             var softuniadaEvent = this.testDb.EventSoftuniada;
 
             // Go to the "All Events" page and assert the event exists
-            var allresponse = await this.httpClient.GetAsync("/Events/All");
-            var allresponseBody = await allresponse.Content.ReadAsStringAsync();
-            Assert.That(allresponseBody.Contains(softuniadaEvent.Name));
+            var allResponse = await this.httpClient.GetAsync("/Events/All");
+            var allResponseBody = await allResponse.Content.ReadAsStringAsync();
+            Assert.That(allResponseBody.Contains(softuniadaEvent.Name));
 
             // Go to the "Edit Event" page with the new event id
             var editResponse = await this.httpClient.GetAsync(
@@ -349,15 +351,15 @@ namespace Eventures.App.IntegrationTests
         public async Task LoginUser(string username, string password)
         {
             // Go to the "Login" page
-            var loginFormResponse =
+            var response =
                 await this.httpClient.GetAsync("/Identity/Account/Login");
-            var loginFormResponseBody =
-                await loginFormResponse.Content.ReadAsStringAsync();
-            Assert.AreEqual(HttpStatusCode.OK, loginFormResponse.StatusCode);
-            Assert.That(loginFormResponseBody.Contains("<h1>Log in</h1>"));
+            var responseBody =
+                await response.Content.ReadAsStringAsync();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.That(responseBody.Contains("<h1>Log in</h1>"));
 
             // Prepare request content for login
-            var antiForgeryToken = ExtractAntiForgeryToken(loginFormResponseBody);
+            var antiForgeryToken = ExtractAntiForgeryToken(responseBody);
             var postContent = new FormUrlEncodedContent(
                 new Dictionary<string, string>
                 {

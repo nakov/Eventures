@@ -49,14 +49,11 @@
         <div class="col-md-4">
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="All" class="btn btn-secondary">Back to List</a>
             </div>
         </div>
     </div>
 </form>
-
-<div>
-    <a asp-action="All">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

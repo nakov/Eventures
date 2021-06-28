@@ -22,7 +22,7 @@ namespace Eventures.App.SeleniumTests
             // Act: locate and click on the "Register" button
             driver.FindElement(By.XPath("//button[@type='submit'][contains(.,'Register')]")).Click();
 
-            // Assert user is redirected to the "Home" page and is logged in
+            // Assert the user is redirected to the "Home" page and is logged in
             Assert.AreEqual(this.baseUrl + "/", driver.Url);
             Assert.That(driver.PageSource.Contains($"Welcome, {username}"));
         }
@@ -65,10 +65,10 @@ namespace Eventures.App.SeleniumTests
             // Arrange: go to the "Home" page
             driver.Navigate().GoToUrl(this.baseUrl);
 
-            // Act: locate and click on [Login] in the navigation bar
+            // Act: locate and click on "Log in" page button in the navigation bar
             driver.FindElement(By.XPath("(//a[@href='/Identity/Account/Login'])[1]")).Click();
             
-            // Assert user is redirected to the "Log in" page
+            // Assert the user is redirected to the "Log in" page
             Assert.AreEqual(this.baseUrl + "/Identity/Account/Login", driver.Url);
             Assert.That(driver.Title.Contains("Log in"));
             Assert.That(driver.PageSource.Contains("Log in"));
@@ -81,7 +81,7 @@ namespace Eventures.App.SeleniumTests
             // Arrange: go to the "Home" page
             driver.Navigate().GoToUrl(this.baseUrl);
 
-            // Act: locate and click on [Login] on the main page
+            // Act: locate and click on "Log in" page link on the main page
             driver.FindElement(By.XPath("(//a[@href='/Identity/Account/Login'])[2]")).Click();
 
             // Assert user is redirected to the "Log in" page
@@ -97,10 +97,10 @@ namespace Eventures.App.SeleniumTests
             // Arrange: go to the "Home" page
             driver.Navigate().GoToUrl(this.baseUrl);
 
-            // Act: locate and click on [Register] in the navigation bar
+            // Act: locate and click on the "Register" page button in the navigation bar
             driver.FindElement(By.XPath("(//a[@href='/Identity/Account/Register'])[1]")).Click();
 
-            // Assert user is redirected to the "Register" page
+            // Assert the user is redirected to the "Register" page
             Assert.AreEqual(this.baseUrl + "/Identity/Account/Register", driver.Url);
             Assert.That(driver.Title.Contains("Register"));
             Assert.That(driver.PageSource.Contains("Register"));
@@ -113,10 +113,10 @@ namespace Eventures.App.SeleniumTests
             // Arrange: go to the "Home" page
             driver.Navigate().GoToUrl(this.baseUrl);
 
-            // Act: locate and click on [Register] on the main page
+            // Act: locate and click on the "Register" page link on the main page
             driver.FindElement(By.XPath("(//a[@href='/Identity/Account/Register'])[2]")).Click();
 
-            // Assert user is redirected to the "Register" page
+            // Assert the user is redirected to the "Register" page
             Assert.AreEqual(this.baseUrl + "/Identity/Account/Register", driver.Url);
             Assert.That(driver.Title.Contains("Register"));
             Assert.That(driver.PageSource.Contains("Register"));
@@ -131,7 +131,7 @@ namespace Eventures.App.SeleniumTests
 
             driver.Navigate().GoToUrl(this.baseUrl + "/Events/All");
 
-            // Assert user is redirected to the "Log in" page
+            // Assert the user is redirected to the "Log in" page
             Assert.AreEqual(this.baseUrl + "/Identity/Account/LogIn?ReturnUrl=%2FEvents%2FAll", driver.Url);
             Assert.That(driver.Title.Contains("Log in"));
             Assert.That(driver.PageSource.Contains("Log in"));

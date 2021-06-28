@@ -17,10 +17,10 @@ namespace Eventures.WebAPI.IntegrationTests
         {
             // Arrange
 
-            // Act
+            // Act: send a GET request
             var response = await httpClient.GetAsync("api/events");
 
-            // Assert
+            // Assert the user is unauthorized
             Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
@@ -32,9 +32,9 @@ namespace Eventures.WebAPI.IntegrationTests
             // Act
             var response = await this.httpClient.GetAsync("api/events/count");
             var responseContent = response.Content.ReadAsStringAsync();
-            int responseResult = int.Parse(responseContent.Result);
+            var responseResult = int.Parse(responseContent.Result);
 
-            // Assert
+            // Assert the returned events count is correct
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.AreEqual(this.dbContext.Events.Count(), responseResult);
         }
@@ -56,7 +56,7 @@ namespace Eventures.WebAPI.IntegrationTests
             };
             var usersCountBefore = this.dbContext.Users.Count();
 
-            // Act
+            // Act: send a POST request with registration data
             var postResponse = await this.httpClient.PostAsJsonAsync(
                 "/api/users/register", newUser);
 
@@ -65,7 +65,6 @@ namespace Eventures.WebAPI.IntegrationTests
 
             var postResponseContent = postResponse.Content.ReadAsAsync<ResponseMsg>();
             var postResponseResult = postResponseContent.Result;
-            Assert.AreEqual("Success", postResponseResult.Status);
             Assert.AreEqual("User created successfully!", postResponseResult.Message);
 
             var usersCountAfter = this.dbContext.Users.Count();
@@ -132,7 +131,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var userMaria = this.testDb.UserMaria;
             var wrongPassword = "wrongPass";
 
-            // Act
+            // Act: send a POST request with invalid password
             var postResponse = await httpClient.PostAsJsonAsync("api/users/login", new ApiLoginModel
             {
                 Username = userMaria.UserName,
@@ -141,6 +140,9 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, postResponse.StatusCode);
+
+            var postResponseContent = await postResponse.Content.ReadAsAsync<ResponseMsg>();
+            Assert.AreEqual("Invalid username or password!", postResponseContent.Message);
         }
     }
 }
