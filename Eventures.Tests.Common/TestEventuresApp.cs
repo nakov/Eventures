@@ -35,6 +35,7 @@ namespace Eventures.Tests.Common
                     services.AddScoped<ApplicationDbContext>(
                         provider => this.TestDb.CreateDbContext());
                 });
+                // Use randome free TCP port for the Web server
                 webHostBuilder.UseUrls("http://127.0.0.1:0");
             });
             this.host = hostBuilder.Build();
