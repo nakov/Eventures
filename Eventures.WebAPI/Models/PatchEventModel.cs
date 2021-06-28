@@ -12,17 +12,17 @@ namespace Eventures.WebAPI.Models
         public string Place { get; set; }
 
         [Display(Name = "Start")]
-        public DateTime Start { get; set; }
+        public DateTime? Start { get; set; }
 
         [Display(Name = "End")]
-        public DateTime End { get; set; }
+        public DateTime? End { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Total Tickets must be a positive number.")]
         [Display(Name = "TotalTickets")]
-        public int TotalTickets { get; set; }
+        public int? TotalTickets { get; set; }
 
         [Range(0.00, double.MaxValue, ErrorMessage = "Price Per Ticket must be a positive number.")]
         [Display(Name = "PricePerTicket")]
-        public decimal PricePerTicket { get; set; }
+        public decimal? PricePerTicket { get; set; }
     }
 }

@@ -234,10 +234,10 @@ namespace Eventures.WebAPI.Controllers
 
             ev.Name = eventModel.Name == null ? ev.Name : eventModel.Name;
             ev.Place = eventModel.Place == null || eventModel.Place == string.Empty ? ev.Place : eventModel.Place;
-            ev.Start = eventModel.Start.ToString() == "01/01/0001 12:00:00 AM" ? ev.Start : eventModel.Start;
-            ev.End = eventModel.End.ToString() == "01/01/0001 12:00:00 AM" ? ev.End : eventModel.End;
-            ev.TotalTickets = eventModel.TotalTickets == 0 ? ev.TotalTickets : eventModel.TotalTickets;
-            ev.PricePerTicket = eventModel.PricePerTicket == 0 ? ev.PricePerTicket : eventModel.PricePerTicket;
+            ev.Start = eventModel.Start == null ? ev.Start : eventModel.Start.Value;
+            ev.End = eventModel.End == null ? ev.End : eventModel.End.Value;
+            ev.TotalTickets = eventModel.TotalTickets == null ? ev.TotalTickets : eventModel.TotalTickets.Value;
+            ev.PricePerTicket = eventModel.PricePerTicket == null ? ev.PricePerTicket : eventModel.PricePerTicket.Value;
             dbContext.SaveChanges();
 
             return NoContent();
