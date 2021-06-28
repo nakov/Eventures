@@ -19,7 +19,7 @@ namespace Eventures.WebAPI.IntegrationTests
         [OneTimeSetUp]
         public async Task Setup()
         {
-            await this.testFactory.AuthenticateAsync();
+            await base.AuthenticateAsync();
         }
 
         [Test]

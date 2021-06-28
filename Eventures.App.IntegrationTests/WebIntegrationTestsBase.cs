@@ -18,7 +18,8 @@ namespace Eventures.App.IntegrationTests
         public void SetUp()
         {
             this.testDb = new TestDb();
-            this.testEventuresApp = new TestEventuresApp<Startup>(testDb);
+            this.testEventuresApp = new TestEventuresApp<Startup>(
+                testDb, "../../../../Eventures.App");
             this.httpClient = new HttpClient()
             {
                 BaseAddress = new Uri(this.testEventuresApp.ServerUri)
