@@ -1,34 +1,33 @@
 TODO:
 
-1) Add at user's home page, after login (in the Web app):
+1) Unit tests update for the App Home page:
+  Add at user's home page, after login (in the Web app):
   - My events: 2
   - All events: 5  
   
-2) Implement patch (partial update, e.g. change title only) in the API
+2) [Done] Implement patch (partial update, e.g. change title only) in the API
 
-3) Swagger UI -> better title, e.g. "Eventures API"
+3) [Done] Swagger UI -> better title, e.g. "Eventures API"
 
-4) In the API app: a simple ASP.NET Core Web API for the Eventures App
+4) [Done] In the API app: a simple ASP.NET Core Web API for the Eventures App
 "Softuni - Website" --> change to the GitHub app repo
 
-5) Better error handling in the API, like thhis:
+5) [Done] Better error handling in the API, like thhis:
   return NotFound(new { msg = $"Event #{id} not found." });
   
-6) API: edit event: check owner on POST
+6) [Done] API: edit event: check owner on POST
 
-7) API: delete event: check owner on POST
+7) [Done] API: delete event: check owner on POST
 
-8) Web app: Button [Back to List] -> use the brown background like in the "Delete" page
+8) [Done] Web app: Button [Back to List] -> use the brown background like in the "Delete" page
 
-9) API (Swagger): change https://localhost:44318/index.html -> https://localhost:44318/api/index.html
+9) [Done] API (Swagger): change https://localhost:44318/index.html -> https://localhost:44318/api/index.html
 
-10) API (Swagger): change https://localhost:44318/api -> show the same as https://localhost:44318/swagger/v1/swagger.json
+10) [Done] API (Swagger): change https://localhost:44318/api -> show the same as https://localhost:44318/swagger/v1/swagger.json
 
-11) Docs to be here: https://localhost:44318/api/docs/index.html, but redirect the home page to this URL automatically: https://localhost:44318/ --> https://localhost:44318/api/docs
+11) [Done] Docs to be here: https://localhost:44318/api/docs/index.html, but redirect the home page to this URL automatically: https://localhost:44318/ --> https://localhost:44318/api/docs
 
-12) Merge API with the main app
-
-
+12) [Canceled] Merge API with the main app
 
 
 [Done] 0) At the home page, anonymous users should see the #count of events.
@@ -58,5 +57,5 @@ map entity User -> UserViewModel
 Example: https://shorturl.nakov.repl.co/api
 Web API Help Page: https://docs.microsoft.com/en-us/aspnet/web-api/overview/getting-started-with-aspnet-web-api/creating-api-help-pages
 
-9) Add Selenium tests
+9) [Done] Add Selenium tests
 
