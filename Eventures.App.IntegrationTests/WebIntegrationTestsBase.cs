@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 
 using NUnit.Framework;
 
 using Eventures.Tests.Common;
-using System.Text.RegularExpressions;
+using Eventures.Data;
 
 namespace Eventures.App.IntegrationTests
 {
@@ -13,6 +14,7 @@ namespace Eventures.App.IntegrationTests
         protected TestDb testDb;
         protected TestEventuresApp<Startup> testEventuresApp;
         protected HttpClient httpClient;
+        protected ApplicationDbContext dbContext;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -20,6 +22,7 @@ namespace Eventures.App.IntegrationTests
             this.testDb = new TestDb();
             this.testEventuresApp = new TestEventuresApp<Startup>(
                 testDb, "../../../../Eventures.App");
+            this.dbContext = this.testDb.CreateDbContext();
             this.httpClient = new HttpClient()
             {
                 BaseAddress = new Uri(this.testEventuresApp.ServerUri)

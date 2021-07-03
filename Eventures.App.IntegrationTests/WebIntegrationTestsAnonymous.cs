@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -109,6 +110,10 @@ namespace Eventures.App.IntegrationTests
             var responseBody = await response.Content.ReadAsStringAsync();
             string anonymousWelcomeMessage = "<h1>Eventures: Events and Tickets</h1>";
             Assert.That(responseBody, Does.Contain(anonymousWelcomeMessage));
+
+            // Assert all events count is correct
+            var allEventsCount = this.dbContext.Events.Count();
+            Assert.That(responseBody.Contains($"We already have <b>{allEventsCount}</b> events on our Eventures App!"));
         }
 
         [Test]

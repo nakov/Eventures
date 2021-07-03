@@ -61,6 +61,15 @@ namespace Eventures.App.IntegrationTests
             // Assert a "Welcome" message appears
             var responseBody = await response.Content.ReadAsStringAsync();
             Assert.That(responseBody.Contains($"Welcome, {this.testDb.UserMaria.UserName}"));
+
+            // Assert all events count is correct
+            var allEventsCount = this.dbContext.Events.Count();
+            Assert.That(responseBody.Contains($"We already have <b>{allEventsCount}</b> events on our Eventures App!"));
+
+            // Assert user's events count is correct
+            var currentUser = this.testDb.UserMaria;
+            var userEventsCount = this.dbContext.Events.Where(e => e.OwnerId == currentUser.Id).Count();
+            Assert.That(responseBody.Contains($"Your have <b>{userEventsCount}</b> event(s)!"));
         }
 
         [Test]
