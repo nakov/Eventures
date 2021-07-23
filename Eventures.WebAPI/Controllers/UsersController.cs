@@ -64,18 +64,11 @@ namespace Eventures.WebAPI.Controllers
             var user = await userManager.FindByNameAsync(model.Username);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
-                var userRoles = await userManager.GetRolesAsync(user);
-
                 var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
 
                 string jwtSecret = _configuration["JWT:Secret"];
                 byte[] jwtSecretBytes = Encoding.UTF8.GetBytes(jwtSecret);
@@ -121,7 +114,12 @@ namespace Eventures.WebAPI.Controllers
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return BadRequest(new ResponseMsg { Message = "User already exists!" });
+                return BadRequest(new ResponseMsg 
+                { Message = "User already exists!" });
+
+            if(model.Password != model.ConfirmPassword)
+                return BadRequest(new ResponseMsg 
+                { Message = "Password and Confirm Password don't match!" });
 
             EventuresUser user = new EventuresUser()
             {
@@ -131,9 +129,11 @@ namespace Eventures.WebAPI.Controllers
                 LastName = model.LastName,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
+
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return BadRequest(new ResponseMsg { Message = "User creation failed! Please check user details and try again." });
+                return BadRequest(new ResponseMsg 
+                { Message = "User creation failed! Please check user details and try again." });
 
             return Ok(new ResponseMsg { Message = "User created successfully!" });
         }
@@ -157,12 +157,12 @@ namespace Eventures.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = new List<ApiUserViewModel>();
+            var users = new List<ApiUserListingModel>();
 
             var dbUsers = dbContext.Users.ToList();
             foreach (var dbUser in dbUsers)
             {
-                var user = new ApiUserViewModel
+                var user = new ApiUserListingModel
                 {
                     Id = dbUser.Id,
                     FirstName = dbUser.FirstName,

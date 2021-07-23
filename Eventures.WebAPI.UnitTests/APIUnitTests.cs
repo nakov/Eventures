@@ -20,7 +20,8 @@ namespace Eventures.WebAPI.UnitTests
     {
         TestDb testDb;
         ApplicationDbContext dbContext;
-        EventsController controller;
+        HomeController homeController;
+        EventsController eventsController;
         UsersController usersController;
 
         [OneTimeSetUp]
@@ -28,7 +29,8 @@ namespace Eventures.WebAPI.UnitTests
         {
             testDb = new TestDb();
             dbContext = testDb.CreateDbContext();
-            controller = new EventsController(dbContext);
+            homeController = new HomeController();
+            eventsController = new EventsController(dbContext);
 
             // Get configuration from appsettings.json file in the Web API project
             var configuration = new ConfigurationBuilder()
@@ -36,6 +38,18 @@ namespace Eventures.WebAPI.UnitTests
                 .AddJsonFile("appsettings.json")
                 .Build();
             usersController = new UsersController(dbContext, configuration);
+        }
+
+        [Test]
+        public void Test_Home_Index()
+        {
+            // Arrange
+
+            // Act
+            var result = homeController.Index() as LocalRedirectResult;
+
+            // Assert the user is redirected
+            Assert.AreEqual(@"/api/docs/index.html", result.Url);
         }
 
         [Test]
@@ -56,7 +70,7 @@ namespace Eventures.WebAPI.UnitTests
             // Act
             var result = await usersController.Register(newUser) as OkObjectResult;
 
-            // Assert the user is registered and logged-in successfully
+            // Assert the user is registered
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
             var resultValues = result.Value as ResponseMsg;
             Assert.AreEqual("User created successfully!", resultValues.Message);
@@ -66,13 +80,71 @@ namespace Eventures.WebAPI.UnitTests
         }
 
         [Test]
-        public async Task Test_User_Login()
+        public async Task Test_User_Register_ExistingUser()
+        {
+            // Arrange: create a new register model with UserMaria data
+            var userMaria = this.testDb.UserMaria;
+            var newUser = new ApiRegisterModel()
+            {
+                Username = userMaria.UserName,
+                FirstName = userMaria.FirstName,
+                LastName = userMaria.LastName,
+                Email = userMaria.Email,
+                Password = userMaria.PasswordHash,
+                ConfirmPassword = userMaria.PasswordHash
+            };
+            var usersBefore = this.dbContext.Users.Count();
+
+            // Act
+            var result = await usersController.Register(newUser) as BadRequestObjectResult;
+
+            // Assert the user is not registered and "BadRequest" is returned
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, result.StatusCode);
+            var resultValues = result.Value as ResponseMsg;
+            Assert.AreEqual("User already exists!", resultValues.Message);
+
+            var usersAfter = this.dbContext.Users.Count();
+            Assert.AreEqual(usersBefore, usersAfter);
+        }
+
+        [Test]
+        public async Task Test_User_Register_UnmatchingPasswords()
+        {
+            // Arrange: create a new register model
+            var newUser = new ApiRegisterModel()
+            {
+                Username = "user",
+                FirstName = "Peter",
+                LastName = "Petrov",
+                Email = "pesho.petrov@abv.bg",
+                Password = "password",
+                ConfirmPassword = "anotherPassword"
+            };
+            var usersBefore = this.dbContext.Users.Count();
+
+            // Act
+            var result = await usersController.Register(newUser) 
+                as BadRequestObjectResult;
+
+            // Assert the user is not registered and "BadRequest" is returned
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, result.StatusCode);
+            var resultValues = result.Value as ResponseMsg;
+            Assert.AreEqual("Password and Confirm Password don't match!", 
+                resultValues.Message);
+
+            var usersAfter = this.dbContext.Users.Count();
+            Assert.AreEqual(usersBefore, usersAfter);
+        }
+
+        [Test]
+        public async Task Test_User_Login_ValidCredentials()
         {
             // Arrange: create a login model
+            var userMariaUsername = this.testDb.UserMaria.UserName;
             var user = new ApiLoginModel()
             {
-                Username = this.testDb.UserMaria.UserName,
-                Password = this.testDb.UserMaria.UserName
+                Username = userMariaUsername,
+                Password = userMariaUsername
             };
 
             // Act
@@ -87,6 +159,27 @@ namespace Eventures.WebAPI.UnitTests
         }
 
         [Test]
+        public async Task Test_User_Login_InvalidCredentials()
+        {
+            // Arrange: create a login model
+            var user = new ApiLoginModel()
+            {
+                Username = this.testDb.UserMaria.UserName,
+                Password = "invalidPassword"
+            };
+
+            // Act
+            var result = await usersController.Login(user) as UnauthorizedObjectResult;
+
+            // Assert the user is logged in and a valid token is returned
+            Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);
+
+            var resultValue = result.Value as ResponseMsg;
+            Assert.AreEqual("Invalid username or password!",
+                resultValue.Message);
+        }
+
+        [Test]
         public void Test_User_GetAllUsers()
         {
             //Arrange
@@ -97,7 +190,7 @@ namespace Eventures.WebAPI.UnitTests
             // Assert the users are returned successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
 
-            var resultValue = result.Value as IEnumerable<ApiUserViewModel>;
+            var resultValue = result.Value as IEnumerable<ApiUserListingModel>;
             Assert.AreEqual(this.dbContext.Users.Count(), resultValue.Count());
         }
 
@@ -107,10 +200,11 @@ namespace Eventures.WebAPI.UnitTests
             // Arrange
 
             // Act
-            var result = controller.GetEventsCount() as OkObjectResult;
+            var result = eventsController.GetEventsCount() as OkObjectResult;
 
             // Assert the events count is correct
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
+
             var resultValue = (int)result.Value;
             Assert.AreEqual(this.dbContext.Events.Count(), resultValue);
         }
@@ -121,12 +215,21 @@ namespace Eventures.WebAPI.UnitTests
             // Arrange
 
             // Act
-            var result = controller.GetEvents() as OkObjectResult;
+            var result = eventsController.GetEvents() as OkObjectResult;
 
             // Assert the events are returned successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
-            var resultValues = result.Value as IEnumerable<ApiEventViewModel>;
+
+            var resultValues = result.Value as List<ApiEventListingModel>;
             Assert.AreEqual(this.dbContext.Events.Count(), resultValues.Count());
+
+            var firstResult = resultValues.ToList()[0];
+            var firstEvent = this.dbContext.Events.ToList()[0];
+            Assert.AreEqual(firstEvent.Name, firstResult.Name);
+
+            var secondResult = resultValues.ToList()[1];
+            var secondEvent = this.dbContext.Events.ToList()[1];
+            Assert.AreEqual(secondEvent.Name, secondResult.Name);
         }
 
         [Test]
@@ -136,11 +239,11 @@ namespace Eventures.WebAPI.UnitTests
             int eventId = this.testDb.EventSoftuniada.Id;
 
             // Act
-            var result = controller.GetEventById(eventId) as OkObjectResult;
+            var result = eventsController.GetEventById(eventId) as OkObjectResult;
 
             // Assert the correct event is returned
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
-            var resultValue = result.Value as ApiEventViewModel;
+            var resultValue = result.Value as ApiEventListingModel;
             Assert.AreEqual(this.testDb.EventSoftuniada.Id, resultValue.Id);
         }
 
@@ -158,16 +261,16 @@ namespace Eventures.WebAPI.UnitTests
                 PricePerTicket = 20
             };
             int eventsCountBefore = dbContext.Events.Count();
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(eventsController, testDb.UserMaria);
 
             // Act
-            var result = controller.CreateEvent(newEventData) as CreatedAtActionResult;
+            var result = eventsController.CreateEvent(newEventData) as CreatedAtActionResult;
 
-            // Assert
+            // Assert the event is created
             Assert.AreEqual((int)HttpStatusCode.Created, result.StatusCode);
 
             // Check response data
-            var resultValue = result.Value as ApiEventViewModel;
+            var resultValue = result.Value as ApiEventListingModel;
             Assert.IsTrue(resultValue.Id > 0);
             Assert.AreEqual(newEventData.Place, resultValue.Place);
             Assert.AreEqual(newEventData.Start, resultValue.Start);
@@ -217,10 +320,12 @@ namespace Eventures.WebAPI.UnitTests
                 PricePerTicket = 120.00m
             };
 
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils
+                .AssignCurrentUserForController(eventsController, testDb.UserMaria);
 
             // Act
-            var result = controller.PutEvent(newEvent.Id, changedEvent) as NoContentResult;
+            var result = eventsController
+                .PutEvent(newEvent.Id, changedEvent) as NoContentResult;
 
             // Assert
             Assert.AreEqual((int)HttpStatusCode.NoContent, result.StatusCode);
@@ -252,7 +357,8 @@ namespace Eventures.WebAPI.UnitTests
             var invalidId = -1;
 
             // Act: make request with invalid id
-            var result = controller.PutEvent(invalidId, changedEvent) as NotFoundObjectResult;
+            var result = eventsController
+                .PutEvent(invalidId, changedEvent) as NotFoundObjectResult;
 
             //Assert a "Not Found" error appears
             Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
@@ -268,7 +374,8 @@ namespace Eventures.WebAPI.UnitTests
             var openFestEvent = this.testDb.EventOpenFest;
 
             // Assign UserMaria to the controller
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+            TestingUtils
+                .AssignCurrentUserForController(eventsController, this.testDb.UserMaria);
 
             // Create event binding model with changed event name
             var changedName = "OpenFest 2021 (New Edition)";
@@ -283,7 +390,8 @@ namespace Eventures.WebAPI.UnitTests
             };
 
             // Act
-            var result = controller.PutEvent(openFestEvent.Id, changedEvent) as UnauthorizedObjectResult;
+            var result = eventsController
+                .PutEvent(openFestEvent.Id, changedEvent) as UnauthorizedObjectResult;
 
             // Assert the user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);
@@ -320,10 +428,10 @@ namespace Eventures.WebAPI.UnitTests
                 Name = "House Party" + DateTime.Now.Ticks
             };
 
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(eventsController, testDb.UserMaria);
 
             // Act: send a PATCH request for partial update
-            var result = controller.PatchEvent(newEvent.Id, changedEvent) as NoContentResult;
+            var result = eventsController.PatchEvent(newEvent.Id, changedEvent) as NoContentResult;
 
             // Assert the request returns "No Content"
             Assert.AreEqual((int)HttpStatusCode.NoContent, result.StatusCode);
@@ -350,7 +458,7 @@ namespace Eventures.WebAPI.UnitTests
             var invalidId = -1;
 
             // Act: make request with invalid id
-            var result = controller.PatchEvent(invalidId, changedEvent) as NotFoundObjectResult;
+            var result = eventsController.PatchEvent(invalidId, changedEvent) as NotFoundObjectResult;
 
             //Assert an "Not Found" error appears
             Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
@@ -366,7 +474,7 @@ namespace Eventures.WebAPI.UnitTests
             var openFestEvent = this.testDb.EventOpenFest;
 
             // Assign UserMaria to the controller
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(eventsController, this.testDb.UserMaria);
 
             // Create event model with changed event name
             var changedName = "OpenFest 2021 (New Edition)";
@@ -376,7 +484,7 @@ namespace Eventures.WebAPI.UnitTests
             };
 
             // Act
-            var result = controller.PatchEvent(openFestEvent.Id, changedEvent) as UnauthorizedObjectResult;
+            var result = eventsController.PatchEvent(openFestEvent.Id, changedEvent) as UnauthorizedObjectResult;
 
             // Assert user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);
@@ -407,11 +515,11 @@ namespace Eventures.WebAPI.UnitTests
             dbContext.Add(newEvent);
             dbContext.SaveChanges();
 
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(eventsController, testDb.UserMaria);
             int eventsCountBefore = dbContext.Events.Count();
 
             // Act
-            var result = controller.DeleteEvent(newEvent.Id) as OkObjectResult;
+            var result = eventsController.DeleteEvent(newEvent.Id) as OkObjectResult;
 
             // Assert
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
@@ -422,7 +530,7 @@ namespace Eventures.WebAPI.UnitTests
             Assert.That(this.dbContext.Events.Find(newEvent.Id) == null);
 
             // Assert the event is returned
-            var resultValue = result.Value as ApiEventViewModel;
+            var resultValue = result.Value as ApiEventListingModel;
             Assert.IsNotNull(resultValue);
             Assert.That(resultValue.Id == newEvent.Id);
             Assert.That(resultValue.Name == newEvent.Name);
@@ -433,12 +541,12 @@ namespace Eventures.WebAPI.UnitTests
         public void Test_Delete_InvalidId()
         {
             // Arrange: create a new event in the DB for deleting
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(eventsController, testDb.UserMaria);
 
             int eventsCountBefore = dbContext.Events.Count();
             int invalidId = -1;
             // Act: create request with invalid id
-            var result = controller.DeleteEvent(invalidId) as NotFoundObjectResult;
+            var result = eventsController.DeleteEvent(invalidId) as NotFoundObjectResult;
 
             // Assert a "Not Found" error appears
             Assert.AreEqual((int)HttpStatusCode.NotFound, result.StatusCode);
@@ -457,12 +565,12 @@ namespace Eventures.WebAPI.UnitTests
             var openFestEvent = this.testDb.EventOpenFest;
 
             // Assign UserMaria to the controller
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(eventsController, this.testDb.UserMaria);
 
             int eventsCountBefore = dbContext.Events.Count();
 
             // Act
-            var result = controller.DeleteEvent(openFestEvent.Id) as UnauthorizedObjectResult;
+            var result = eventsController.DeleteEvent(openFestEvent.Id) as UnauthorizedObjectResult;
 
             // Assert user is unauthorized
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, result.StatusCode);

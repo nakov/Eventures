@@ -33,7 +33,7 @@ namespace Eventures.WebAPI.Controllers
         ///     }
         /// </remarks>
         /// <response code="200">Returns "OK" with events count</response>  
-        [HttpGet("count")] // GET: /api/events/count
+        [HttpGet("count")]
         public IActionResult GetEventsCount()
         {
             return Ok(this.dbContext.Events.ToList().Count());
@@ -55,16 +55,16 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="200">Returns "OK" with a list of all events</response>
         /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>    
         [Authorize]
-        [HttpGet] // GET: /api/events
+        [HttpGet] 
         public IActionResult GetEvents()
         {
-            var events = new List<ApiEventViewModel>();
+            var events = new List<ApiEventListingModel>();
 
             var dbEvents = this.dbContext.Events.ToList();
             foreach (var ev in dbEvents)
             {
                 ev.Owner = this.dbContext.Users.Find(ev.OwnerId);
-                var eventViewModel = CreateViewModel(ev);
+                var eventViewModel = CreateEventModel(ev);
                 events.Add(eventViewModel);
             }
             return Ok(events);
@@ -87,16 +87,17 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>    
         /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>    
         [Authorize]
-        [HttpGet("{id}")] // GET: /api/events/1
+        [HttpGet("{id}")]
         public IActionResult GetEventById(int id)
         {
             var dbEvent = this.dbContext.Events.Find(id);
             if (dbEvent == null)
             {
-                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
+                return NotFound(
+                    new ResponseMsg { Message = $"Event #{id} not found." });
             }
             dbEvent.Owner = this.dbContext.Users.Find(dbEvent.OwnerId);
-            var eventViewModel = CreateViewModel(dbEvent);
+            var eventViewModel = CreateEventModel(dbEvent);
             return Ok(eventViewModel);
         }
 
@@ -126,7 +127,8 @@ namespace Eventures.WebAPI.Controllers
         public IActionResult CreateEvent(EventCreateBindingModel bindingModel)
         {
             string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
-            var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
+            var currentUser = this.dbContext.Users
+                .FirstOrDefault(x => x.UserName == currentUsername);
             Event ev = new Event
             {
                 Name = bindingModel.Name,
@@ -141,7 +143,7 @@ namespace Eventures.WebAPI.Controllers
             dbContext.Events.Add(ev);
             dbContext.SaveChanges();
 
-            var eventViewModel = CreateViewModel(ev);
+            var eventViewModel = CreateEventModel(ev);
 
             return CreatedAtAction("GetEventById", new { id = ev.Id }, eventViewModel);
         }
@@ -180,10 +182,12 @@ namespace Eventures.WebAPI.Controllers
             }
 
             string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
-            var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
+            var currentUser = this.dbContext.Users
+                .FirstOrDefault(x => x.UserName == currentUsername);
             if(currentUser.Id != ev.OwnerId)
             {
-                return Unauthorized(new ResponseMsg { Message = "Cannot edit event, when not an owner." });
+                return Unauthorized(
+                    new ResponseMsg { Message = "Cannot edit event, when not an owner." });
             }
 
             ev.Name = eventModel.Name;
@@ -261,7 +265,7 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="401">Returns "Unauthorized" when user is not authenticated or is not the owner of the event</response>  
         /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>  
         [Authorize]
-        [HttpDelete("{id}")] // DELETE: api/events/1
+        [HttpDelete("{id}")]
         public IActionResult DeleteEvent(int id)
         {
             Event ev = dbContext.Events.Find(id);
@@ -279,14 +283,14 @@ namespace Eventures.WebAPI.Controllers
             dbContext.Events.Remove(ev);
             dbContext.SaveChanges();
 
-            var eventViewModel = CreateViewModel(ev);
+            var eventViewModel = CreateEventModel(ev);
             
             return Ok(eventViewModel);
         }
 
-        private ApiEventViewModel CreateViewModel(Event ev)
+        private ApiEventListingModel CreateEventModel(Event ev)
         {
-            var eventModel = new ApiEventViewModel()
+            var eventModel = new ApiEventListingModel()
             {
                 Id = ev.Id,
                 Name = ev.Name,
@@ -295,7 +299,7 @@ namespace Eventures.WebAPI.Controllers
                 End = ev.End,
                 TotalTickets = ev.TotalTickets,
                 PricePerTicket = ev.PricePerTicket,
-                Owner = new ApiUserViewModel()
+                Owner = new ApiUserListingModel()
                 {
                     FirstName = ev.Owner.FirstName,
                     LastName = ev.Owner.LastName,

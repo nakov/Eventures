@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Eventures.WebAPI.Models
 {
-    public class ApiEventViewModel
+    public class ApiEventListingModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -11,10 +11,8 @@ namespace Eventures.WebAPI.Models
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public int TotalTickets { get; set; }
-
         [Column(TypeName = "decimal(12,3)")]
         public decimal PricePerTicket { get; set; }
-
-        public ApiUserViewModel Owner { get; set; }
+        public ApiUserListingModel Owner { get; set; }
     }
 }

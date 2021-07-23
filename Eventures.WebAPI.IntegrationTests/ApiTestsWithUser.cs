@@ -33,7 +33,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Assert users are returned successfully
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var resposeContent = response.Content.ReadAsAsync<List<ApiUserViewModel>>();
+            var resposeContent = response.Content.ReadAsAsync<List<ApiUserListingModel>>();
             var responseResult = resposeContent.Result;
             Assert.AreEqual(this.dbContext.Users.Count(), responseResult.Count());
             Assert.AreEqual(this.dbContext.Users.FirstOrDefault().UserName, responseResult.FirstOrDefault().Username);
@@ -50,7 +50,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Assert the events are returned successfully
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var responseContent = response.Content.ReadAsAsync<List<ApiEventViewModel>>().Result;
+            var responseContent = response.Content.ReadAsAsync<List<ApiEventListingModel>>().Result;
             Assert.AreEqual(this.dbContext.Events.Count(), responseContent.Count());
             Assert.AreEqual(this.dbContext.Events.FirstOrDefault().Name, responseContent.FirstOrDefault().Name);
             Assert.AreEqual(this.dbContext.Events.LastOrDefault().Name, responseContent.LastOrDefault().Name);
@@ -68,7 +68,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Assert the returned event is correct
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var responseContent = response.Content.ReadAsAsync<ApiEventViewModel>().Result;
+            var responseContent = response.Content.ReadAsAsync<ApiEventListingModel>().Result;
             Assert.AreEqual(this.dbContext.Events.FirstOrDefault().Name, responseContent.Name);
         }
 
@@ -366,7 +366,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Assert the deletion is successfull
             Assert.AreEqual(HttpStatusCode.OK, deleteResponse.StatusCode);
 
-            var deleteResponseContent = deleteResponse.Content.ReadAsAsync<ApiEventViewModel>().Result;
+            var deleteResponseContent = deleteResponse.Content.ReadAsAsync<ApiEventListingModel>().Result;
             Assert.AreEqual(eventInDb.Name, deleteResponseContent.Name);
 
             var eventsCountAfter = this.dbContext.Events.Count();
