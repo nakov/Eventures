@@ -56,20 +56,6 @@ namespace Eventures.App.SeleniumTests
         }
 
         [Test]
-        public void Test_AllEventsPage_ThroughUrl()
-        {
-            // Arrange
-
-            // Act: go to the "All Events" page
-            driver.Navigate().GoToUrl(this.baseUrl + "/Events/All");
-
-            // Assert the page appears
-            Assert.That(driver.Title.Contains("All Events"));
-            Assert.That(driver.PageSource.Contains("<h1>All Events</h1>"));
-            Assert.That(driver.PageSource.Contains(@"<a href=""/Events/Create"">Create New</a>"));
-        }
-
-        [Test]
         public void Test_HomePage_CreateEventPageLink()
         {
             // Arrange: go to the "Home" page and find the link to the "Create Event" page
@@ -110,20 +96,6 @@ namespace Eventures.App.SeleniumTests
         }
 
         [Test]
-        public void Test_CreateEventPage_ThroughUrl()
-        {
-            // Arrange
-
-            // Act: go to the "Create Event" page
-            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
-
-            // Assert the "Create Event" page appears
-            Assert.That(driver.Title.Contains("Create Event"));
-            Assert.That(driver.PageSource.Contains("<h1>Create New Event</h1>"));
-            Assert.That(driver.PageSource.Contains(@"<a class=""btn btn-secondary"" href=""/Events/All"">Back to List</a>"));
-        }
-
-        [Test]
         public void Test_CreateEventPage_BackToListLink()
         {
             // Arrange: go to the "Create Event" page
@@ -157,15 +129,6 @@ namespace Eventures.App.SeleniumTests
             placeField.Clear();
             placeField.SendKeys(eventPlace);
 
-            // DateTime is not set properly
-            //var startField = driver.FindElement(By.Id("Start"));
-            //startField.Clear();
-            //startField.SendKeys(DateTime.Now.ToString();
-
-            //var endField = driver.FindElement(By.Id("End"));
-            //endField.Clear();
-            //endField.SendKeys("2021-06-26T10:00:00.000");
-
             var totalTicketsField = driver.FindElement(By.Id("TotalTickets"));
             totalTicketsField.Clear();
             totalTicketsField.SendKeys("100");
@@ -175,7 +138,8 @@ namespace Eventures.App.SeleniumTests
             priceField.SendKeys("10.00");
 
             // Locate the "Create" button
-            var createButton = driver.FindElement(By.XPath("//input[contains(@value,'Create')]"));
+            var createButton = driver
+                .FindElement(By.XPath("//input[contains(@value,'Create')]"));
 
             // Click on the button
             createButton.Click();
@@ -236,17 +200,23 @@ namespace Eventures.App.SeleniumTests
             nameField.Clear();
             nameField.SendKeys(eventName);
 
-            var createButton = driver.FindElement(By.XPath("//input[contains(@value,'Create')]"));
+            var createButton = driver.FindElement(By
+                .XPath("//input[contains(@value,'Create')]"));
             createButton.Click();
 
-            // Assert user is redirected to the "All Events" page and the new event appears on the page
+            // Assert user is redirected to the "All Events" page
+            // The new event should appear on the page
             Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.PageSource.Contains(eventName));
 
-            // Get the last row with the new event and locate the "Delete" button of the event
+            // Get the last row with the new event and 
             var lastRow = driver.FindElements(By.TagName("tr")).Last();
             Assert.That(lastRow.Text.Contains(eventName));
-            var deleteBtn = driver.FindElements(By.XPath("//a[contains(.,'Delete')]")).Last();
+
+            // Locate the "Delete" button of the event
+            var deleteBtn = driver
+                .FindElements(By.XPath("//a[contains(.,'Delete')]"))
+                .Last();
 
             // Click on the "Delete" button
             deleteBtn.Click();
@@ -257,7 +227,8 @@ namespace Eventures.App.SeleniumTests
             Assert.That(driver.PageSource.Contains(eventName));
 
             // Click on the new "Delete" button to confirm deletion
-            var confirmDeleteButton = driver.FindElement(By.XPath("//input[contains(@value,'Delete')]"));
+            var confirmDeleteButton = driver
+                .FindElement(By.XPath("//input[contains(@value,'Delete')]"));
             confirmDeleteButton.Click();
 
             // Assert the user is redirected to the "All Events" page
@@ -289,7 +260,9 @@ namespace Eventures.App.SeleniumTests
             // Get the last row with the event and locate the "Edit" button of the event
             var lastRow = driver.FindElements(By.TagName("tr")).Last();
             Assert.That(lastRow.Text.Contains(eventName));
-            var editButton = driver.FindElements(By.XPath("//a[contains(.,'Edit')]")).Last();
+            var editButton = driver
+                .FindElements(By.XPath("//a[contains(.,'Edit')]"))
+                .Last();
 
             // Click on the "Edit" button
             editButton.Click();
@@ -304,7 +277,8 @@ namespace Eventures.App.SeleniumTests
             editNameField.Clear();
             editNameField.SendKeys(changedName);
 
-            var confirmEditButton = driver.FindElement(By.XPath("//input[contains(@value,'Edit')]"));
+            var confirmEditButton = driver
+                .FindElement(By.XPath("//input[contains(@value,'Edit')]"));
 
             // Click on the new "Edit" button to confirm edition
             confirmEditButton.Click();
@@ -376,7 +350,9 @@ namespace Eventures.App.SeleniumTests
             driver.FindElement(By.Id("Input_ConfirmPassword")).SendKeys(password);
             driver.FindElement(By.Id("Input_FirstName")).SendKeys("Pesho");
             driver.FindElement(By.Id("Input_LastName")).SendKeys("Petrov");
-            driver.FindElement(By.XPath("//button[@type='submit'][contains(.,'Register')]")).Click();
+            driver.FindElement(By
+                .XPath("//button[@type='submit'][contains(.,'Register')]"))
+                .Click();
 
             Assert.AreEqual(this.baseUrl + "/", driver.Url);
             Assert.That(driver.PageSource.Contains($"Welcome, {username}"));

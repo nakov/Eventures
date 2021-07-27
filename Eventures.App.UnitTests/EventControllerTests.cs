@@ -20,7 +20,8 @@ namespace Eventures.App.UnitTests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            this.controller = new EventsController(this.testDb.CreateDbContext());
+            this.controller = new EventsController(
+                this.testDb.CreateDbContext());
         }
 
         [Test]
@@ -43,6 +44,7 @@ namespace Eventures.App.UnitTests
             // Assert events are correct
             Assert.AreEqual(testDb.EventSoftuniada.Name, resultModel[0].Name);
             Assert.AreEqual(testDb.EventOpenFest.Name, resultModel[1].Name);
+            Assert.AreEqual(testDb.EventMSBuild.Name, resultModel[2].Name);
         }
 
         [Test]

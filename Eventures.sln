@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Tests.Common", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Data", "Eventures.Data\Eventures.Data.csproj", "{B4FD2B43-692B-4863-8B3B-F530CA4643EC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Desktop", "Eventures.Desktop\Eventures.Desktop.csproj", "{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
