@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>TaskBoard_DesktopClient</RootNamespace>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>TaskBoard.DesktopClient</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RestSharp" Version="106.11.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Eventures.WebAPI\Eventures.WebAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="FormCreateEvent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>
