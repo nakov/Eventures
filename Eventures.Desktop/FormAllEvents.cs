@@ -14,7 +14,9 @@ namespace Eventures_Desktop
     {
         private string apiBaseUrl;
         private string username;
+        private string email;
         private string password;
+        private string confirmPassword;
         private string token;
 
         public FormAllEvents()
@@ -29,7 +31,9 @@ namespace Eventures_Desktop
             {
                 this.apiBaseUrl = formConnect.ApiUrl;
                 this.username = formConnect.Username;
+                this.email = formConnect.Email;
                 this.password = formConnect.Password;
+                this.confirmPassword = formConnect.ConfirmPassword;
                 LoadEvents();
             }
             else
@@ -49,10 +53,27 @@ namespace Eventures_Desktop
             {
                 var restClient = new RestClient(this.apiBaseUrl); // { Timeout = 3000 };
 
+                var registerRequest = new RestRequest("/users/register", Method.POST);
+                registerRequest.AddJsonBody(
+                    new { Username = $"{username}", 
+                        Email = $"{email}", 
+                        Password = $"{password}", 
+                        ConfirmPassword = $"{confirmPassword}", 
+                        FirstName = "Name", 
+                        LastName = "Last" });
+
+                var registerResponse = await restClient.ExecuteAsync(registerRequest);
+                if (!registerResponse.IsSuccessful)
+                    ShowError(registerResponse);
+
                 var loginRequest = new RestRequest("/users/login", Method.POST);
                 loginRequest.AddJsonBody(new { Username = $"{username}", Password = $"{password}" });
 
                 var loginResponse = await restClient.ExecuteAsync(loginRequest);
+
+                if (!loginResponse.IsSuccessful)
+                    ShowError(loginResponse);
+
                 var jsonResponse = new JsonDeserializer().Deserialize<LoginResponse>(loginResponse);
                 token = jsonResponse.Token;
 

@@ -6,7 +6,9 @@ namespace Eventures_Desktop
     {
         public string ApiUrl { get => this.textBoxApiUrl.Text; }
         public string Username { get => this.textBoxUsername.Text; }
+        public string Email { get => this.textBoxEmail.Text; }
         public string Password { get => this.textBoxPassword.Text; }
+        public string ConfirmPassword { get => this.textBoxConfirmPassword.Text; }
 
         public FormConnect()
         {
