@@ -32,7 +32,7 @@ namespace Eventures_Desktop
         {
             this.labelName = new System.Windows.Forms.Label();
             this.textBoxName = new System.Windows.Forms.TextBox();
-            this.buttonCreate = new System.Windows.Forms.Button();
+            this.buttonCreateConfirm = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.textBoxPlace = new System.Windows.Forms.TextBox();
             this.labelPlace = new System.Windows.Forms.Label();
@@ -60,7 +60,7 @@ namespace Eventures_Desktop
             // textBoxName
             // 
             this.textBoxName.AccessibleName = "name box";
-            this.textBoxName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.textBoxName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxName.Location = new System.Drawing.Point(73, 16);
@@ -68,18 +68,18 @@ namespace Eventures_Desktop
             this.textBoxName.Size = new System.Drawing.Size(458, 30);
             this.textBoxName.TabIndex = 1;
             // 
-            // buttonCreate
+            // buttonCreateConfirm
             // 
-            this.buttonCreate.AccessibleName = "create button";
-            this.buttonCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCreate.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonCreate.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonCreate.Location = new System.Drawing.Point(326, 278);
-            this.buttonCreate.Name = "buttonCreate";
-            this.buttonCreate.Size = new System.Drawing.Size(168, 47);
-            this.buttonCreate.TabIndex = 4;
-            this.buttonCreate.Text = "✓ Create";
-            this.buttonCreate.UseVisualStyleBackColor = true;
+            this.buttonCreateConfirm.AccessibleName = "confirm create button";
+            this.buttonCreateConfirm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCreateConfirm.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.buttonCreateConfirm.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonCreateConfirm.Location = new System.Drawing.Point(326, 278);
+            this.buttonCreateConfirm.Name = "buttonCreateConfirm";
+            this.buttonCreateConfirm.Size = new System.Drawing.Size(168, 47);
+            this.buttonCreateConfirm.TabIndex = 4;
+            this.buttonCreateConfirm.Text = "✓ Create";
+            this.buttonCreateConfirm.UseVisualStyleBackColor = true;
             // 
             // buttonCancel
             // 
@@ -97,7 +97,7 @@ namespace Eventures_Desktop
             // textBoxPlace
             // 
             this.textBoxPlace.AccessibleName = "place box";
-            this.textBoxPlace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.textBoxPlace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPlace.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxPlace.Location = new System.Drawing.Point(73, 62);
@@ -117,7 +117,7 @@ namespace Eventures_Desktop
             // dateTimePickerStart
             // 
             this.dateTimePickerStart.AccessibleName = "start box";
-            this.dateTimePickerStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.dateTimePickerStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerStart.CustomFormat = "dd/MM/yyyy hh:mm:ss";
             this.dateTimePickerStart.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -139,7 +139,7 @@ namespace Eventures_Desktop
             // dateTimePickerEnd
             // 
             this.dateTimePickerEnd.AccessibleName = "end box";
-            this.dateTimePickerEnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.dateTimePickerEnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerEnd.CustomFormat = "dd/MM/yyyy hh:mm:ss";
             this.dateTimePickerEnd.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -161,7 +161,7 @@ namespace Eventures_Desktop
             // numboxTickets
             // 
             this.numboxTickets.AccessibleName = "tickets box";
-            this.numboxTickets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.numboxTickets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.numboxTickets.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.numboxTickets.Location = new System.Drawing.Point(112, 206);
@@ -196,8 +196,8 @@ namespace Eventures_Desktop
             // 
             // numboxPrice
             // 
-            this.numboxPrice.AccessibleName = "tickets box";
-            this.numboxPrice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.numboxPrice.AccessibleName = "price box";
+            this.numboxPrice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.numboxPrice.DecimalPlaces = 2;
             this.numboxPrice.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -207,7 +207,7 @@ namespace Eventures_Desktop
             0,
             0,
             0});
-            this.numboxPrice.Name = "numericUpDown1";
+            this.numboxPrice.Name = "numboxPrice";
             this.numboxPrice.Size = new System.Drawing.Size(131, 30);
             this.numboxPrice.TabIndex = 14;
             // 
@@ -228,7 +228,7 @@ namespace Eventures_Desktop
             this.Controls.Add(this.textBoxPlace);
             this.Controls.Add(this.labelPlace);
             this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.buttonCreate);
+            this.Controls.Add(this.buttonCreateConfirm);
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.labelName);
             this.KeyPreview = true;
@@ -260,7 +260,7 @@ namespace Eventures_Desktop
         private Label labelPrice;
         private NumericUpDown numboxPrice;
         private Button buttonCancel;
-        private Button buttonCreate;
+        private Button buttonCreateConfirm;
     }
 }
 

@@ -68,6 +68,7 @@ namespace Eventures_Desktop
             // 
             // statusStrip
             // 
+            this.statusStrip.AccessibleName = "statusStrip";
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
@@ -78,7 +79,7 @@ namespace Eventures_Desktop
             // 
             // toolStripStatusLabel
             // 
-            this.toolStripStatusLabel.AccessibleName = "status box";
+            this.toolStripStatusLabel.AccessibleName = "statusBox";
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(97, 20);
             this.toolStripStatusLabel.Text = "Connecting ...";

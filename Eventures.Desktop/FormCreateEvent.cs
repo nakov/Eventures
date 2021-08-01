@@ -9,8 +9,8 @@ namespace Eventures_Desktop
         public string Place { get => this.textBoxPlace.Text; }
         public DateTime Start { get => DateTime.Parse(this.dateTimePickerStart.Text); }
         public DateTime End { get => DateTime.Parse(this.dateTimePickerEnd.Text); }
-        public int TotalTickets { get =>int.Parse(this.numboxTickets.Text); }
-        public decimal PricePerTicket { get =>decimal.Parse(this.numboxPrice.Text); }
+        public int TotalTickets { get => int.Parse(this.numboxTickets.Text); }
+        public decimal PricePerTicket { get => decimal.Parse(this.numboxPrice.Text); }
 
         public FormCreateEvent()
         {
