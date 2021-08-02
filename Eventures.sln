@@ -3,11 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App", "Eventures.App\Eventures.App.csproj", "{0ACB3FB7-5965-4B50-A392-4CB50A96E222}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App.UnitTests", "Eventures.App.UnitTests\Eventures.App.UnitTests.csproj", "{1E2F7824-77B5-457D-9BEC-DB8A765F9044}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App.IntegrationTests", "Eventures.App.IntegrationTests\Eventures.App.IntegrationTests.csproj", "{BDAED536-4EBC-4D78-B844-845D34AD5746}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI", "Eventures.WebAPI\Eventures.WebAPI.csproj", "{010DD5B0-DD50-4026-9030-6301ECD97FC1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.UnitTests", "Eventures.WebAPI.UnitTests\Eventures.WebAPI.UnitTests.csproj", "{B87ACAE2-CF97-41A3-9778-B77F680B63FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.IntegrationTests", "Eventures.WebAPI.IntegrationTests\Eventures.WebAPI.IntegrationTests.csproj", "{32D156D1-81CC-4C21-A710-61031F3FB655}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App.SeleniumTests", "Eventures.App.SeleniumTests\Eventures.App.SeleniumTests.csproj", "{8C46501C-D333-4C97-8179-BFF34D53195C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Tests.Common", "Eventures.Tests.Common\Eventures.Tests.Common.csproj", "{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Data", "Eventures.Data\Eventures.Data.csproj", "{B4FD2B43-692B-4863-8B3B-F530CA4643EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Desktop", "Eventures.Desktop\Eventures.Desktop.csproj", "{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.Desktop.AppiumTests", "Eventures.Desktop.AppiumTests\Eventures.Desktop.AppiumTests.csproj", "{D801D311-1DC8-44AB-92D8-53FA232740B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +31,38 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0ACB3FB7-5965-4B50-A392-4CB50A96E222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ACB3FB7-5965-4B50-A392-4CB50A96E222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ACB3FB7-5965-4B50-A392-4CB50A96E222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ACB3FB7-5965-4B50-A392-4CB50A96E222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E2F7824-77B5-457D-9BEC-DB8A765F9044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E2F7824-77B5-457D-9BEC-DB8A765F9044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E2F7824-77B5-457D-9BEC-DB8A765F9044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E2F7824-77B5-457D-9BEC-DB8A765F9044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDAED536-4EBC-4D78-B844-845D34AD5746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDAED536-4EBC-4D78-B844-845D34AD5746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDAED536-4EBC-4D78-B844-845D34AD5746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDAED536-4EBC-4D78-B844-845D34AD5746}.Release|Any CPU.Build.0 = Release|Any CPU
 		{010DD5B0-DD50-4026-9030-6301ECD97FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{010DD5B0-DD50-4026-9030-6301ECD97FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{010DD5B0-DD50-4026-9030-6301ECD97FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{010DD5B0-DD50-4026-9030-6301ECD97FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B87ACAE2-CF97-41A3-9778-B77F680B63FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B87ACAE2-CF97-41A3-9778-B77F680B63FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B87ACAE2-CF97-41A3-9778-B77F680B63FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B87ACAE2-CF97-41A3-9778-B77F680B63FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32D156D1-81CC-4C21-A710-61031F3FB655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32D156D1-81CC-4C21-A710-61031F3FB655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32D156D1-81CC-4C21-A710-61031F3FB655}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32D156D1-81CC-4C21-A710-61031F3FB655}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C46501C-D333-4C97-8179-BFF34D53195C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C46501C-D333-4C97-8179-BFF34D53195C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C46501C-D333-4C97-8179-BFF34D53195C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C46501C-D333-4C97-8179-BFF34D53195C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +71,10 @@ Global
 		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
