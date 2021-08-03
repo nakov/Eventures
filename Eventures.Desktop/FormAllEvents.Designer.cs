@@ -34,6 +34,8 @@ namespace Eventures_Desktop
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonCreate = new System.Windows.Forms.Button();
+            this.buttonLogin = new System.Windows.Forms.Button();
+            this.buttonRegister = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,6 +74,7 @@ namespace Eventures_Desktop
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
+            this.statusStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.statusStrip.Location = new System.Drawing.Point(0, 559);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(908, 26);
@@ -96,17 +99,41 @@ namespace Eventures_Desktop
             this.buttonCreate.UseVisualStyleBackColor = true;
             this.buttonCreate.Click += new System.EventHandler(this.buttonAdd_Click);
             // 
-            // EventBoard
+            // buttonLogin
+            // 
+            this.buttonLogin.AccessibleName = "login button";
+            this.buttonLogin.Location = new System.Drawing.Point(12, 12);
+            this.buttonLogin.Name = "buttonLogin";
+            this.buttonLogin.Size = new System.Drawing.Size(79, 29);
+            this.buttonLogin.TabIndex = 9;
+            this.buttonLogin.Text = "➞ Login";
+            this.buttonLogin.UseVisualStyleBackColor = true;
+            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
+            // 
+            // buttonRegister
+            // 
+            this.buttonRegister.AccessibleName = "login button";
+            this.buttonRegister.Location = new System.Drawing.Point(106, 12);
+            this.buttonRegister.Name = "buttonRegister";
+            this.buttonRegister.Size = new System.Drawing.Size(99, 29);
+            this.buttonRegister.TabIndex = 10;
+            this.buttonRegister.Text = "✓ Register";
+            this.buttonRegister.UseVisualStyleBackColor = true;
+            this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
+            // 
+            // FormAllEvents
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(908, 585);
+            this.Controls.Add(this.buttonRegister);
+            this.Controls.Add(this.buttonLogin);
             this.Controls.Add(this.buttonCreate);
             this.Controls.Add(this.buttonReload);
             this.Controls.Add(this.listViewEvents);
             this.Controls.Add(this.statusStrip);
             this.MinimumSize = new System.Drawing.Size(900, 500);
-            this.Name = "FormEventBoard";
+            this.Name = "FormAllEvents";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Event Board";
             this.Shown += new System.EventHandler(this.EventBoardForm_Shown);
@@ -123,5 +150,7 @@ namespace Eventures_Desktop
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.Button buttonCreate;
+        private System.Windows.Forms.Button buttonLogin;
+        private System.Windows.Forms.Button buttonRegister;
     }
 }

@@ -63,9 +63,10 @@ namespace Eventures_Desktop
             this.textBoxName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBoxName.Location = new System.Drawing.Point(73, 16);
+            this.textBoxName.Location = new System.Drawing.Point(66, 16);
             this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(458, 30);
+            this.textBoxName.PlaceholderText = "Enter event name ...";
+            this.textBoxName.Size = new System.Drawing.Size(462, 30);
             this.textBoxName.TabIndex = 1;
             // 
             // buttonCreateConfirm
@@ -74,10 +75,10 @@ namespace Eventures_Desktop
             this.buttonCreateConfirm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCreateConfirm.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonCreateConfirm.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonCreateConfirm.Location = new System.Drawing.Point(326, 278);
+            this.buttonCreateConfirm.Location = new System.Drawing.Point(310, 203);
             this.buttonCreateConfirm.Name = "buttonCreateConfirm";
             this.buttonCreateConfirm.Size = new System.Drawing.Size(168, 47);
-            this.buttonCreateConfirm.TabIndex = 4;
+            this.buttonCreateConfirm.TabIndex = 7;
             this.buttonCreateConfirm.Text = "✓ Create";
             this.buttonCreateConfirm.UseVisualStyleBackColor = true;
             // 
@@ -87,10 +88,10 @@ namespace Eventures_Desktop
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonCancel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonCancel.Location = new System.Drawing.Point(56, 278);
+            this.buttonCancel.Location = new System.Drawing.Point(55, 203);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(164, 47);
-            this.buttonCancel.TabIndex = 3;
+            this.buttonCancel.TabIndex = 8;
             this.buttonCancel.Text = "✕ Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
@@ -100,10 +101,11 @@ namespace Eventures_Desktop
             this.textBoxPlace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPlace.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBoxPlace.Location = new System.Drawing.Point(73, 62);
+            this.textBoxPlace.Location = new System.Drawing.Point(66, 62);
             this.textBoxPlace.Name = "textBoxPlace";
-            this.textBoxPlace.Size = new System.Drawing.Size(458, 30);
-            this.textBoxPlace.TabIndex = 6;
+            this.textBoxPlace.PlaceholderText = "Enter the event venue (place) ...";
+            this.textBoxPlace.Size = new System.Drawing.Size(462, 30);
+            this.textBoxPlace.TabIndex = 2;
             // 
             // labelPlace
             // 
@@ -122,10 +124,10 @@ namespace Eventures_Desktop
             this.dateTimePickerStart.CustomFormat = "dd/MM/yyyy hh:mm:ss";
             this.dateTimePickerStart.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerStart.Location = new System.Drawing.Point(73, 109);
+            this.dateTimePickerStart.Location = new System.Drawing.Point(66, 109);
             this.dateTimePickerStart.Name = "dateTimePickerStart";
-            this.dateTimePickerStart.Size = new System.Drawing.Size(207, 30);
-            this.dateTimePickerStart.TabIndex = 8;
+            this.dateTimePickerStart.Size = new System.Drawing.Size(188, 30);
+            this.dateTimePickerStart.TabIndex = 3;
             // 
             // labelStart
             // 
@@ -139,20 +141,20 @@ namespace Eventures_Desktop
             // dateTimePickerEnd
             // 
             this.dateTimePickerEnd.AccessibleName = "end box";
-            this.dateTimePickerEnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dateTimePickerEnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerEnd.CustomFormat = "dd/MM/yyyy hh:mm:ss";
             this.dateTimePickerEnd.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerEnd.Location = new System.Drawing.Point(72, 155);
+            this.dateTimePickerEnd.Location = new System.Drawing.Point(325, 109);
             this.dateTimePickerEnd.Name = "dateTimePickerEnd";
-            this.dateTimePickerEnd.Size = new System.Drawing.Size(207, 30);
-            this.dateTimePickerEnd.TabIndex = 10;
+            this.dateTimePickerEnd.Size = new System.Drawing.Size(203, 30);
+            this.dateTimePickerEnd.TabIndex = 4;
             // 
             // labelEnd
             // 
+            this.labelEnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelEnd.AutoSize = true;
-            this.labelEnd.Location = new System.Drawing.Point(12, 163);
+            this.labelEnd.Location = new System.Drawing.Point(282, 115);
             this.labelEnd.Name = "labelEnd";
             this.labelEnd.Size = new System.Drawing.Size(37, 20);
             this.labelEnd.TabIndex = 9;
@@ -164,20 +166,25 @@ namespace Eventures_Desktop
             this.numboxTickets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.numboxTickets.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.numboxTickets.Location = new System.Drawing.Point(112, 206);
+            this.numboxTickets.Location = new System.Drawing.Point(116, 154);
             this.numboxTickets.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.numboxTickets.Name = "numboxTickets";
-            this.numboxTickets.Size = new System.Drawing.Size(80, 30);
-            this.numboxTickets.TabIndex = 12;
+            this.numboxTickets.Size = new System.Drawing.Size(138, 30);
+            this.numboxTickets.TabIndex = 5;
+            this.numboxTickets.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // labelTickets
             // 
             this.labelTickets.AutoSize = true;
-            this.labelTickets.Location = new System.Drawing.Point(12, 210);
+            this.labelTickets.Location = new System.Drawing.Point(16, 158);
             this.labelTickets.Name = "labelTickets";
             this.labelTickets.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.labelTickets.Size = new System.Drawing.Size(94, 20);
@@ -186,8 +193,9 @@ namespace Eventures_Desktop
             // 
             // labelPrice
             // 
+            this.labelPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelPrice.AutoSize = true;
-            this.labelPrice.Location = new System.Drawing.Point(279, 210);
+            this.labelPrice.Location = new System.Drawing.Point(277, 158);
             this.labelPrice.Name = "labelPrice";
             this.labelPrice.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.labelPrice.Size = new System.Drawing.Size(111, 20);
@@ -197,26 +205,26 @@ namespace Eventures_Desktop
             // numboxPrice
             // 
             this.numboxPrice.AccessibleName = "price box";
-            this.numboxPrice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.numboxPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.numboxPrice.DecimalPlaces = 2;
             this.numboxPrice.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.numboxPrice.Location = new System.Drawing.Point(399, 206);
+            this.numboxPrice.Location = new System.Drawing.Point(392, 154);
             this.numboxPrice.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.numboxPrice.Name = "numboxPrice";
-            this.numboxPrice.Size = new System.Drawing.Size(131, 30);
-            this.numboxPrice.TabIndex = 14;
+            this.numboxPrice.Size = new System.Drawing.Size(136, 30);
+            this.numboxPrice.TabIndex = 6;
             // 
             // FormCreateEvent
             // 
+            this.AcceptButton = this.buttonCreateConfirm;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(556, 353);
+            this.ClientSize = new System.Drawing.Size(545, 272);
             this.Controls.Add(this.numboxPrice);
             this.Controls.Add(this.labelPrice);
             this.Controls.Add(this.numboxTickets);
@@ -233,11 +241,12 @@ namespace Eventures_Desktop
             this.Controls.Add(this.labelName);
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(500, 400);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "FormCreateEvent";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create New Event";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormConnect_KeyDown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormCreateEvent_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.numboxTickets)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numboxPrice)).EndInit();
             this.ResumeLayout(false);

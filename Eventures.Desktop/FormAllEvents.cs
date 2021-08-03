@@ -13,11 +13,8 @@ namespace Eventures_Desktop
     public partial class FormAllEvents : Form
     {
         private string apiBaseUrl;
-        private string username;
-        private string email;
-        private string password;
-        private string confirmPassword;
         private string token;
+        private RestClient restClient;
 
         public FormAllEvents()
         {
@@ -26,20 +23,102 @@ namespace Eventures_Desktop
 
         private void EventBoardForm_Shown(object sender, EventArgs e)
         {
-            var formConnect = new FormConnect();
-            if (formConnect.ShowDialog() == DialogResult.OK)
+            // Show the [Connect] form again and agin, until connected
+            while (true)
             {
-                this.apiBaseUrl = formConnect.ApiUrl;
-                this.username = formConnect.Username;
-                this.email = formConnect.Email;
-                this.password = formConnect.Password;
-                this.confirmPassword = formConnect.ConfirmPassword;
-                LoadEvents();
+                var formConnect = new FormConnect();
+                if (formConnect.ShowDialog() != DialogResult.OK)
+                    this.Close();
+
+                // Try to connect to the Web API url
+                try
+                {
+                    this.apiBaseUrl = formConnect.ApiUrl;
+                    var homeRequest = new RestRequest("/", Method.GET);
+                    this.restClient = new RestClient(this.apiBaseUrl) { Timeout = 10000 };
+                    var homeResponse = this.restClient.Execute(homeRequest);
+                    if (homeResponse.IsSuccessful)
+                    {
+                        // Successfully connected to the Web API
+                        this.ShowSuccessMsg("Connected to the Web API.");
+                        return;
+                    }
+                    else
+                    {
+                        ShowError(homeResponse);
+                    }
+                } 
+                catch (Exception ex)
+                {
+                    ShowErrorMsg(ex.Message);
+                }
             }
-            else
+        }
+
+        private void buttonRegister_Click(object sender, EventArgs e)
+        {
+            var formRegister = new FormRegister();
+            if (formRegister.ShowDialog() != DialogResult.OK)
+                return;
+
+            this.Register(formRegister.Username, formRegister.Email, formRegister.Password, formRegister.ConfirmPassword /* firstName, lastName */);
+        }
+
+        private async void Register(string username, string email, 
+            string password, string confirmPassword)
+        {
+            var registerRequest = new RestRequest("/users/register", Method.POST);
+            registerRequest.AddJsonBody(
+                new
+                {
+                    Username = $"{username}",
+                    Email = $"{email}",
+                    Password = $"{password}",
+                    ConfirmPassword = $"{confirmPassword}",
+                    FirstName = "Name", // TODO: add "First Name" in the register form ...
+                    LastName = "Last"   // TODO: add "Last Name" in the register form ...
+                });
+
+            var registerResponse = await this.restClient.ExecuteAsync(registerRequest);
+            if (!registerResponse.IsSuccessful)
             {
-                this.Close();
+                ShowError(registerResponse);
+                return;
             }
+
+            this.ShowSuccessMsg($"User `{username}` registered.");
+
+            this.Login(username, password);
+        }
+
+        private void buttonLogin_Click(object sender, EventArgs e)
+        {
+            // Show the login form
+            var username = "nakov";
+            var password = "parola1";
+
+            this.Login(username, password);
+        }
+
+        private async void Login(string username, string password)
+        {
+            var loginRequest = new RestRequest("/users/login", Method.POST);
+            loginRequest.AddJsonBody(new { Username = $"{username}", Password = $"{password}" });
+
+            var loginResponse = await this.restClient.ExecuteAsync(loginRequest);
+
+            if (!loginResponse.IsSuccessful)
+            {
+                ShowError(loginResponse);
+                return;
+            }
+
+            var jsonResponse = new JsonDeserializer().Deserialize<LoginResponse>(loginResponse);
+            this.token = jsonResponse.Token;
+
+            this.ShowSuccessMsg($"User `{username}` successfully logged-in.");
+
+            this.LoadEvents();
         }
 
         private void buttonReload_Click(object sender, EventArgs e)
@@ -51,43 +130,18 @@ namespace Eventures_Desktop
         {
             try
             {
-                var restClient = new RestClient(this.apiBaseUrl); // { Timeout = 3000 };
-
-                var registerRequest = new RestRequest("/users/register", Method.POST);
-                registerRequest.AddJsonBody(
-                    new { Username = $"{username}", 
-                        Email = $"{email}", 
-                        Password = $"{password}", 
-                        ConfirmPassword = $"{confirmPassword}", 
-                        FirstName = "Name", 
-                        LastName = "Last" });
-
-                var registerResponse = await restClient.ExecuteAsync(registerRequest);
-                if (!registerResponse.IsSuccessful)
-                    ShowError(registerResponse);
-
-                var loginRequest = new RestRequest("/users/login", Method.POST);
-                loginRequest.AddJsonBody(new { Username = $"{username}", Password = $"{password}" });
-
-                var loginResponse = await restClient.ExecuteAsync(loginRequest);
-
-                if (!loginResponse.IsSuccessful)
-                    ShowError(loginResponse);
-
-                var jsonResponse = new JsonDeserializer().Deserialize<LoginResponse>(loginResponse);
-                token = jsonResponse.Token;
-
                 var request = new RestRequest("/events", Method.GET);
-                request.AddParameter("Authorization", "Bearer " + token, ParameterType.HttpHeader);
+                request.AddParameter("Authorization", 
+                    "Bearer " + this.token, ParameterType.HttpHeader);
 
-                ShowMsg("Loading tasks ...");
+                ShowMsg("Loading events ...");
 
-                var response = await restClient.ExecuteAsync(request);
+                var response = await this.restClient.ExecuteAsync(request);
                 if (response.IsSuccessful & response.StatusCode == HttpStatusCode.OK)
                 {
                     // Visualize the returned events
                     var events = new JsonDeserializer().Deserialize<List<Event>>(response);
-                    ShowSuccessMsg($"Search successful: {events.Count} events loaded.");
+                    ShowSuccessMsg($"Load successful: {events.Count} events loaded.");
                     DisplayEventsInListView(events);
                 }
                 else
@@ -140,36 +194,36 @@ namespace Eventures_Desktop
         private async void buttonAdd_Click(object sender, EventArgs e)
         {
             var formCreateEvent = new FormCreateEvent();
-            if (formCreateEvent.ShowDialog() == DialogResult.OK)
+            if (formCreateEvent.ShowDialog() != DialogResult.OK)
+                return;
+
+            // TODO: extract in a separate method
+            try
             {
-                try
+                var request = new RestRequest("/events/create", Method.POST);
+                request.AddParameter("Authorization", "Bearer " + token, ParameterType.HttpHeader);
+                request.AddJsonBody(new
                 {
-                    var restClient = new RestClient(this.apiBaseUrl) { Timeout = 3000 };
-                    var request = new RestRequest("/events/create", Method.POST);
-                    request.AddParameter("Authorization", "Bearer " + token, ParameterType.HttpHeader);
-                    request.AddJsonBody(new
-                    {
-                        name = formCreateEvent.EvName,
-                        place = formCreateEvent.Place,
-                        start = formCreateEvent.Start,
-                        end = formCreateEvent.End,
-                        totalTickets = formCreateEvent.TotalTickets,
-                        pricePerTicket = formCreateEvent.PricePerTicket
-                    });
-                    ShowMsg($"Creating new event ...");
-                    var response = await restClient.ExecuteAsync(request);
-                    if (response.IsSuccessful & response.StatusCode == HttpStatusCode.Created)
-                    {
-                        ShowSuccessMsg($"Event created.");
-                        LoadEvents();
-                    }
-                    else
-                        ShowError(response);
-                }
-                catch (Exception ex)
+                    name = formCreateEvent.EvName,
+                    place = formCreateEvent.Place,
+                    start = formCreateEvent.Start,
+                    end = formCreateEvent.End,
+                    totalTickets = formCreateEvent.TotalTickets,
+                    pricePerTicket = formCreateEvent.PricePerTicket
+                });
+                ShowMsg($"Creating new event ...");
+                var response = await this.restClient.ExecuteAsync(request);
+                if (response.IsSuccessful & response.StatusCode == HttpStatusCode.Created)
                 {
-                    ShowErrorMsg(ex.Message);
+                    ShowSuccessMsg($"Event created.");
+                    LoadEvents();
                 }
+                else
+                    ShowError(response);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg(ex.Message);
             }
         }
 

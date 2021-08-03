@@ -17,7 +17,7 @@ namespace Eventures_Desktop
             InitializeComponent();
         }
 
-        private void FormConnect_KeyDown(object sender, KeyEventArgs e)
+        private void FormCreateEvent_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
                 Close();

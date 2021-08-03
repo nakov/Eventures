@@ -14,4 +14,10 @@
     <ProjectReference Include="..\Eventures.Data\Eventures.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="FormRegister.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
