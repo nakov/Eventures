@@ -19,6 +19,14 @@ namespace Eventures_Desktop
         public FormAllEvents()
         {
             InitializeComponent();
+            this.toolStripStatusLabel.TextChanged += ToolStripStatusLabel_TextChanged;
+        }
+
+        private void ToolStripStatusLabel_TextChanged(object sender, EventArgs e)
+        {
+            // Intentionally copy the "status label text" into the "accessibility text"
+            // to allow the runtime UI inspectors to read the text
+            toolStripStatusLabel.AccessibleName = toolStripStatusLabel.Text;
         }
 
         private void EventBoardForm_Shown(object sender, EventArgs e)
