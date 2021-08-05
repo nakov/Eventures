@@ -2,21 +2,25 @@ name: Build and Test
 on: [push]
 jobs:
   build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with: { dotnet-version: 5.0.x }
+      - run: dotnet test Eventures.App.UnitTests --verbosity normal
+      - run: dotnet test Eventures.App.IntegrationTests --verbosity normal
+      - run: dotnet test Eventures.App.SeleniumTests --verbosity normal
+      - run: dotnet test Eventures.WebAPI.UnitTests --verbosity normal
+      - run: dotnet test Eventures.WebAPI.IntegrationTests --verbosity normal
+  appium-tests:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with: { dotnet-version: 5.0.x }
-      - run: dotnet restore
-      - run: dotnet build --no-restore
-      - run: dotnet test Eventures.App.UnitTests --no-build --verbosity normal
-      - run: dotnet test Eventures.App.IntegrationTests --no-build --verbosity normal
-      - run: dotnet test Eventures.App.SeleniumTests --no-build --verbosity normal
-      - run: dotnet test Eventures.WebAPI.UnitTests --no-build --verbosity normal
-      - run: dotnet test Eventures.WebAPI.IntegrationTests --no-build --verbosity normal
-      # Install Node.js, install Appium, run Appium on ::1: and run the Appium tests
+      # Install Node.js, install Appium, and run the Appium tests
       - uses: actions/setup-node@v2
         with: { node-version: '14' }
       - run: npm install -g appium
-      - run: appium -a ::1 &
+      - run: dotnet run --project .\Eventures.WebAPI\Eventures.WebAPI.csproj &
       - run: dotnet test Eventures.Desktop.AppiumTests --no-build --verbosity normal
