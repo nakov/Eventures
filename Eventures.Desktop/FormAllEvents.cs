@@ -5,7 +5,7 @@ using RestSharp;
 using RestSharp.Serialization.Json;
 using System.Drawing;
 using System.Linq;
-using Eventures.Data;
+using Eventures.Desktop.Data;
 
 namespace Eventures_Desktop
 {

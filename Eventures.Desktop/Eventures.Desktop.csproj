@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Eventures.Data\Eventures.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="FormLogin.cs">
       <SubType>Form</SubType>
     </Compile>
