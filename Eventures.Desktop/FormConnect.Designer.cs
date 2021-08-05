@@ -50,7 +50,7 @@
             this.textBoxApiUrl.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxApiUrl.Location = new System.Drawing.Point(148, 16);
             this.textBoxApiUrl.Name = "textBoxApiUrl";
-            this.textBoxApiUrl.Size = new System.Drawing.Size(419, 30);
+            this.textBoxApiUrl.Size = new System.Drawing.Size(254, 30);
             this.textBoxApiUrl.TabIndex = 1;
             this.textBoxApiUrl.Text = "https://localhost:44359/api/";
             // 
@@ -63,7 +63,7 @@
             this.buttonConnect.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonConnect.Location = new System.Drawing.Point(12, 66);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(555, 47);
+            this.buttonConnect.Size = new System.Drawing.Size(390, 47);
             this.buttonConnect.TabIndex = 6;
             this.buttonConnect.Text = "✓ Connect";
             this.buttonConnect.UseVisualStyleBackColor = false;
@@ -73,7 +73,7 @@
             this.AcceptButton = this.buttonConnect;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(582, 133);
+            this.ClientSize = new System.Drawing.Size(417, 133);
             this.Controls.Add(this.buttonConnect);
             this.Controls.Add(this.textBoxApiUrl);
             this.Controls.Add(this.labelApiUrl);

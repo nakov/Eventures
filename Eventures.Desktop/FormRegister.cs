@@ -8,6 +8,8 @@ namespace Eventures_Desktop
         public string Email { get => this.textBoxEmail.Text; }
         public string Password { get => this.textBoxPassword.Text; }
         public string ConfirmPassword { get => this.textBoxConfirmPassword.Text; }
+        public string FirstName { get => this.textBoxFirstName.Text; }
+        public string LastName { get => this.textBoxLastName.Text; }
 
         public FormRegister()
         {

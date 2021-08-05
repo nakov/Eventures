@@ -50,11 +50,11 @@
             this.textBoxUsername.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxUsername.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBoxUsername.Location = new System.Drawing.Point(151, 12);
+            this.textBoxUsername.Location = new System.Drawing.Point(151, 13);
             this.textBoxUsername.Name = "textBoxUsername";
             this.textBoxUsername.PlaceholderText = "Your username here...";
-            this.textBoxUsername.Size = new System.Drawing.Size(304, 30);
-            this.textBoxUsername.TabIndex = 2;
+            this.textBoxUsername.Size = new System.Drawing.Size(339, 30);
+            this.textBoxUsername.TabIndex = 1;
             // 
             // labelUsername
             // 
@@ -62,7 +62,7 @@
             this.labelUsername.Location = new System.Drawing.Point(17, 17);
             this.labelUsername.Name = "labelUsername";
             this.labelUsername.Size = new System.Drawing.Size(78, 20);
-            this.labelUsername.TabIndex = 3;
+            this.labelUsername.TabIndex = 1;
             this.labelUsername.Text = "Username:";
             // 
             // textBoxPassword
@@ -75,8 +75,8 @@
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.PasswordChar = '*';
             this.textBoxPassword.PlaceholderText = "Enter a password...";
-            this.textBoxPassword.Size = new System.Drawing.Size(304, 30);
-            this.textBoxPassword.TabIndex = 4;
+            this.textBoxPassword.Size = new System.Drawing.Size(339, 30);
+            this.textBoxPassword.TabIndex = 3;
             // 
             // labelPassword
             // 
@@ -84,7 +84,7 @@
             this.labelPassword.Location = new System.Drawing.Point(17, 91);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(73, 20);
-            this.labelPassword.TabIndex = 5;
+            this.labelPassword.TabIndex = 3;
             this.labelPassword.Text = "Password:";
             // 
             // textBoxEmail
@@ -96,8 +96,8 @@
             this.textBoxEmail.Location = new System.Drawing.Point(151, 49);
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.PlaceholderText = "Your email here...";
-            this.textBoxEmail.Size = new System.Drawing.Size(304, 30);
-            this.textBoxEmail.TabIndex = 3;
+            this.textBoxEmail.Size = new System.Drawing.Size(339, 30);
+            this.textBoxEmail.TabIndex = 2;
             // 
             // labelEmail
             // 
@@ -105,7 +105,7 @@
             this.labelEmail.Location = new System.Drawing.Point(17, 54);
             this.labelEmail.Name = "labelEmail";
             this.labelEmail.Size = new System.Drawing.Size(49, 20);
-            this.labelEmail.TabIndex = 8;
+            this.labelEmail.TabIndex = 2;
             this.labelEmail.Text = "Email:";
             // 
             // textBoxConfirmPassword
@@ -118,8 +118,8 @@
             this.textBoxConfirmPassword.Name = "textBoxConfirmPassword";
             this.textBoxConfirmPassword.PasswordChar = '*';
             this.textBoxConfirmPassword.PlaceholderText = "Repeat the password to confirm it ...";
-            this.textBoxConfirmPassword.Size = new System.Drawing.Size(304, 30);
-            this.textBoxConfirmPassword.TabIndex = 5;
+            this.textBoxConfirmPassword.Size = new System.Drawing.Size(339, 30);
+            this.textBoxConfirmPassword.TabIndex = 4;
             // 
             // labelConfirmPassword
             // 
@@ -127,7 +127,7 @@
             this.labelConfirmPassword.Location = new System.Drawing.Point(18, 128);
             this.labelConfirmPassword.Name = "labelConfirmPassword";
             this.labelConfirmPassword.Size = new System.Drawing.Size(130, 20);
-            this.labelConfirmPassword.TabIndex = 10;
+            this.labelConfirmPassword.TabIndex = 4;
             this.labelConfirmPassword.Text = "Confirm Password:";
             // 
             // buttonCancel
@@ -136,10 +136,10 @@
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonCancel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonCancel.Location = new System.Drawing.Point(50, 248);
+            this.buttonCancel.Location = new System.Drawing.Point(50, 249);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(164, 47);
-            this.buttonCancel.TabIndex = 7;
+            this.buttonCancel.TabIndex = 8;
             this.buttonCancel.Text = "✕ Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
@@ -149,10 +149,10 @@
             this.buttonRegisterConfirm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonRegisterConfirm.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonRegisterConfirm.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonRegisterConfirm.Location = new System.Drawing.Point(268, 248);
+            this.buttonRegisterConfirm.Location = new System.Drawing.Point(274, 249);
             this.buttonRegisterConfirm.Name = "buttonRegisterConfirm";
             this.buttonRegisterConfirm.Size = new System.Drawing.Size(187, 47);
-            this.buttonRegisterConfirm.TabIndex = 6;
+            this.buttonRegisterConfirm.TabIndex = 7;
             this.buttonRegisterConfirm.Text = "✓ Register";
             this.buttonRegisterConfirm.UseVisualStyleBackColor = true;
             // 
@@ -165,8 +165,8 @@
             this.textBoxFirstName.Location = new System.Drawing.Point(151, 160);
             this.textBoxFirstName.Name = "textBoxFirstName";
             this.textBoxFirstName.PlaceholderText = "Enter first name...";
-            this.textBoxFirstName.Size = new System.Drawing.Size(304, 30);
-            this.textBoxFirstName.TabIndex = 11;
+            this.textBoxFirstName.Size = new System.Drawing.Size(339, 30);
+            this.textBoxFirstName.TabIndex = 5;
             // 
             // labelFirstName
             // 
@@ -174,7 +174,7 @@
             this.labelFirstName.Location = new System.Drawing.Point(18, 165);
             this.labelFirstName.Name = "labelFirstName";
             this.labelFirstName.Size = new System.Drawing.Size(83, 20);
-            this.labelFirstName.TabIndex = 12;
+            this.labelFirstName.TabIndex = 5;
             this.labelFirstName.Text = "First Name:";
             // 
             // textBoxLastName
@@ -186,8 +186,8 @@
             this.textBoxLastName.Location = new System.Drawing.Point(151, 198);
             this.textBoxLastName.Name = "textBoxLastName";
             this.textBoxLastName.PlaceholderText = "Enter last name...";
-            this.textBoxLastName.Size = new System.Drawing.Size(304, 30);
-            this.textBoxLastName.TabIndex = 13;
+            this.textBoxLastName.Size = new System.Drawing.Size(339, 30);
+            this.textBoxLastName.TabIndex = 6;
             // 
             // labelLast
             // 
@@ -195,7 +195,7 @@
             this.labelLast.Location = new System.Drawing.Point(18, 203);
             this.labelLast.Name = "labelLast";
             this.labelLast.Size = new System.Drawing.Size(82, 20);
-            this.labelLast.TabIndex = 14;
+            this.labelLast.TabIndex = 6;
             this.labelLast.Text = "Last Name:";
             // 
             // FormRegister
@@ -203,7 +203,7 @@
             this.AcceptButton = this.buttonRegisterConfirm;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(467, 312);
+            this.ClientSize = new System.Drawing.Size(502, 313);
             this.Controls.Add(this.textBoxLastName);
             this.Controls.Add(this.labelLast);
             this.Controls.Add(this.textBoxFirstName);
@@ -221,6 +221,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.KeyPreview = true;
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(760, 360);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(520, 360);
             this.Name = "FormRegister";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Register a New User";

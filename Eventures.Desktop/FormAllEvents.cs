@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using RestSharp;
@@ -26,41 +25,38 @@ namespace Eventures_Desktop
         {
             // Intentionally copy the "status label text" into the "accessibility text"
             // to allow the runtime UI inspectors to read the text
-            toolStripStatusLabel.AccessibleName = toolStripStatusLabel.Text;
+            this.toolStripStatusLabel.AccessibleName = toolStripStatusLabel.Text;
         }
 
         private void EventBoardForm_Shown(object sender, EventArgs e)
         {
             // Show the [Connect] form again and agin, until connected
-            while (true)
+            var connected = false;
+            while (connected == false)
             {
                 var formConnect = new FormConnect();
                 if (formConnect.ShowDialog() != DialogResult.OK)
                     this.Close();
-
-                // Try to connect to the Web API url
-                try
-                {
-                    this.apiBaseUrl = formConnect.ApiUrl;
-                    var homeRequest = new RestRequest("/", Method.GET);
-                    this.restClient = new RestClient(this.apiBaseUrl) { Timeout = 10000 };
-                    var homeResponse = this.restClient.Execute(homeRequest);
-                    if (homeResponse.IsSuccessful)
-                    {
-                        // Successfully connected to the Web API
-                        this.ShowSuccessMsg("Connected to the Web API.");
-                        return;
-                    }
-                    else
-                    {
-                        ShowError(homeResponse);
-                    }
-                } 
-                catch (Exception ex)
-                {
-                    ShowErrorMsg(ex.Message);
-                }
+                connected = this.Connect(formConnect.ApiUrl);
             }
+        }
+
+        private bool Connect(string apiUrl)
+        {
+            // Try to connect to the Web API url
+            this.apiBaseUrl = apiUrl;
+            var homeRequest = new RestRequest("/", Method.GET);
+            this.restClient = new RestClient(this.apiBaseUrl) { Timeout = 5000 };
+            var homeResponse = this.restClient.Execute(homeRequest);
+            if (!homeResponse.IsSuccessful)
+            {
+                this.ShowError(homeResponse);
+                return false;
+            }
+
+            // Successfully connected to the Web API
+            this.ShowSuccessMsg("Connected to the Web API.");
+            return true;
         }
 
         private void buttonRegister_Click(object sender, EventArgs e)
@@ -69,11 +65,17 @@ namespace Eventures_Desktop
             if (formRegister.ShowDialog() != DialogResult.OK)
                 return;
 
-            this.Register(formRegister.Username, formRegister.Email, formRegister.Password, formRegister.ConfirmPassword /* firstName, lastName */);
+            this.Register(
+                formRegister.Username,
+                formRegister.Email,
+                formRegister.Password,
+                formRegister.ConfirmPassword,
+                formRegister.FirstName,
+                formRegister.LastName);
         }
 
-        private async void Register(string username, string email, 
-            string password, string confirmPassword)
+        private async void Register(string username, string email,
+            string password, string confirmPassword, string firstName, string lastName)
         {
             var registerRequest = new RestRequest("/users/register", Method.POST);
             registerRequest.AddJsonBody(
@@ -83,14 +85,14 @@ namespace Eventures_Desktop
                     Email = $"{email}",
                     Password = $"{password}",
                     ConfirmPassword = $"{confirmPassword}",
-                    FirstName = "Name", // TODO: add "First Name" in the register form ...
-                    LastName = "Last"   // TODO: add "Last Name" in the register form ...
+                    FirstName = firstName,
+                    LastName = lastName
                 });
 
             var registerResponse = await this.restClient.ExecuteAsync(registerRequest);
             if (!registerResponse.IsSuccessful)
             {
-                ShowError(registerResponse);
+                this.ShowError(registerResponse);
                 return;
             }
 
@@ -101,11 +103,13 @@ namespace Eventures_Desktop
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
-            // Show the login form
-            var username = "nakov";
-            var password = "parola1";
+            var formLogin = new FormLogin();
+            if (formLogin.ShowDialog() != DialogResult.OK)
+                return;
 
-            this.Login(username, password);
+            this.Login(
+                formLogin.Username,
+                formLogin.Password);
         }
 
         private async void Login(string username, string password)
@@ -117,7 +121,7 @@ namespace Eventures_Desktop
 
             if (!loginResponse.IsSuccessful)
             {
-                ShowError(loginResponse);
+                this.ShowError(loginResponse);
                 return;
             }
 
@@ -131,34 +135,28 @@ namespace Eventures_Desktop
 
         private void buttonReload_Click(object sender, EventArgs e)
         {
-            LoadEvents();
+            this.LoadEvents();
         }
 
         private async void LoadEvents()
         {
-            try
-            {
-                var request = new RestRequest("/events", Method.GET);
-                request.AddParameter("Authorization", 
-                    "Bearer " + this.token, ParameterType.HttpHeader);
+            var request = new RestRequest("/events", Method.GET);
+            request.AddParameter("Authorization",
+                "Bearer " + this.token, ParameterType.HttpHeader);
 
-                ShowMsg("Loading events ...");
+            ShowMsg("Loading events ...");
 
-                var response = await this.restClient.ExecuteAsync(request);
-                if (response.IsSuccessful & response.StatusCode == HttpStatusCode.OK)
-                {
-                    // Visualize the returned events
-                    var events = new JsonDeserializer().Deserialize<List<Event>>(response);
-                    ShowSuccessMsg($"Load successful: {events.Count} events loaded.");
-                    DisplayEventsInListView(events);
-                }
-                else
-                    ShowError(response);
-            }
-            catch (Exception ex)
+            var response = await this.restClient.ExecuteAsync(request);
+            if (!response.IsSuccessful)
             {
-                ShowErrorMsg(ex.Message);
+                this.ShowError(response);
+                return;
             }
+
+            // Visualize the returned events
+            var events = new JsonDeserializer().Deserialize<List<Event>>(response);
+            ShowSuccessMsg($"Load successful: {events.Count} events loaded.");
+            DisplayEventsInListView(events);
         }
 
         private void DisplayEventsInListView(List<Event> events)
@@ -183,9 +181,9 @@ namespace Eventures_Desktop
             foreach (var ev in events)
             {
                 var item = new ListViewItem(new string[] {
-                    "" + ev.Id, 
-                    ev.Name, 
-                    ev.Place, 
+                    "" + ev.Id,
+                    ev.Name,
+                    ev.Place,
                     ev.Start.ToString(),
                     ev.End.ToString(),
                     ev.TotalTickets.ToString(),
@@ -199,40 +197,45 @@ namespace Eventures_Desktop
             this.listViewEvents.Groups.AddRange(sortedGroups);
         }
 
-        private async void buttonAdd_Click(object sender, EventArgs e)
+        private void buttonCreate_Click(object sender, EventArgs e)
         {
             var formCreateEvent = new FormCreateEvent();
             if (formCreateEvent.ShowDialog() != DialogResult.OK)
                 return;
 
-            // TODO: extract in a separate method
-            try
+            this.Create(formCreateEvent.EvName,
+                formCreateEvent.Place,
+                formCreateEvent.Start,
+                formCreateEvent.End,
+                formCreateEvent.TotalTickets,
+                formCreateEvent.PricePerTicket);
+        }
+
+        private async void Create(string name, string place, DateTime start,
+            DateTime end, int totalTickets, decimal pricePerTicket)
+        {
+            var request = new RestRequest("/events/create", Method.POST);
+            request.AddParameter("Authorization", "Bearer " + token, ParameterType.HttpHeader);
+            request.AddJsonBody(new
             {
-                var request = new RestRequest("/events/create", Method.POST);
-                request.AddParameter("Authorization", "Bearer " + token, ParameterType.HttpHeader);
-                request.AddJsonBody(new
-                {
-                    name = formCreateEvent.EvName,
-                    place = formCreateEvent.Place,
-                    start = formCreateEvent.Start,
-                    end = formCreateEvent.End,
-                    totalTickets = formCreateEvent.TotalTickets,
-                    pricePerTicket = formCreateEvent.PricePerTicket
-                });
-                ShowMsg($"Creating new event ...");
-                var response = await this.restClient.ExecuteAsync(request);
-                if (response.IsSuccessful & response.StatusCode == HttpStatusCode.Created)
-                {
-                    ShowSuccessMsg($"Event created.");
-                    LoadEvents();
-                }
-                else
-                    ShowError(response);
-            }
-            catch (Exception ex)
+                name = name,
+                place = place,
+                start = start,
+                end = end,
+                totalTickets = totalTickets,
+                pricePerTicket = pricePerTicket
+            });
+            ShowMsg($"Creating new event ...");
+            var response = await this.restClient.ExecuteAsync(request);
+            if (!response.IsSuccessful)
             {
-                ShowErrorMsg(ex.Message);
+                this.ShowError(response);
+                return;
+               
             }
+
+            this.ShowSuccessMsg($"Event created.");
+            this.LoadEvents();
         }
 
         private void ShowError(IRestResponse response)
@@ -242,31 +245,31 @@ namespace Eventures_Desktop
                 string errText = $"HTTP error `{response.StatusCode}`.";
                 if (!string.IsNullOrWhiteSpace(response.Content))
                     errText += $" Details: {response.Content}";
-                ShowErrorMsg(errText);
+                this.ShowErrorMsg(errText);
             }
             else
-                ShowErrorMsg($"HTTP error `{response.ErrorMessage}`.");
+                this.ShowErrorMsg($"HTTP error `{response.ErrorMessage}`.");
         }
 
         private void ShowMsg(string msg)
         {
-            toolStripStatusLabel.Text = msg;
-            toolStripStatusLabel.ForeColor = SystemColors.ControlText;
-            toolStripStatusLabel.BackColor = SystemColors.Control;
+            this.toolStripStatusLabel.Text = msg;
+            this.toolStripStatusLabel.ForeColor = SystemColors.ControlText;
+            this.toolStripStatusLabel.BackColor = SystemColors.Control;
         }
 
         private void ShowSuccessMsg(string msg)
         {
-            toolStripStatusLabel.Text = msg;
-            toolStripStatusLabel.ForeColor = Color.White;
-            toolStripStatusLabel.BackColor = Color.Green;
+            this.toolStripStatusLabel.Text = msg;
+            this.toolStripStatusLabel.ForeColor = Color.White;
+            this.toolStripStatusLabel.BackColor = Color.Green;
         }
 
         private void ShowErrorMsg(string errMsg)
         {
-            toolStripStatusLabel.Text = $"Error: {errMsg}";
-            toolStripStatusLabel.ForeColor = Color.White;
-            toolStripStatusLabel.BackColor = Color.Red;
+            this.toolStripStatusLabel.Text = $"Error: {errMsg}";
+            this.toolStripStatusLabel.ForeColor = Color.White;
+            this.toolStripStatusLabel.BackColor = Color.Red;
         }
     }
 }

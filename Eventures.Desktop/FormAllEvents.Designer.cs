@@ -97,7 +97,7 @@ namespace Eventures_Desktop
             this.buttonCreate.TabIndex = 8;
             this.buttonCreate.Text = "✚ Create";
             this.buttonCreate.UseVisualStyleBackColor = true;
-            this.buttonCreate.Click += new System.EventHandler(this.buttonAdd_Click);
+            this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
             // 
             // buttonLogin
             // 

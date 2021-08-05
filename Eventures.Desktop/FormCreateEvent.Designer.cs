@@ -245,7 +245,7 @@ namespace Eventures_Desktop
             this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "FormCreateEvent";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Create New Event";
+            this.Text = "Create a New Event";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormCreateEvent_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.numboxTickets)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numboxPrice)).EndInit();

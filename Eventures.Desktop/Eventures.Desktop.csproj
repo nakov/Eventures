@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="FormLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="FormRegister.cs">
       <SubType>Form</SubType>
     </Compile>
