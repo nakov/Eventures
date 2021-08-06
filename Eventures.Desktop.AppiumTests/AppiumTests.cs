@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+using Eventures.Tests.Common;
+using Eventures.WebAPI;
+using Eventures.WebAPI.IntegrationTests;
 using NUnit.Framework;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Service;
@@ -7,7 +10,7 @@ using OpenQA.Selenium.Appium.Windows;
 
 namespace Eventures.Desktop.AppiumTests
 {
-    public class AppiumTests
+    public class AppiumTests : ApiTestsBase
     {
         private AppiumLocalService appiumLocalService;
         private string AppPath = @"../../../../Eventures.Desktop/bin/Debug/net5.0-windows/Eventures.Desktop.exe";
