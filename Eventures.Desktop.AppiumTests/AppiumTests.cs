@@ -2,9 +2,11 @@ using System;
 using System.IO;
 using Eventures.WebAPI.IntegrationTests;
 using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Service;
 using OpenQA.Selenium.Appium.Windows;
+using OpenQA.Selenium.Support.UI;
 
 namespace Eventures.Desktop.AppiumTests
 {
@@ -134,6 +136,11 @@ namespace Eventures.Desktop.AppiumTests
 
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
+            while(!statusTextBox.Text.Contains("Load successful:"))
+            {
+                statusTextBox = driver
+                .FindElementByXPath("/Window/StatusBar/Text");
+            }
             Assert.That(statusTextBox.Text.Contains("Load successful:"));
         }
 

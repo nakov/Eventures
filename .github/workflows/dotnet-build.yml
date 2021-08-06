@@ -19,5 +19,4 @@ jobs:
         with: { node-version: '14' }
       - run: npm install -g appium
       - run: appium -a ::1 &
-      - run: dotnet run --project .\Eventures.WebAPI\Eventures.WebAPI.csproj &
       - run: dotnet test Eventures.Desktop.AppiumTests --no-build --verbosity normal
