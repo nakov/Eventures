@@ -18,5 +18,4 @@ jobs:
       - uses: actions/setup-node@v2
         with: { node-version: '14' }
       - run: npm install -g appium
-      - run: appium -a ::1 &
       - run: dotnet test Eventures.Desktop.AppiumTests --no-build --verbosity normal
