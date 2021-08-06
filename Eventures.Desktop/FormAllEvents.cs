@@ -36,21 +36,32 @@ namespace Eventures_Desktop
             {
                 var formConnect = new FormConnect();
                 if (formConnect.ShowDialog() != DialogResult.OK)
+                {
                     this.Close();
+                    break;
+                } 
                 connected = this.Connect(formConnect.ApiUrl);
             }
         }
 
         private bool Connect(string apiUrl)
         {
-            // Try to connect to the Web API url
-            this.apiBaseUrl = apiUrl;
-            var homeRequest = new RestRequest("/", Method.GET);
-            this.restClient = new RestClient(this.apiBaseUrl) { Timeout = 5000 };
-            var homeResponse = this.restClient.Execute(homeRequest);
-            if (!homeResponse.IsSuccessful)
+            try
             {
-                this.ShowError(homeResponse);
+                // Try to connect to the Web API url
+                this.apiBaseUrl = apiUrl;
+                var homeRequest = new RestRequest("/", Method.GET);
+                this.restClient = new RestClient(this.apiBaseUrl) { Timeout = 5000 };
+                var homeResponse = this.restClient.Execute(homeRequest);
+                if (!homeResponse.IsSuccessful)
+                {
+                    this.ShowError(homeResponse);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg(ex.Message);
                 return false;
             }
 
@@ -89,15 +100,22 @@ namespace Eventures_Desktop
                     LastName = lastName
                 });
 
-            var registerResponse = await this.restClient.ExecuteAsync(registerRequest);
-            if (!registerResponse.IsSuccessful)
+            try
             {
-                this.ShowError(registerResponse);
+                var registerResponse = await this.restClient.ExecuteAsync(registerRequest);
+                if (!registerResponse.IsSuccessful)
+                {
+                    this.ShowError(registerResponse);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg(ex.Message);
                 return;
             }
 
             this.ShowSuccessMsg($"User `{username}` registered.");
-
             this.Login(username, password);
         }
 
@@ -117,19 +135,26 @@ namespace Eventures_Desktop
             var loginRequest = new RestRequest("/users/login", Method.POST);
             loginRequest.AddJsonBody(new { Username = $"{username}", Password = $"{password}" });
 
-            var loginResponse = await this.restClient.ExecuteAsync(loginRequest);
-
-            if (!loginResponse.IsSuccessful)
+            try
             {
-                this.ShowError(loginResponse);
+                var loginResponse = await this.restClient.ExecuteAsync(loginRequest);
+
+                if (!loginResponse.IsSuccessful)
+                {
+                    this.ShowError(loginResponse);
+                    return;
+                }
+
+                var jsonResponse = new JsonDeserializer().Deserialize<LoginResponse>(loginResponse);
+                this.token = jsonResponse.Token;
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg(ex.Message);
                 return;
             }
 
-            var jsonResponse = new JsonDeserializer().Deserialize<LoginResponse>(loginResponse);
-            this.token = jsonResponse.Token;
-
             this.ShowSuccessMsg($"User `{username}` successfully logged-in.");
-
             this.LoadEvents();
         }
 
@@ -146,17 +171,25 @@ namespace Eventures_Desktop
 
             ShowMsg("Loading events ...");
 
-            var response = await this.restClient.ExecuteAsync(request);
-            if (!response.IsSuccessful)
+            try
             {
-                this.ShowError(response);
+                var response = await this.restClient.ExecuteAsync(request);
+                if (!response.IsSuccessful)
+                {
+                    this.ShowError(response);
+                    return;
+                }
+
+                // Visualize the returned events
+                var events = new JsonDeserializer().Deserialize<List<Event>>(response);
+                ShowSuccessMsg($"Load successful: {events.Count} events loaded.");
+                DisplayEventsInListView(events);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg(ex.Message);
                 return;
             }
-
-            // Visualize the returned events
-            var events = new JsonDeserializer().Deserialize<List<Event>>(response);
-            ShowSuccessMsg($"Load successful: {events.Count} events loaded.");
-            DisplayEventsInListView(events);
         }
 
         private void DisplayEventsInListView(List<Event> events)
