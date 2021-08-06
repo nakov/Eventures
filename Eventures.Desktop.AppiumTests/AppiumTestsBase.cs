@@ -1,16 +1,10 @@
-﻿using System.Net.Http;
-
+﻿
 using NUnit.Framework;
-
-using System.Threading.Tasks;
-using System.Net.Http.Headers;
-
 using Eventures.Data;
 using Eventures.Tests.Common;
-using Eventures.WebAPI.Models;
-using System;
+using Eventures.WebAPI;
 
-namespace Eventures.WebAPI.IntegrationTests
+namespace Eventures.Desktop.AppiumTests
 {
     public class AppiumTestsBase
     {

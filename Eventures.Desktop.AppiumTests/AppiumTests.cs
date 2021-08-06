@@ -1,12 +1,10 @@
 using System;
 using System.IO;
-using Eventures.WebAPI.IntegrationTests;
+using System.Linq;
 using NUnit.Framework;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Service;
 using OpenQA.Selenium.Appium.Windows;
-using OpenQA.Selenium.Support.UI;
 
 namespace Eventures.Desktop.AppiumTests
 {
@@ -20,19 +18,23 @@ namespace Eventures.Desktop.AppiumTests
         private string password = "newPassword12";
         private string eventBoardWindowName = "Event Board";
         private string createEventWindowName = "Create a New Event";
-        private int columnsCount = 8;
 
         [OneTimeSetUp]
         public void Setup()
         {
+            // Initialize Appium Local Service to start
+            // the Appium server automatically
             appiumLocalService = new AppiumServiceBuilder()
                 .UsingAnyFreePort()
                 .Build();
-
             appiumLocalService.Start();
+
             var appiumOptions = new AppiumOptions() { PlatformName = "Windows" };
             var fullPathName = Path.GetFullPath(AppPath);
             appiumOptions.AddAdditionalCapability("app", fullPathName);
+
+            // Initialize the Windows driver with
+            // Appium local service and options
             driver = new WindowsDriver<WindowsElement>(
                 appiumLocalService,
                 appiumOptions);
@@ -41,63 +43,107 @@ namespace Eventures.Desktop.AppiumTests
         }
 
         [Test, Order(1)]
-        public void Test_Connect_WithInvalidUrl()
+        public void Test_Connect_WithEmptyUrl()
         {
+            // Locate the URL field and send an empty URL
             var apiUrlField = driver
                 .FindElementByAccessibilityId("textBoxApiUrl");
-            var invalidPort = "1234";
-            apiUrlField.SendKeys($"http://localhost:{invalidPort}/api");
+            apiUrlField.Clear();
+            apiUrlField.SendKeys(string.Empty);
 
+            // Locate and click on the [Connect] button
             var connectBtn = driver
                 .FindElementByAccessibilityId("buttonConnect");
             connectBtn.Click();
 
+            // Assert the "Connect to Eventures API" window appeared again
             Assert.That(driver.PageSource.Contains("Connect to Eventures API"));
 
+            // Assert an error message is displayed in the status box
+            var statusTextBox = driver
+                .FindElementByXPath("/Window/StatusBar/Text");
+            Assert.That(statusTextBox.Text.Contains("Error: Value cannot be null."));
+        }
+
+        [Test, Order(2)]
+        public void Test_Connect_WithInvalidUrl()
+        {
+            // Locate the URL field and
+            // send a URL with invalid port, e.g. invalid URL
+            var apiUrlField = driver
+                .FindElementByAccessibilityId("textBoxApiUrl");
+            apiUrlField.Clear();
+            var invalidPort = "1234";
+            apiUrlField.SendKeys($"http://localhost:{invalidPort}/api");
+
+            // Locate and click on the [Connect] button
+            var connectBtn = driver
+                .FindElementByAccessibilityId("buttonConnect");
+            connectBtn.Click();
+
+            // Assert the "Connect to Eventures API" window appeared again
+            Assert.That(driver.PageSource.Contains("Connect to Eventures API"));
+
+            // Assert an error message is displayed in the status box
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
             Assert.That(statusTextBox.Text.Contains("Error: HTTP error `No connection"));
         }
 
-        [Test, Order(2)]
+        [Test, Order(3)]
         public void Test_Connect_WithValidUrl()
         {
+            // Locate the URL field
             var apiUrlField = driver
                .FindElementByAccessibilityId("textBoxApiUrl");
+            apiUrlField.Clear();
+
+            // Send a valid URL- get the "baseUrl" from the
+            // "AppiumTestsBase" base class
+            // (it access "127.0.0.1" instead of "localhost" but they are the same)
             apiUrlField.SendKeys(@$"{this.baseUrl}/api");
 
+            // Locate and click on the [Connect] button
             var connectBtn = driver
                 .FindElementByAccessibilityId("buttonConnect");
             connectBtn.Click();
 
+            // Assert the "Event Board" window appeared again
             Assert.That(driver.PageSource.Contains(this.eventBoardWindowName));
 
+            // Assert a sucess message is displayed in the status box
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
             Assert.AreEqual("Connected to the Web API.", statusTextBox.Text);
         }
 
-        [Test, Order(3)]
+        [Test, Order(4)]
         public void Test_Reload_Unauthorized()
         {
+            // Locate and click on the [Reload] button
             var reloadBtn = driver
                 .FindElementByAccessibilityId("buttonReload");
             reloadBtn.Click();
 
+            // Assert the "Event Board" window is displayed
             Assert.That(driver.PageSource.Contains(this.eventBoardWindowName));
 
+            // Assert an error message is displayed in the status box
+            // as the current user is not logged-in
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
             Assert.That(statusTextBox.Text.Contains("Error: HTTP error `Unauthorized`"));
         }
 
-        [Test, Order(4)]
+        [Test, Order(5)]
         public void Test_Register()
         {
+            // Locate and click on the [Register] button
             var registerBtn = driver
                 .FindElementByAccessibilityId("buttonRegister");
             registerBtn.Click();
 
+            // Fill in valid data in the fields
             var usernameField = driver
                  .FindElementByAccessibilityId("textBoxUsername");
             usernameField.Clear();
@@ -128,29 +174,37 @@ namespace Eventures.Desktop.AppiumTests
             lastNameField.Clear();
             lastNameField.SendKeys("User");
 
+            // Click on the [Register] button under the "Register" form
             var registerConfirmBtn = driver
                 .FindElementByAccessibilityId("buttonRegisterConfirm");
             registerConfirmBtn.Click();
 
+            // Assert the "Event Board" windows appears
             Assert.That(driver.PageSource.Contains(this.eventBoardWindowName));
 
+            // Wait until the events are loaded
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
-            while(!statusTextBox.Text.Contains("Load successful:"))
+
+            while (!statusTextBox.Text.Contains("Load successful:"))
             {
                 statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
             }
+
+            // Assert a success message is displayed in the status box
             Assert.That(statusTextBox.Text.Contains("Load successful:"));
         }
 
         [Test]
         public void Test_Login()
         {
+            // Locate and click on the [Login] button
             var loginBtn = driver
                 .FindElementByAccessibilityId("buttonLogin");
             loginBtn.Click();
 
+            // Fill in valid data in the fields
             var usernameField = driver
                  .FindElementByAccessibilityId("textBoxUsername");
             usernameField.Clear();
@@ -161,12 +215,15 @@ namespace Eventures.Desktop.AppiumTests
             passworField.Clear();
             passworField.SendKeys(this.password);
 
+            // Click on the [Login] button under the "Login" form
             var loginConfirmBtn = driver
                 .FindElementByAccessibilityId("buttonLoginConfirm");
             loginConfirmBtn.Click();
 
+            // Assert the "Event Board" windows appears
             Assert.That(driver.PageSource.Contains(this.eventBoardWindowName));
 
+            // Assert a success message is displayed in the status box
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
             Assert.That(statusTextBox.Text.Contains("Load successful:"));
@@ -175,16 +232,18 @@ namespace Eventures.Desktop.AppiumTests
         [Test]
         public void Test_Reload()
         {
+            // Locate and click on the [Reload] button
             var reloadBtn = driver
                 .FindElementByAccessibilityId("buttonReload");
             reloadBtn.Click();
 
+            // Assert the "Event Board" windows appears
             Assert.That(driver.PageSource.Contains(this.eventBoardWindowName));
 
-            var eventsListSubItems = driver
-                .FindElementsByXPath("/Window/List/ListItem/Text[starts-with(@AutomationId,\"ListViewSubItem-\")]");
-            var eventsCount = eventsListSubItems.Count / this.columnsCount;
+            // Get the events count from the db context
+            var eventsCount = this.dbContext.Events.Count();
 
+            // Assert a success message with a correct events count is displayed 
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
             Assert.AreEqual($"Load successful: {eventsCount} events loaded.", statusTextBox.Text);
@@ -193,16 +252,18 @@ namespace Eventures.Desktop.AppiumTests
         [Test]
         public void Test_CreateEvent_ValidData()
         {
-            var eventsListSubItems = driver
-                .FindElementsByXPath("/Window/List/ListItem/Text[starts-with(@AutomationId,\"ListViewSubItem-\")]");
-            var eventsCountBefore = eventsListSubItems.Count / this.columnsCount;
+            // Get the events count before
+            var eventsCountBefore = this.dbContext.Events.Count();
 
+            // Locate and click on the [Create] button
             var createBtn = driver
                 .FindElementByAccessibilityId("buttonCreate");
             createBtn.Click();
 
+            // Assert the "Create a New Event" windows appears
             Assert.That(driver.PageSource.Contains(this.createEventWindowName));
 
+            // Fill in valid event data in the fields
             var eventName = "Fun Event" + DateTime.Now.Ticks;
             var nameField = driver
                 .FindElementByAccessibilityId("textBoxName");
@@ -215,29 +276,42 @@ namespace Eventures.Desktop.AppiumTests
             placeField.Clear();
             placeField.SendKeys(eventPlace);
 
+            // Locate the up arrow buttons
             var upBtns = driver
                 .FindElementsByName("Up");
+
+            // Click the first up arrow button to
+            // increase the event price field value
             var priceUpBtn = upBtns[0];
             priceUpBtn.Click();
             priceUpBtn.Click();
 
+            // Click the second up arrow button to
+            // increase the event tickets field value
             var ticketsUpBtn = upBtns[1];
             ticketsUpBtn.Click();
 
+            // Click on the [Create] button under the "Create" form
             var createConfirmationBtn = driver
                 .FindElementByAccessibilityId("buttonCreateConfirm");
             createConfirmationBtn.Click();
 
+            // Assert the "Create a New Event" windows disappears
             Assert.That(!driver.PageSource.Contains(this.createEventWindowName));
+
+            // Assert the "Event Board" windows appears
             Assert.That(driver.PageSource.Contains(this.eventBoardWindowName));
+
+            // Assert the new event is displayed correctly
             Assert.That(driver.PageSource.Contains(eventName));
             Assert.That(driver.PageSource.Contains(eventPlace));
             Assert.That(driver.PageSource.Contains(this.username));
 
-            eventsListSubItems = driver.FindElementsByXPath("/Window/List/ListItem/Text[starts-with(@AutomationId,\"ListViewSubItem-\")]");
-            var eventsCountAfter = eventsListSubItems.Count / this.columnsCount;
+            // Assert the events count increased by 1
+            var eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore + 1, eventsCountAfter);
 
+            // Assert a success message is displayed in the status box
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
             Assert.That(statusTextBox.Text.Contains("Load successful:"));
@@ -246,41 +320,50 @@ namespace Eventures.Desktop.AppiumTests
         [Test]
         public void Test_CreateEvent_InvalidData()
         {
-            var eventsListSubItems = driver
-                .FindElementsByXPath("/Window/List/ListItem/Text[starts-with(@AutomationId,\"ListViewSubItem-\")]");
-            var eventsCountBefore = eventsListSubItems.Count / this.columnsCount;
+            // Get the events count before
+            var eventsCountBefore = this.dbContext.Events.Count();
 
+            // Locate and click on the [Create] button
             var createBtn = driver
                 .FindElementByAccessibilityId("buttonCreate");
             createBtn.Click();
 
+            // Assert the "Create a New Event" windows appears
             Assert.That(driver.PageSource.Contains(this.createEventWindowName));
 
+            // Fill in valid event name
             var eventName = "Fun Event" + DateTime.Now.Ticks;
             var nameField = driver
                 .FindElementByAccessibilityId("textBoxName");
             nameField.Clear();
             nameField.SendKeys(eventName);
 
+            // Fill in invalid event place
             var invalidEventPlace = string.Empty;
             var placeField = driver
                 .FindElementByAccessibilityId("textBoxPlace");
             placeField.Clear();
             placeField.SendKeys(invalidEventPlace);
 
+            // Click on the [Create] button under the "Create" form
             var createConfirmationBtn = driver
                 .FindElementByAccessibilityId("buttonCreateConfirm");
             createConfirmationBtn.Click();
 
+            // Assert the "Create a New Event" windows disappears
             Assert.That(!driver.PageSource.Contains(this.createEventWindowName));
+
+            // Assert the "Event Board" windows appears
             Assert.That(driver.PageSource.Contains(this.eventBoardWindowName));
+
+            // Assert the page doesn't contain the new event
             Assert.That(!driver.PageSource.Contains(eventName));
 
-            eventsListSubItems = driver
-                .FindElementsByXPath("/Window/List/ListItem/Text[starts-with(@AutomationId,\"ListViewSubItem-\")]");
-            var eventsCountAfter = eventsListSubItems.Count / this.columnsCount;
+            // Assert the events count is not increased
+            var eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
 
+            // Assert an error message is displayed in the status box
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
             Assert.That(statusTextBox.Text.Contains("Error: HTTP error `BadRequest`."));
         }
@@ -288,8 +371,11 @@ namespace Eventures.Desktop.AppiumTests
         [OneTimeTearDown]
         public void TearDown()
         {
+            // Close the app and quit the driver
             driver.CloseApp();
             driver.Quit();
+
+            // Dispose of the Appium Local Service
             appiumLocalService.Dispose();
         }
     }
