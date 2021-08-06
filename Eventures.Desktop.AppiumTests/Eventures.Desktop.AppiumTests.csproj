@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -18,7 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Eventures.WebAPI.IntegrationTests\Eventures.WebAPI.IntegrationTests.csproj" />
+    <ProjectReference Include="..\Eventures.Tests.Common\Eventures.Tests.Common.csproj" />
+    <ProjectReference Include="..\Eventures.WebAPI\Eventures.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using Eventures.Tests.Common;
-using Eventures.WebAPI;
 using Eventures.WebAPI.IntegrationTests;
 using NUnit.Framework;
 using OpenQA.Selenium.Appium;
@@ -10,7 +8,7 @@ using OpenQA.Selenium.Appium.Windows;
 
 namespace Eventures.Desktop.AppiumTests
 {
-    public class AppiumTests : ApiTestsBase
+    public class AppiumTests : AppiumTestsBase
     {
         private AppiumLocalService appiumLocalService;
         private string AppPath = @"../../../../Eventures.Desktop/bin/Debug/net5.0-windows/Eventures.Desktop.exe";
@@ -46,7 +44,7 @@ namespace Eventures.Desktop.AppiumTests
             var apiUrlField = driver
                 .FindElementByAccessibilityId("textBoxApiUrl");
             var invalidPort = "1234";
-            apiUrlField.SendKeys($"https://localhost:{invalidPort}/api/");
+            apiUrlField.SendKeys($"http://localhost:{invalidPort}/api");
 
             var connectBtn = driver
                 .FindElementByAccessibilityId("buttonConnect");
@@ -62,6 +60,10 @@ namespace Eventures.Desktop.AppiumTests
         [Test, Order(2)]
         public void Test_Connect_WithValidUrl()
         {
+            var apiUrlField = driver
+               .FindElementByAccessibilityId("textBoxApiUrl");
+            apiUrlField.SendKeys(@$"{this.baseUrl}/api");
+
             var connectBtn = driver
                 .FindElementByAccessibilityId("buttonConnect");
             connectBtn.Click();
