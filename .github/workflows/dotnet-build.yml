@@ -7,17 +7,27 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with: { dotnet-version: 5.0.x }
-      - run: dotnet test Eventures.App.UnitTests --verbosity normal
-      - run: dotnet test Eventures.App.IntegrationTests --verbosity normal
-      - run: dotnet test Eventures.App.SeleniumTests --verbosity normal
+      - run: dotnet restore Eventures.App.UnitTests
+      - run: dotnet build Eventures.App.UnitTests --no-restore
+      - run: dotnet test Eventures.App.UnitTests --no-build --verbosity normal
+      - run: dotnet restore Eventures.App.IntegrationTests
+      - run: dotnet build Eventures.App.IntegrationTests --no-restore
+      - run: dotnet test Eventures.App.IntegrationTests --no-build --verbosity normal
+      - run: dotnet restore Eventures.App.SeleniumTests
+      - run: dotnet build Eventures.App.SeleniumTests --no-restore
+      - run: dotnet test Eventures.App.SeleniumTests --no-build --verbosity normal
   api-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with: { dotnet-version: 5.0.x }
-      - run: dotnet test Eventures.WebAPI.UnitTests --verbosity normal
-      - run: dotnet test Eventures.WebAPI.IntegrationTests --verbosity normal
+      - run: dotnet restore Eventures.WebAPI.UnitTests 
+      - run: dotnet build Eventures.WebAPI.UnitTests --no-restore
+      - run: dotnet test Eventures.WebAPI.UnitTests --no-build --verbosity normal
+      - run: dotnet restore Eventures.WebAPI.IntegrationTests
+      - run: dotnet build Eventures.WebAPI.IntegrationTests --no-restore
+      - run: dotnet test Eventures.WebAPI.IntegrationTests --no-build --verbosity normal
   appium-tests:
     runs-on: windows-latest
     steps:
@@ -27,5 +37,7 @@ jobs:
       # Install Node.js, install Appium, run Appium on ::1: and run the Appium tests
       - uses: actions/setup-node@v2
         with: { node-version: '14' }
+      - run: dotnet restore Eventures.Desktop.AppiumTests
+      - run: dotnet build Eventures.Desktop.AppiumTests --no-restore
       - run: npm install -g appium
-      - run: dotnet test Eventures.Desktop.AppiumTests --verbosity normal
+      - run: dotnet test Eventures.Desktop.AppiumTests --no-build --verbosity normal
