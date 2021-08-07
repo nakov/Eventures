@@ -37,6 +37,8 @@ jobs:
       # Install Node.js, install Appium, run Appium on ::1: and run the Appium tests
       - uses: actions/setup-node@v2
         with: { node-version: '14' }
+      - run: dotnet restore Eventures.Desktop
+      - run: dotnet build Eventures.Desktop --no-restore
       - run: dotnet restore Eventures.Desktop.AppiumTests
       - run: dotnet build Eventures.Desktop.AppiumTests --no-restore
       - run: npm install -g appium
