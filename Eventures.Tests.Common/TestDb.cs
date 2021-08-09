@@ -14,28 +14,16 @@ namespace Eventures.Tests.Common
         public EventuresUser UserPeter { get; private set; }
         public Event EventSoftuniada { get; private set; }
         public Event EventOpenFest { get; private set; }
-        public Event EventMSBuild { get; private set; }        
+        public Event EventMSBuild { get; private set; }      
         private string uniqueDbName;
 
-        /// <summary>
-        /// Creates a new ApplicationDbContext, which connects to the existing database, 
-        /// which was already created and initialized with the constructor `new TestDb()`.
-        /// </summary>
-        /// <returns></returns>
         public ApplicationDbContext CreateDbContext()
         {
-            // Use in-memory database for testing
-            // Attach the same DB every time, unless new TestDb() is called
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseInMemoryDatabase(uniqueDbName);
-            //optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=" + uniqueDbName);
             var dbContext = new ApplicationDbContext(optionsBuilder.Options);
             return dbContext;
         }
-
-        /// <summary>
-        /// Creates a new testing database and resets its data to its initial state.
-        /// </summary>
         public TestDb()
         {
             this.uniqueDbName = "Eventures-TestDb-" + DateTime.Now.Ticks;

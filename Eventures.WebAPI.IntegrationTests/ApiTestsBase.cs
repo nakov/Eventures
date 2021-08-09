@@ -1,14 +1,14 @@
-﻿using System.Net.Http;
-
-using NUnit.Framework;
+﻿using System;
+using System.Net.Http;
 
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 
+using NUnit.Framework;
+
 using Eventures.Data;
 using Eventures.Tests.Common;
 using Eventures.WebAPI.Models;
-using System;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
@@ -41,11 +41,12 @@ namespace Eventures.WebAPI.IntegrationTests
         private async Task<string> GetJWTAsync()
         {
             var userMaria = this.testDb.UserMaria;
-            var response = await this.httpClient.PostAsJsonAsync("api/users/login", new ApiLoginModel
-            {
-                Username = userMaria.UserName,
-                Password = userMaria.UserName
-            });
+            var response = await this.httpClient.PostAsJsonAsync("api/users/login",
+                new ApiLoginModel
+                {
+                    Username = userMaria.UserName,
+                    Password = userMaria.UserName
+                });
 
             var loginResponse = await response.Content.ReadAsAsync<ResponseWithToken>();
 

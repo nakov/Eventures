@@ -236,7 +236,7 @@ namespace Eventures.WebAPI.Controllers
                 return Unauthorized(new ResponseMsg { Message = "Cannot edit event, when not an owner." });
             }
 
-            ev.Name = eventModel.Name == null ? ev.Name : eventModel.Name;
+            ev.Name = eventModel.Name == null || eventModel.Name == string.Empty ? ev.Name : eventModel.Name;
             ev.Place = eventModel.Place == null || eventModel.Place == string.Empty ? ev.Place : eventModel.Place;
             ev.Start = eventModel.Start == null ? ev.Start : eventModel.Start.Value;
             ev.End = eventModel.End == null ? ev.End : eventModel.End.Value;
