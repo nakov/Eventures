@@ -22,5 +22,11 @@ namespace Eventures.Desktop.AppiumTests
                 testDb, "../../../../Eventures.WebAPI");
             this.baseUrl = this.testEventuresApp.ServerUri;
         }
+        
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            this.testEventuresApp.Dispose();
+        }
     }
 }
