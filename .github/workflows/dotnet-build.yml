@@ -1,7 +1,7 @@
 name: Build and Test
 on: [push]
 jobs:
-  app-tests:
+  webApp-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,7 +16,7 @@ jobs:
       - run: dotnet restore Eventures.App.SeleniumTests
       - run: dotnet build Eventures.App.SeleniumTests --no-restore
       - run: dotnet test Eventures.App.SeleniumTests --no-build --verbosity normal
-  api-tests:
+  webApi-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
       - run: dotnet restore Eventures.WebAPI.IntegrationTests
       - run: dotnet build Eventures.WebAPI.IntegrationTests --no-restore
       - run: dotnet test Eventures.WebAPI.IntegrationTests --no-build --verbosity normal
-  appium-tests:
+  desktopApp-tests:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
