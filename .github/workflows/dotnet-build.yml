@@ -5,8 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with: { dotnet-version: 5.0.x }
       - run: dotnet restore Eventures.App.UnitTests
       - run: dotnet build Eventures.App.UnitTests --no-restore
       - run: dotnet test Eventures.App.UnitTests --no-build --verbosity normal
@@ -20,8 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with: { dotnet-version: 5.0.x }
       - run: dotnet restore Eventures.WebAPI.UnitTests 
       - run: dotnet build Eventures.WebAPI.UnitTests --no-restore
       - run: dotnet test Eventures.WebAPI.UnitTests --no-build --verbosity normal
@@ -32,11 +28,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with: { dotnet-version: 5.0.x }
+      # - uses: actions/setup-dotnet@v1
+      #  with: { dotnet-version: 5.0.x }
       # Install Node.js, install Appium, run Appium on ::1: and run the Appium tests
-      - uses: actions/setup-node@v2
-        with: { node-version: '14' }
+      #- uses: actions/setup-node@v2
+      #  with: { node-version: '14' }
       - run: dotnet restore Eventures.Desktop
       - run: dotnet build Eventures.Desktop --no-restore
       - run: dotnet restore Eventures.Desktop.AppiumTests
