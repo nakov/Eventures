@@ -20,7 +20,7 @@ namespace Eventures.WebAPI.IntegrationTests
         protected HttpClient httpClient;
 
         [OneTimeSetUp]
-        public void OneTimeSetUp()
+        public void OneTimeSetUpBase()
         {
             this.testDb = new TestDb();
             this.dbContext = testDb.CreateDbContext();
@@ -51,6 +51,13 @@ namespace Eventures.WebAPI.IntegrationTests
             var loginResponse = await response.Content.ReadAsAsync<ResponseWithToken>();
 
             return loginResponse.Token;
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDownBase()
+        {
+            // Stop and dispose the local Web API server
+            this.testEventuresApp.Dispose();
         }
     }
 }

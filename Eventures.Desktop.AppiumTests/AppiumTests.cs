@@ -1,46 +1,15 @@
 using System;
-using System.IO;
 using System.Linq;
 using NUnit.Framework;
-using OpenQA.Selenium.Appium;
-using OpenQA.Selenium.Appium.Service;
-using OpenQA.Selenium.Appium.Windows;
 
 namespace Eventures.Desktop.AppiumTests
 {
     public class AppiumTests : AppiumTestsBase
     {
-        private AppiumLocalService appiumLocalService;
-        private string AppPath = @"../../../../Eventures.Desktop/bin/Debug/net5.0-windows/Eventures.Desktop.exe";
-        private WindowsDriver<WindowsElement> driver;
-
         private string username = "newUser" + DateTime.UtcNow.Ticks;
         private string password = "newPassword12";
         private string eventBoardWindowName = "Event Board";
         private string createEventWindowName = "Create a New Event";
-
-        [OneTimeSetUp]
-        public void Setup()
-        {
-            // Initialize Appium Local Service to start
-            // the Appium server automatically
-            appiumLocalService = new AppiumServiceBuilder()
-                .UsingAnyFreePort()
-                .Build();
-            appiumLocalService.Start();
-
-            var appiumOptions = new AppiumOptions() { PlatformName = "Windows" };
-            var fullPathName = Path.GetFullPath(AppPath);
-            appiumOptions.AddAdditionalCapability("app", fullPathName);
-
-            // Initialize the Windows driver with
-            // Appium local service and options
-            driver = new WindowsDriver<WindowsElement>(
-                appiumLocalService,
-                appiumOptions);
-            driver.Manage().Timeouts().ImplicitWait = 
-                TimeSpan.FromSeconds(10);
-        }
 
         [Test, Order(1)]
         public void Test_Connect_WithEmptyUrl()
@@ -366,17 +335,6 @@ namespace Eventures.Desktop.AppiumTests
             // Assert an error message is displayed in the status box
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
             Assert.That(statusTextBox.Text.Contains("Error: HTTP error `BadRequest`."));
-        }
-
-        [OneTimeTearDown]
-        public void TearDown()
-        {
-            // Close the app and quit the driver
-            driver.CloseApp();
-            driver.Quit();
-
-            // Dispose of the Appium Local Service
-            appiumLocalService.Dispose();
         }
     }
 }

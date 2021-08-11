@@ -1,20 +1,20 @@
 name: Build and Test
 on: [push]
 jobs:
-  webApp-tests:
+  WebApp-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: dotnet restore Eventures.App.UnitTests
-      - run: dotnet build Eventures.App.UnitTests --no-restore
-      - run: dotnet test Eventures.App.UnitTests --no-build --verbosity normal
-      - run: dotnet restore Eventures.App.IntegrationTests
-      - run: dotnet build Eventures.App.IntegrationTests --no-restore
-      - run: dotnet test Eventures.App.IntegrationTests --no-build --verbosity normal
-      - run: dotnet restore Eventures.App.SeleniumTests
-      - run: dotnet build Eventures.App.SeleniumTests --no-restore
-      - run: dotnet test Eventures.App.SeleniumTests --no-build --verbosity normal
-  webApi-tests:
+      - run: dotnet restore Eventures.WebApp.UnitTests
+      - run: dotnet build Eventures.WebApp.UnitTests --no-restore
+      - run: dotnet test Eventures.WebApp.UnitTests --no-build --verbosity normal
+      - run: dotnet restore Eventures.WebApp.IntegrationTests
+      - run: dotnet build Eventures.WebApp.IntegrationTests --no-restore
+      - run: dotnet test Eventures.WebApp.IntegrationTests --no-build --verbosity normal
+      - run: dotnet restore Eventures.WebApp.SeleniumTests
+      - run: dotnet build Eventures.WebApp.SeleniumTests --no-restore
+      - run: dotnet test Eventures.WebApp.SeleniumTests --no-build --verbosity normal
+  WebApi-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,15 +24,10 @@ jobs:
       - run: dotnet restore Eventures.WebAPI.IntegrationTests
       - run: dotnet build Eventures.WebAPI.IntegrationTests --no-restore
       - run: dotnet test Eventures.WebAPI.IntegrationTests --no-build --verbosity normal
-  desktopApp-tests:
+  DesktopApp-tests:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      # - uses: actions/setup-dotnet@v1
-      #  with: { dotnet-version: 5.0.x }
-      # Install Node.js, install Appium, run Appium on ::1: and run the Appium tests
-      #- uses: actions/setup-node@v2
-      #  with: { node-version: '14' }
       - run: dotnet restore Eventures.Desktop
       - run: dotnet build Eventures.Desktop --no-restore
       - run: dotnet restore Eventures.Desktop.AppiumTests

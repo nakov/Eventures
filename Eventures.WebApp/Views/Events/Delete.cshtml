@@ -1,0 +1,42 @@
+﻿@model Eventures.WebApp.Models.EventViewModel
+
+@{
+    ViewData["Title"] = "Delete Event";
+}
+
+<h1>Delete Existing Event</h1>
+<hr />
+
+@if (Model != null)
+{
+    <form asp-action="Delete">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Place" class="control-label"></label>
+                    <input asp-for="Place" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="submit" value="Delete" class="btn btn-primary" />
+                    &nbsp;&nbsp;&nbsp;
+                    <a asp-action="All" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <h2 class="text-danger">Event not found.</h2>
+    <a asp-action="All" class="btn btn-secondary">Back to List</a>
+}

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App", "Eventures.App\Eventures.App.csproj", "{0ACB3FB7-5965-4B50-A392-4CB50A96E222}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebApp", "Eventures.WebApp\Eventures.WebApp.csproj", "{0ACB3FB7-5965-4B50-A392-4CB50A96E222}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App.UnitTests", "Eventures.App.UnitTests\Eventures.App.UnitTests.csproj", "{1E2F7824-77B5-457D-9BEC-DB8A765F9044}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebApp.UnitTests", "Eventures.WebApp.UnitTests\Eventures.WebApp.UnitTests.csproj", "{1E2F7824-77B5-457D-9BEC-DB8A765F9044}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App.IntegrationTests", "Eventures.App.IntegrationTests\Eventures.App.IntegrationTests.csproj", "{BDAED536-4EBC-4D78-B844-845D34AD5746}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebApp.IntegrationTests", "Eventures.WebApp.IntegrationTests\Eventures.WebApp.IntegrationTests.csproj", "{BDAED536-4EBC-4D78-B844-845D34AD5746}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI", "Eventures.WebAPI\Eventures.WebAPI.csproj", "{010DD5B0-DD50-4026-9030-6301ECD97FC1}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.UnitTests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebAPI.IntegrationTests", "Eventures.WebAPI.IntegrationTests\Eventures.WebAPI.IntegrationTests.csproj", "{32D156D1-81CC-4C21-A710-61031F3FB655}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.App.SeleniumTests", "Eventures.App.SeleniumTests\Eventures.App.SeleniumTests.csproj", "{8C46501C-D333-4C97-8179-BFF34D53195C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.WebApp.SeleniumTests", "Eventures.WebApp.SeleniumTests\Eventures.WebApp.SeleniumTests.csproj", "{8C46501C-D333-4C97-8179-BFF34D53195C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Tests.Common", "Eventures.Tests.Common\Eventures.Tests.Common.csproj", "{1720D1B3-F84B-4F89-A1FF-B4A4E4DB900D}"
 EndProject
