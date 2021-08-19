@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+    tools:context="eventures.ui.AddEventActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewCreateNewEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/editTextApiUrl"
+            android:text="@string/create_a_new_event"
+            android:textSize="24sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/editTextName"
+            android:text="@string/addEventName"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="@string/event_name"
+            android:inputType="text"
+            android:textColorHint="#B6B0B0"
+            android:textSize="18sp"
+            tools:ignore="DuplicateSpeakableTextCheck" />
+
+        <TextView
+            android:id="@+id/labelPlace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/editTextPlace"
+            android:text="@string/addEventPlace"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTextPlace"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="top"
+            android:hint="@string/event_place"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:textColorHint="#B6B0B0"
+            tools:ignore="DuplicateSpeakableTextCheck"
+            tools:textSize="18sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/editTextStart"
+            android:text="@string/addEventStart"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTextStart"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:hint="@string/_2025_05_05t12_00_00"
+            android:textColorHint="#B6B0B0"
+            tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/editTextEnd"
+            android:text="@string/addEventEnd"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTextEnd"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:hint="@string/_2025_05_06t12_00_00"
+            android:textColorHint="#B6B0B0"
+            tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewTickets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/editTextTickets"
+            android:text="@string/total_tickets"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTextTickets"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:hint="@string/_100"
+            android:inputType="number"
+            android:textColorHint="#B6B0B0"
+            tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/editTextPrice"
+            android:text="@string/price_per_ticket"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTextPrice"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:hint="@string/_10_00"
+            android:inputType="numberDecimal"
+            android:nextFocusForward="@+id/buttonCreate"
+            android:textColorHint="#B6B0B0"
+            tools:ignore="DuplicateSpeakableTextCheck" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/buttonCancel"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancel"
+                android:textSize="18sp" />
+
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/buttonCreate"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:nextFocusForward="@+id/buttonCancel"
+                android:text="@string/create"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
