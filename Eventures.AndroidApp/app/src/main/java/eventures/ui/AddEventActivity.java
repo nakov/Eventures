@@ -2,6 +2,7 @@ package eventures.ui;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,13 +10,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eventures.android.R;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
@@ -30,8 +34,10 @@ public class AddEventActivity extends AppCompatActivity {
         EditText editTextName = findViewById(R.id.editTextName);
         editTextName.requestFocus();
         EditText editTextPlace = findViewById(R.id.editTextPlace);
-        EditText editTextStart = findViewById(R.id.editTextStart);
-        EditText editTextEnd = findViewById(R.id.editTextEnd);
+        EditText editTextStartDate = findViewById(R.id.editTextStartDate);
+        EditText editTextStartTime = findViewById(R.id.editTextStartTime);
+        EditText editTextEndDate = findViewById(R.id.editTextEndDate);
+        EditText editTextEndTime = findViewById(R.id.editTextEndTime);
         EditText editTextTickets = findViewById(R.id.editTextTickets);
         EditText editTextPrice = findViewById(R.id.editTextPrice);
 
@@ -42,8 +48,8 @@ public class AddEventActivity extends AppCompatActivity {
 
             // Create a date picker dialog and display it
             DatePickerDialog.OnDateSetListener onDateSetListener = (view, selectedYear, selectedMonth, selectedDay) -> {
-                LocalDateTime selectedDate = LocalDateTime.of(selectedYear, selectedMonth, selectedDay, 0, 0);
-                String selectedDateStr = selectedDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonth, selectedDay);
+                String selectedDateStr = selectedDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
                 ((EditText)v).setText(selectedDateStr);
             };
 
@@ -59,8 +65,32 @@ public class AddEventActivity extends AppCompatActivity {
             return false;
         };
 
-        editTextStart.setOnTouchListener(touchListenerDateSelect);
-        editTextEnd.setOnTouchListener(touchListenerDateSelect);
+        View.OnTouchListener touchListenerTimeSelect = (v, event) -> {
+            if (event.getAction() != MotionEvent.ACTION_DOWN)
+                return false;
+
+            // Create a time picker dialog and display it
+            TimePickerDialog.OnTimeSetListener onTimeSetListener = (view, selectedHour, selectedMinutes) -> {
+                LocalTime selectedTime = LocalTime.of(selectedHour, selectedMinutes);
+                String selectedTimeStr = selectedTime.format(DateTimeFormatter.ISO_LOCAL_TIME);
+                ((EditText)v).setText(selectedTimeStr);
+            };
+
+            final Calendar cldr = Calendar.getInstance();
+            int hour = cldr.get(Calendar.HOUR_OF_DAY);
+            int minutes = cldr.get(Calendar.MINUTE);
+
+            TimePickerDialog timePicker = new TimePickerDialog(AddEventActivity.this, onTimeSetListener,
+                    hour, minutes, true);
+            timePicker.show();
+            return false;
+        };
+
+        editTextStartDate.setOnTouchListener(touchListenerDateSelect);
+        editTextEndDate.setOnTouchListener(touchListenerDateSelect);
+
+        editTextStartTime.setOnTouchListener(touchListenerTimeSelect);
+        editTextEndTime.setOnTouchListener(touchListenerTimeSelect);
 
         Button buttonCancel = findViewById(R.id.buttonCancel);
         buttonCancel.setOnClickListener(v -> {
@@ -73,8 +103,8 @@ public class AddEventActivity extends AppCompatActivity {
             Intent resultData = new Intent();
             resultData.putExtra("name", editTextName.getText().toString());
             resultData.putExtra("place", editTextPlace.getText().toString());
-            resultData.putExtra("start", editTextStart.getText().toString());
-            resultData.putExtra("end", editTextEnd.getText().toString());
+            resultData.putExtra("start", editTextStartDate.getText().toString() + "T" + editTextStartTime.getText().toString());
+            resultData.putExtra("end", editTextEndDate.getText().toString() + "T" + editTextEndTime.getText().toString());
             resultData.putExtra("totalTickets", editTextTickets.getText().toString());
             resultData.putExtra("pricePerTicket", editTextPrice.getText().toString());
             setResult(RESULT_OK, resultData);
