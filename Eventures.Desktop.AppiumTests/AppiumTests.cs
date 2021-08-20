@@ -282,8 +282,10 @@ namespace Eventures.Desktop.AppiumTests
             nameField.SendKeys(eventName);
 
             // Fill in invalid event place, e.g. empty string
+            var invalidPlace = string.Empty;
             var placeField = driver.FindElementByAccessibilityId("textBoxPlace");
             placeField.Clear();
+            placeField.SendKeys(invalidPlace);
 
             // Click on the [Create] button under the "Create" form
             var createConfirmationBtn = driver
