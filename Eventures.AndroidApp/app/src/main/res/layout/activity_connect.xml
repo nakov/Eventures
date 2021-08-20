@@ -32,7 +32,7 @@
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <Button
-            android:id="@+id/buttonConnect"
+            android:id="@+id/buttonConfirmConnect"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

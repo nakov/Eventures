@@ -21,71 +21,20 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ActivityConnect extends AppCompatActivity {
-    private String apiBaseUrl;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
 
-        Button buttonConnect = findViewById(R.id.buttonConnect);
+        Button buttonConnect = findViewById(R.id.buttonConfirmConnect);
         buttonConnect.requestFocus();
         EditText editTextApiUrl = findViewById(R.id.editTextApiUrl);
 
         buttonConnect.setOnClickListener(v -> {
-            this.apiBaseUrl = editTextApiUrl.getText().toString();
-            if (!this.apiBaseUrl.endsWith("/"))
-                this.apiBaseUrl += "/";
-
-            try {
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(this.apiBaseUrl)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                EventuresAPI service = retrofit.create(EventuresAPI.class);
-
-                Call<List<Event>> request;
-
-                request = service.getEvents("Bearer ");
-                try {
-                    request.enqueue(new Callback<List<Event>>() {
-                        @Override
-                        public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                            if (response.code() != HttpURLConnection.HTTP_UNAUTHORIZED) {
-                                returnToActivityConnect();
-                            }
-                            else {
-                                connect();
-                                return;
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Event>> call, Throwable t) {
-                            returnToActivityConnect();
-                        }
-                    });
-                }
-                catch (Throwable tr) {
-                    returnToActivityConnect();
-                }
-
-            } catch (Throwable t) {
-                returnToActivityConnect();
-            }
+            Intent resultData = new Intent();
+            resultData.putExtra("paramApiBaseUrl", editTextApiUrl.getText().toString());
+            setResult(RESULT_OK, resultData);
+            finish();
         });
-    }
-
-    private void connect() {
-        EditText editTextApiUrl = findViewById(R.id.editTextApiUrl);
-        String apiUrl = editTextApiUrl.getText().toString();
-        Intent intent = new Intent(this, ActivityEvents.class);
-        intent.putExtra("paramApiBaseUrl", apiUrl);
-        startActivity(intent);
-    }
-
-    private void returnToActivityConnect() {
-        Intent intent = new Intent(this, ActivityConnect.class);
-        startActivity(intent);
     }
 }

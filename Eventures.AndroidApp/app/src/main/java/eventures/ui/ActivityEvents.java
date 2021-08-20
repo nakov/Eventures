@@ -1,9 +1,7 @@
 package eventures.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,13 +29,19 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ActivityEvents extends AppCompatActivity {
-    private static final int REQUEST_CODE_CREATE_TASK = 1001;
+    private static final int REQUEST_CODE_CONNECT = 1001;
     private static final int REQUEST_CODE_LOGIN = 1002;
     private static final int REQUEST_CODE_REGISTER = 1003;
+    private static final int REQUEST_CODE_CREATE_TASK = 1004;
     private OkHttpClient client;
     private String apiBaseUrl;
     private TextView textViewStatus;
     private String token = null;
+    private Button buttonConnect;
+    private Button buttonLogin;
+    private Button buttonRegister;
+    private Button buttonAdd;
+    private Button buttonReload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,34 +54,38 @@ public class ActivityEvents extends AppCompatActivity {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-        this.apiBaseUrl = this.getIntent().getStringExtra("paramApiBaseUrl");
-
         this.textViewStatus = findViewById(R.id.textViewStatus);
 
-        Button buttonLogin = findViewById(R.id.buttonLogin);
+        buttonConnect = findViewById(R.id.buttonConnect);
+        buttonConnect.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ActivityConnect.class);
+            startActivityForResult(intent, REQUEST_CODE_CONNECT);
+        });
+
+        buttonLogin = findViewById(R.id.buttonLogin);
+        buttonLogin.setEnabled(false);
         buttonLogin.setOnClickListener(v -> {
-            //hideSoftKeyboard(this);
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, REQUEST_CODE_LOGIN);
         });
 
-        Button buttonRegister = findViewById(R.id.buttonRegister);
+        buttonRegister = findViewById(R.id.buttonRegister);
+        buttonRegister.setEnabled(false);
         buttonRegister.setOnClickListener(v -> {
-            //hideSoftKeyboard(this);
             Intent intent = new Intent(this, RegisterActivity.class);
             startActivityForResult(intent, REQUEST_CODE_REGISTER);
         });
 
-        Button buttonAdd = findViewById(R.id.buttonAdd);
+        buttonAdd = findViewById(R.id.buttonAdd);
+        buttonAdd.setEnabled(false);
         buttonAdd.setOnClickListener(v -> {
-            //hideSoftKeyboard(this);
             Intent intent = new Intent(this, AddEventActivity.class);
             startActivityForResult(intent, REQUEST_CODE_CREATE_TASK);
         });
 
-        Button buttonReload = findViewById(R.id.buttonReload);
+        buttonReload = findViewById(R.id.buttonReload);
+        buttonReload.setEnabled(false);
         buttonReload.setOnClickListener(v -> {
-            //hideSoftKeyboard(this);
             getEvents();
         });
     }
@@ -85,14 +93,11 @@ public class ActivityEvents extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_CREATE_TASK && resultCode == RESULT_OK) {
-            String name = data.getStringExtra("name");
-            String place = data.getStringExtra("place");
-            String start = data.getStringExtra("start");
-            String end = data.getStringExtra("end");
-            String tickets = data.getStringExtra("totalTickets");
-            String price = data.getStringExtra("pricePerTicket");
-            createEvent(name, place, start, end, tickets, price);
+        if (requestCode == REQUEST_CODE_CONNECT && resultCode == RESULT_OK) {
+            this.apiBaseUrl = data.getStringExtra("paramApiBaseUrl");
+            if (!this.apiBaseUrl.endsWith("/"))
+                this.apiBaseUrl += "/";
+            connect();
         }
         if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
             String username = data.getStringExtra("username");
@@ -107,6 +112,70 @@ public class ActivityEvents extends AppCompatActivity {
             String firstName = data.getStringExtra("firstName");
             String lastName = data.getStringExtra("lastName");
             registerUser(userName, email, password, confirmPassword, firstName, lastName);
+        }
+        if (requestCode == REQUEST_CODE_CREATE_TASK && resultCode == RESULT_OK) {
+            String name = data.getStringExtra("name");
+            String place = data.getStringExtra("place");
+            String start = data.getStringExtra("start");
+            String end = data.getStringExtra("end");
+            String tickets = data.getStringExtra("totalTickets");
+            String price = data.getStringExtra("pricePerTicket");
+            createEvent(name, place, start, end, tickets, price);
+        }
+    }
+
+    private void connect() {
+        showStatusMsg("Connecting ...");
+
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(this.apiBaseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            EventuresAPI service = retrofit.create(EventuresAPI.class);
+
+            Call<List<Event>> request;
+
+            request = service.getEvents("Bearer ");
+            try {
+                request.enqueue(new Callback<List<Event>>() {
+                    @Override
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                        if (response.code() != HttpURLConnection.HTTP_UNAUTHORIZED) {
+                            changeLoginRegisterButtonsAccessibility(false);
+                            showErrorMsg("Cannot connect. Try again.");
+                            return;
+                        }
+
+                        changeLoginRegisterButtonsAccessibility(true);
+                        showSuccessMsg("Connected succesfully.");
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Event>> call, Throwable t) {
+                        changeLoginRegisterButtonsAccessibility(false);
+                        showErrorMsg("Could not connect. Try again.");
+                    }
+                });
+            }
+            catch (Throwable t) {
+                changeLoginRegisterButtonsAccessibility(false);
+                showErrorMsg("Could not connect. Try again.");
+            }
+        } catch (Throwable t) {
+            changeLoginRegisterButtonsAccessibility(false);
+            showErrorMsg("Could not connect. Try again.");
+        }
+    }
+
+    private void changeLoginRegisterButtonsAccessibility(Boolean enable) {
+        if(!enable) {
+            this.buttonLogin.setEnabled(false);
+            this.buttonRegister.setEnabled(false);
+        }
+        else {
+            this.buttonLogin.setEnabled(true);
+            this.buttonRegister.setEnabled(true);
         }
     }
 
@@ -131,21 +200,37 @@ public class ActivityEvents extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.code() != HttpURLConnection.HTTP_OK) {
-                        showErrorMsg("Error. HTTP code: " + response.message());
+                        changeAddReloadButtonsAccessibility(false);
+                        showErrorMsg("Could not authorize. Try again.");
                         return;
                     }
 
+                    changeAddReloadButtonsAccessibility(true);
+                    showSuccessMsg("Authorized successfully.");
                     token = response.body().getToken();
                     getEvents();
                 }
 
                 @Override
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    showErrorMsg(t.getMessage());
+                    changeAddReloadButtonsAccessibility(false);
+                    showErrorMsg("Could not authorize. Try again.");
                 }
             });
         } catch (Throwable t) {
-            showErrorMsg(t.getMessage());
+            changeAddReloadButtonsAccessibility(false);
+            showErrorMsg("Could not authorize. Try again.");
+        }
+    }
+
+    private void changeAddReloadButtonsAccessibility(Boolean enable) {
+        if(!enable) {
+            this.buttonAdd.setEnabled(false);
+            this.buttonReload.setEnabled(false);
+        }
+        else {
+            this.buttonAdd.setEnabled(true);
+            this.buttonReload.setEnabled(true);
         }
     }
 
@@ -221,20 +306,19 @@ public class ActivityEvents extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<EventReponse> call, Response<EventReponse> response) {
                     if (response.code() != HttpURLConnection.HTTP_OK) {
-                        showErrorMsg("Error. HTTP code: " + response.code() + ": " + response.message());
+                        showErrorMsg("Could not register a user. Try again.");
                         return;
                     }
-                    showSuccessMsg("New user registered.");
                     authorize(userName, password);
                 }
 
                 @Override
                 public void onFailure(Call<EventReponse> call, Throwable t) {
-                    showErrorMsg(t.getMessage());
+                    showErrorMsg("Could not register a user. Try again.");
                 }
             });
         } catch (Throwable t) {
-            showErrorMsg(t.getMessage());
+            showErrorMsg("Could not register a user. Try again.");
         }
     }
 
@@ -261,20 +345,19 @@ public class ActivityEvents extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<EventReponse> call, Response<EventReponse> response) {
                     if (response.code() != HttpURLConnection.HTTP_CREATED) {
-                        showErrorMsg("Error. HTTP code: " + response.code() + ": " + response.message());
+                        showErrorMsg("Could not create the new event. Try again.");
                         return;
                     }
-                    showSuccessMsg("New event created.");
                     getEvents();
                 }
 
                 @Override
                 public void onFailure(Call<EventReponse> call, Throwable t) {
-                    showErrorMsg(t.getMessage());
+                    showErrorMsg("Could not create the new event. Try again.");
                 }
             });
         } catch (Throwable t) {
-            showErrorMsg(t.getMessage());
+            showErrorMsg("Could not create the new event. Try again.");
         }
     }
 
@@ -291,11 +374,5 @@ public class ActivityEvents extends AppCompatActivity {
     private void showErrorMsg(String errMsg) {
         textViewStatus.setText(errMsg);
         textViewStatus.setBackgroundResource(R.color.backgroundError);
-    }
-
-    private void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager)activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 }
