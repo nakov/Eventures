@@ -20,7 +20,9 @@ namespace Eventures.Desktop.AppiumTests
         private TestEventuresApp<Startup> testEventuresApp;
         protected string baseUrl;
         private AppiumLocalService appiumLocalService;
-        private string AppPath = @"../../../../Eventures.Desktop/bin/Debug/net5.0-windows/Eventures.Desktop.exe";
+        private string ApiPath = @"../../../../Eventures.WebAPI";
+        private string AppPath = @"../../../../Eventures.Desktop/bin/Debug" +
+            @"/net5.0-windows/Eventures.Desktop.exe";
         protected WindowsDriver<WindowsElement> driver;
 
         [OneTimeSetUp]
@@ -28,8 +30,7 @@ namespace Eventures.Desktop.AppiumTests
         {
             this.testDb = new TestDb();
             this.dbContext = testDb.CreateDbContext();
-            this.testEventuresApp = new TestEventuresApp<Startup>(
-                testDb, "../../../../Eventures.WebAPI");
+            this.testEventuresApp = new TestEventuresApp<Startup>(testDb, ApiPath);
             this.baseUrl = this.testEventuresApp.ServerUri;
 
             // Initialize Appium Local Service to start the Appium server automatically

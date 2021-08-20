@@ -52,7 +52,7 @@
             this.textBoxApiUrl.Name = "textBoxApiUrl";
             this.textBoxApiUrl.Size = new System.Drawing.Size(254, 30);
             this.textBoxApiUrl.TabIndex = 1;
-            this.textBoxApiUrl.Text = "https://localhost:44359/api/";
+            this.textBoxApiUrl.Text = "http://localhost:4000/api/";
             // 
             // buttonConnect
             // 
