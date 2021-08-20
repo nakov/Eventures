@@ -209,7 +209,7 @@ namespace Eventures.Desktop.AppiumTests
             createBtn.Click();
 
             // Assert the "Create a New Event" windows appears
-            //Assert.That(driver.PageSource.Contains(this.createEventWindowName));
+            Assert.That(driver.PageSource.Contains(this.createEventWindowName));
 
             // Fill in valid event data in the fields
             var eventName = "Fun Event" + DateTime.Now.Ticks;
@@ -308,11 +308,7 @@ namespace Eventures.Desktop.AppiumTests
             // Assert an error message is displayed in the status box
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
 
-            //if (!statusTextBox.Text.Contains("Error"))
-            //{
-            //    statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
-            //}
-            //Assert.That(statusTextBox.Text.Contains("Error: HTTP error `BadRequest`."));
+            Assert.That(statusTextBox.Text.Contains("Error: HTTP error `BadRequest`."));
         }
     }
 }
