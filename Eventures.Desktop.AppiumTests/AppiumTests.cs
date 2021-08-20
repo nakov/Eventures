@@ -151,33 +151,33 @@ namespace Eventures.Desktop.AppiumTests
         public void Test_Login()
         {
             // Locate and click on the [Login] button
-            var loginBtn = driver.FindElementByAccessibilityId("buttonLogin");
+            var loginBtn = driver
+                .FindElementByAccessibilityId("buttonLogin");
             loginBtn.Click();
 
             // Fill in valid data in the fields
-            var usernameField = driver.FindElementByAccessibilityId("textBoxUsername");
+            var usernameField = driver
+                 .FindElementByAccessibilityId("textBoxUsername");
             usernameField.Clear();
             usernameField.SendKeys(this.username);
 
-            var passworField = driver.FindElementByAccessibilityId("textBoxPassword");
+            var passworField = driver
+                .FindElementByAccessibilityId("textBoxPassword");
             passworField.Clear();
             passworField.SendKeys(this.password);
 
             // Click on the [Login] button under the "Login" form
-            var loginConfirmBtn = driver.FindElementByAccessibilityId("buttonLoginConfirm");
+            var loginConfirmBtn = driver
+                .FindElementByAccessibilityId("buttonLoginConfirm");
             loginConfirmBtn.Click();
 
             // Assert the "Event Board" windows appears
             Assert.That(driver.PageSource.Contains(this.eventBoardWindowName));
 
+            // Assert a success message is displayed in the status box
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
-
-            // Get the events count from the database
-            var eventsInDb = this.dbContext.Events.Count();
-
-            // Assert a success message is displayed in the status box
-            Assert.AreEqual($"Load successful: {eventsInDb} events loaded.", statusTextBox.Text);
+            Assert.That(statusTextBox.Text.Contains("Load successful:"));
         }
 
         [Test]
@@ -205,7 +205,8 @@ namespace Eventures.Desktop.AppiumTests
             var eventsCountBefore = this.dbContext.Events.Count();
 
             // Locate and click on the [Create] button
-            var createBtn = driver.FindElementByAccessibilityId("buttonCreate");
+            var createBtn = driver
+                .FindElementByAccessibilityId("buttonCreate");
             createBtn.Click();
 
             // Assert the "Create a New Event" windows appears
@@ -213,24 +214,29 @@ namespace Eventures.Desktop.AppiumTests
 
             // Fill in valid event data in the fields
             var eventName = "Fun Event" + DateTime.Now.Ticks;
-            var nameField = driver.FindElementByAccessibilityId("textBoxName");
+            var nameField = driver
+                .FindElementByAccessibilityId("textBoxName");
             nameField.Clear();
             nameField.SendKeys(eventName);
 
             var eventPlace = "Beach";
-            var placeField = driver.FindElementByAccessibilityId("textBoxPlace");
+            var placeField = driver
+                .FindElementByAccessibilityId("textBoxPlace");
             placeField.Clear();
             placeField.SendKeys(eventPlace);
 
             // Locate the up arrow buttons
-            var upBtns = driver.FindElementsByName("Up");
+            var upBtns = driver
+                .FindElementsByName("Up");
 
-            // Click the first up arrow button to increase the event price field value
+            // Click the first up arrow button to
+            // increase the event price field value
             var priceUpBtn = upBtns[0];
             priceUpBtn.Click();
             priceUpBtn.Click();
 
-            // Click the second up arrow button to increase the event tickets field value
+            // Click the second up arrow button to
+            // increase the event tickets field value
             var ticketsUpBtn = upBtns[1];
             ticketsUpBtn.Click();
 
@@ -255,9 +261,9 @@ namespace Eventures.Desktop.AppiumTests
             Assert.AreEqual(eventsCountBefore + 1, eventsCountAfter);
 
             // Assert a success message is displayed in the status box
-            var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
-            Assert.AreEqual($"Load successful: {eventsCountAfter} events loaded.", 
-                statusTextBox.Text);
+            var statusTextBox = driver
+                .FindElementByXPath("/Window/StatusBar/Text");
+            Assert.That(statusTextBox.Text.Contains("Load successful:"));
         }
 
         [Test]
@@ -281,11 +287,12 @@ namespace Eventures.Desktop.AppiumTests
             nameField.Clear();
             nameField.SendKeys(eventName);
 
-            // Fill in invalid event place, e.g. empty string
-            var invalidPlace = string.Empty;
-            var placeField = driver.FindElementByAccessibilityId("textBoxPlace");
+            // Fill in invalid event place
+            var invalidEventPlace = string.Empty;
+            var placeField = driver
+                .FindElementByAccessibilityId("textBoxPlace");
             placeField.Clear();
-            placeField.SendKeys(invalidPlace);
+            placeField.SendKeys(invalidEventPlace);
 
             // Click on the [Create] button under the "Create" form
             var createConfirmationBtn = driver
