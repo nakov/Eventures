@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/editTextApiUrl"
-                android:text="@string/log_in"
+                android:text="@string/loginTitle"
                 android:textSize="24sp" />
 
             <Space
@@ -39,9 +39,10 @@
                 android:id="@+id/editTextUsername"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:hint="@string/your_username_here"
+                android:hint="@string/usernameHint"
                 android:inputType="text"
                 android:minHeight="48dp"
+                android:textColorHint="#B6B0B0"
                 android:textSize="18sp"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -58,10 +59,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="top"
-                android:hint="@string/your_password_here"
+                android:hint="@string/passwordHint"
                 android:importantForAutofill="no"
                 android:inputType="textPassword"
                 android:nextFocusForward="@+id/buttonLogin"
+                android:textColorHint="#B6B0B0"
                 tools:textSize="18sp" />
 
             <LinearLayout
@@ -79,7 +81,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/cancel"
+                    android:text="@string/buttonCancel"
                     android:textSize="18sp" />
 
 
@@ -94,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:nextFocusForward="@+id/buttonCancel"
-                    android:text="@string/login"
+                    android:text="@string/buttonLogin"
                     android:textSize="18sp" />
 
             </LinearLayout>

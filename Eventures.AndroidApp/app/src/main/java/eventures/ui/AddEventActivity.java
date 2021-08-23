@@ -65,6 +65,9 @@ public class AddEventActivity extends AppCompatActivity {
             return false;
         };
 
+        editTextStartDate.setOnTouchListener(touchListenerDateSelect);
+        editTextEndDate.setOnTouchListener(touchListenerDateSelect);
+
         View.OnTouchListener touchListenerTimeSelect = (v, event) -> {
             if (event.getAction() != MotionEvent.ACTION_DOWN)
                 return false;
@@ -85,9 +88,6 @@ public class AddEventActivity extends AppCompatActivity {
             timePicker.show();
             return false;
         };
-
-        editTextStartDate.setOnTouchListener(touchListenerDateSelect);
-        editTextEndDate.setOnTouchListener(touchListenerDateSelect);
 
         editTextStartTime.setOnTouchListener(touchListenerTimeSelect);
         editTextEndTime.setOnTouchListener(touchListenerTimeSelect);

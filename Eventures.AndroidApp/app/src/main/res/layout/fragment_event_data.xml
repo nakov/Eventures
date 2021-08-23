@@ -21,7 +21,7 @@
             android:id="@+id/labelEventId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/event_id"
+            android:text="@string/textViewId"
             android:textSize="18sp" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:id="@+id/labelName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/name"
+            android:text="@string/textViewName"
             android:textSize="18sp" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:id="@+id/labelPlace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/place"
+            android:text="@string/textViewPlace"
             android:textSize="18sp" />
 
         <TextView
@@ -77,7 +77,7 @@
             android:id="@+id/labelStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/start"
+            android:text="@string/textViewStart"
             android:textSize="18sp" />
 
         <TextView
@@ -96,7 +96,7 @@
             android:id="@+id/labelEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/end"
+            android:text="@string/textViewEnd"
             android:textSize="18sp" />
 
         <TextView
@@ -115,7 +115,7 @@
             android:id="@+id/labelTickets"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tickets"
+            android:text="@string/textViewTickets"
             android:textSize="18sp" />
 
         <TextView
@@ -134,7 +134,7 @@
             android:id="@+id/labelPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/price"
+            android:text="@string/textViewPrice"
             android:textSize="18sp" />
 
         <TextView
@@ -153,7 +153,7 @@
             android:id="@+id/labelOwner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/owner"
+            android:text="@string/textViewOwner"
             android:textSize="18sp" />
 
         <TextView

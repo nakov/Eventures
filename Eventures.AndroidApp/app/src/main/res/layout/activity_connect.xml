@@ -17,17 +17,17 @@
             android:id="@+id/textViewApiUrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/connect_to_eventures_api"
+            android:text="@string/connectTitle"
             android:textSize="24sp" />
 
         <EditText
             android:id="@+id/editTextApiUrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/api_url_here"
+            android:hint="@string/apiUrlHint"
             android:importantForAutofill="no"
             android:inputType="textUri"
-            android:text="@string/default_url"
+            android:text="@string/defaultUrl"
             android:textSize="20sp"
             tools:ignore="DuplicateSpeakableTextCheck" />
 

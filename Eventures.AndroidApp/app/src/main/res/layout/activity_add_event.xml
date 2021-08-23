@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:labelFor="@id/editTextApiUrl"
-            android:text="@string/create_a_new_event"
+            android:text="@string/createEventTitle"
             android:textSize="24sp" />
 
         <Space
@@ -38,7 +38,7 @@
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:hint="@string/event_name"
+            android:hint="@string/eventNameHint"
             android:inputType="text"
             android:textColorHint="#B6B0B0"
             android:textSize="18sp"
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="top"
-            android:hint="@string/event_place"
+            android:hint="@string/eventPlaceHint"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:lines="5"
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:ems="10"
-                android:hint="2025-05-05"
+                android:hint="@string/startDateHint"
                 android:textColorHint="#B6B0B0"
                 tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
 
@@ -101,7 +101,7 @@
                 android:layout_width="180dp"
                 android:layout_height="48dp"
                 android:ems="10"
-                android:hint="12:00"
+                android:hint="@string/timeHint"
                 android:textColorHint="#B6B0B0"
                 tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
         </LinearLayout>
@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:ems="10"
-                android:hint="2025-06-06"
+                android:hint="@string/endDateHint"
                 android:textColorHint="#B6B0B0"
                 tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
 
@@ -137,7 +137,7 @@
                 android:layout_width="180dp"
                 android:layout_height="48dp"
                 android:ems="10"
-                android:hint="12:00"
+                android:hint="@string/timeHint"
                 android:textColorHint="#B6B0B0"
                 tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
         </LinearLayout>
@@ -151,7 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:labelFor="@id/editTextTickets"
-            android:text="@string/total_tickets"
+            android:text="@string/addEventTotalTickets"
             android:textSize="18sp" />
 
         <EditText
@@ -159,7 +159,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:ems="10"
-            android:hint="@string/_100"
+            android:hint="@string/ticketsHint"
             android:inputType="number"
             android:textColorHint="#B6B0B0"
             tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
@@ -173,7 +173,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:labelFor="@id/editTextPrice"
-            android:text="@string/price_per_ticket"
+            android:text="@string/eventPriceHint"
             android:textSize="18sp" />
 
         <EditText
@@ -181,7 +181,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:ems="10"
-            android:hint="@string/_10_00"
+            android:hint="@string/priceHint"
             android:inputType="numberDecimal"
             android:nextFocusForward="@+id/buttonCreate"
             android:textColorHint="#B6B0B0"
@@ -202,7 +202,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/cancel"
+                android:text="@string/buttonCancel"
                 android:textSize="18sp" />
 
 
@@ -217,7 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:nextFocusForward="@+id/buttonCancel"
-                android:text="@string/create"
+                android:text="@string/buttonCreate"
                 android:textSize="18sp" />
 
         </LinearLayout>

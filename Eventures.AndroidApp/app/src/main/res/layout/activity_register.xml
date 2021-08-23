@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:labelFor="@id/editTextApiUrl"
-            android:text="@string/registerLabel"
+            android:text="@string/registerTitle"
             android:textSize="24sp" />
 
         <Space
@@ -39,8 +39,9 @@
             android:id="@+id/editTextUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/your_username"
+            android:hint="@string/usernameHint"
             android:inputType="text"
+            android:textColorHint="#B6B0B0"
             android:textSize="20sp"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -56,8 +57,9 @@
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/your_email"
+            android:hint="@string/emailHint"
             android:inputType="textEmailAddress"
+            android:textColorHint="#B6B0B0"
             android:textSize="20sp"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -74,9 +76,10 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="top"
-            android:hint="@string/your_password"
+            android:hint="@string/passwordHint"
             android:inputType="textPassword"
             android:lines="5"
+            android:textColorHint="#B6B0B0"
             tools:ignore="DuplicateSpeakableTextCheck"
             tools:textSize="20sp" />
 
@@ -93,9 +96,10 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="top"
-            android:hint="@string/your_confirm_password"
+            android:hint="@string/confirmPasswordHint"
             android:inputType="textPassword"
             android:lines="5"
+            android:textColorHint="#B6B0B0"
             tools:ignore="DuplicateSpeakableTextCheck"
             tools:textSize="20sp" />
 
@@ -111,8 +115,9 @@
             android:id="@+id/editTextFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/your_first_name"
+            android:hint="@string/firstNameHint"
             android:inputType="text"
+            android:textColorHint="#B6B0B0"
             android:textSize="20sp"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -128,9 +133,10 @@
             android:id="@+id/editTextLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/your_last_name"
+            android:hint="@string/lastNameHint"
             android:inputType="text"
             android:nextFocusForward="@+id/buttonConfirmRegister"
+            android:textColorHint="#B6B0B0"
             android:textSize="20sp"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -149,7 +155,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/cancel"
+                android:text="@string/buttonCancel"
                 android:textSize="18sp" />
 
 
@@ -164,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:nextFocusForward="@+id/buttonCancel"
-                android:text="@string/register"
+                android:text="@string/buttonRegister"
                 android:textSize="18sp" />
 
         </LinearLayout>
