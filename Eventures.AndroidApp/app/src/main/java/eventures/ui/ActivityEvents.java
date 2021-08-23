@@ -148,7 +148,7 @@ public class ActivityEvents extends AppCompatActivity {
                         }
 
                         changeLoginRegisterButtonsAccessibility(true);
-                        showSuccessMsg("Connected succesfully.");
+                        showSuccessMsg("Connected successfully.");
                     }
 
                     @Override

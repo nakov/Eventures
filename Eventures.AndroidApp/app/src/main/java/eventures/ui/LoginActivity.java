@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         });
 
-        Button buttonLogin = findViewById(R.id.buttonConfirmRegister);
+        Button buttonLogin = findViewById(R.id.buttonConfirmLogin);
         buttonLogin.setOnClickListener(v -> {
             Intent resultData = new Intent();
             resultData.putExtra("username", editTextUsername.getText().toString());
