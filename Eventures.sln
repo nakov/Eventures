@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Data", "Eventures
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Desktop", "Eventures.Desktop\Eventures.Desktop.csproj", "{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.Desktop.AppiumTests", "Eventures.Desktop.AppiumTests\Eventures.Desktop.AppiumTests.csproj", "{D801D311-1DC8-44AB-92D8-53FA232740B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Desktop.AppiumTests", "Eventures.Desktop.AppiumTests\Eventures.Desktop.AppiumTests.csproj", "{D801D311-1DC8-44AB-92D8-53FA232740B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.AndroidApp.AppiumTests", "Eventures.AndroidApp.AppiumTests\Eventures.AndroidApp.AppiumTests.csproj", "{6009C202-AC6A-46E1-A031-6553AF4819A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6009C202-AC6A-46E1-A031-6553AF4819A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6009C202-AC6A-46E1-A031-6553AF4819A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6009C202-AC6A-46E1-A031-6553AF4819A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6009C202-AC6A-46E1-A031-6553AF4819A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
