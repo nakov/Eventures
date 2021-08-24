@@ -38,12 +38,13 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - run: brew install gradle
+      - name: Access Source directory
+        run: cd Eventures.AndroidApp.AppiumTests
       - name: run emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: echo "Generated AVD."
+          script: ./gradlew build
       - run: dotnet restore Eventures.AndroidApp.AppiumTests
       - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
       - run: npm install -g appium
