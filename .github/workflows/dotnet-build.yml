@@ -42,6 +42,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
+          script: ./gradlew.bat assembleRelease
       - run: dotnet restore Eventures.AndroidApp.AppiumTests
       - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
       - run: npm install -g appium
