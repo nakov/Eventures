@@ -1,12 +1,12 @@
-using Eventures.Data;
-using Eventures.Tests.Common;
-using Eventures.WebAPI;
+using System;
+using System.IO;
 using NUnit.Framework;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.Service;
-using System;
-using System.IO;
+using Eventures.Data;
+using Eventures.WebAPI;
+using Eventures.Tests.Common;
 
 namespace Eventures.AndroidApp.AppiumTests
 {
