@@ -40,10 +40,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: dotnet restore Eventures.AndroidApp.AppiumTests
       - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
-      - name: run emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          script: ./gradlew build
+      - run: ./gradlew build
       - run: npm install -g appium
       - run: dotnet test Eventures.AndroidApp.AppiumTests --no-build --verbosity normal
