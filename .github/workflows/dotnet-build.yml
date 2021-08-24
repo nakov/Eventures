@@ -34,3 +34,16 @@ jobs:
       - run: dotnet build Eventures.Desktop.AppiumTests --no-restore
       - run: npm install -g appium
       - run: dotnet test Eventures.Desktop.AppiumTests --no-build --verbosity normal
+  AndroidApp-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew connectedCheck
+      - run: dotnet restore Eventures.AndroidApp.AppiumTests
+      - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
+      - run: npm install -g appium
+      - run: dotnet test Eventures.AndroidApp.AppiumTests --no-build --verbosity normal
