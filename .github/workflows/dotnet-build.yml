@@ -40,6 +40,8 @@ jobs:
       - uses: actions/checkout@v2
       - run: dotnet restore Eventures.AndroidApp.AppiumTests
       - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
+      - name: Make gradlew executable
+        run: chmod +x ./Eventures.AndroidApp/gradlew
       - run: ./Eventures.AndroidApp/gradlew build
       - run: npm install -g appium
       - run: dotnet test Eventures.AndroidApp.AppiumTests --no-build --verbosity normal
