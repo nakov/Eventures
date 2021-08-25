@@ -10,6 +10,7 @@ using System.IO;
 using System;
 using OpenQA.Selenium.Appium.Service.Options;
 using System.Collections.Generic;
+using OpenQA.Selenium.Support.UI;
 
 namespace Eventures.DesktopApp.AppiumTests
 {
@@ -24,6 +25,7 @@ namespace Eventures.DesktopApp.AppiumTests
         private string AppPath = @"../../../../Eventures.DesktopApp/bin/Debug" +
             @"/net5.0-windows/Eventures.DesktopApp.exe";
         protected WindowsDriver<WindowsElement> driver;
+        protected WebDriverWait wait;
 
         [OneTimeSetUp]
         public void OneTimeSetUpBase()
@@ -47,6 +49,8 @@ namespace Eventures.DesktopApp.AppiumTests
             
             // Set an implicit wait for the UI interaction
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
         }
 
         [OneTimeTearDown]

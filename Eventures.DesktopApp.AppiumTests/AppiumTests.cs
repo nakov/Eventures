@@ -51,7 +51,11 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert an error message is displayed in the status box
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
-            Assert.That(statusTextBox.Text.Contains("Error: HTTP error `No connection"));
+
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Contains("Error: HTTP error `No connection"));
+
+            Assert.IsTrue(messageAppears);
         }
 
         [Test, Order(3)]
@@ -73,7 +77,10 @@ namespace Eventures.DesktopApp.AppiumTests
 
             // Assert a sucess message is displayed in the status box
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
-            Assert.AreEqual("Connected to the Web API.", statusTextBox.Text);
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Equals("Connected to the Web API."));
+
+            Assert.IsTrue(messageAppears);
         }
 
         [Test, Order(4)]
@@ -89,7 +96,10 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert an error message is displayed in the status box
             // as the current user is not logged-in
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
-            Assert.That(statusTextBox.Text.Contains("Error: HTTP error `Unauthorized`"));
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Contains("Error: HTTP error `Unauthorized`"));
+
+            Assert.IsTrue(messageAppears);
         }
 
         [Test, Order(5)]
@@ -135,10 +145,10 @@ namespace Eventures.DesktopApp.AppiumTests
             // Wait until the events are loaded
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
 
-            while (!statusTextBox.Text.Contains("Load successful"))
-            {
-                statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
-            }
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Contains("Load successful"));
+
+            Assert.IsTrue(messageAppears);
 
             // Get the events count from the database
             var eventsInDb = this.dbContext.Events.Count();
@@ -173,6 +183,11 @@ namespace Eventures.DesktopApp.AppiumTests
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
 
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Contains("Load successful:"));
+
+            Assert.IsTrue(messageAppears);
+
             // Get the events count from the database
             var eventsInDb = this.dbContext.Events.Count();
 
@@ -190,11 +205,15 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert the "Event Board" windows appears
             Assert.That(driver.PageSource.Contains(this.eventBoardWindowName));
 
-            // Get the events count from the db context
-            var eventsInDb = this.dbContext.Events.Count();
-
-            // Assert a success message with a correct events count is displayed 
+            // Assert a success message is displayed 
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Contains("Load successful:"));
+
+            Assert.IsTrue(messageAppears);
+
+            // Get the events count from the db
+            var eventsInDb = this.dbContext.Events.Count();
             Assert.AreEqual($"Load successful: {eventsInDb} events loaded.", statusTextBox.Text);
         }
 
@@ -250,12 +269,17 @@ namespace Eventures.DesktopApp.AppiumTests
             Assert.That(driver.PageSource.Contains(eventPlace));
             Assert.That(driver.PageSource.Contains(this.username));
 
+            // Assert a success message is displayed in the status box
+            var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Contains("Load successful"));
+
+            Assert.IsTrue(messageAppears);
+
             // Assert the events count increased by 1
             var eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore + 1, eventsCountAfter);
 
-            // Assert a success message is displayed in the status box
-            var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
             Assert.AreEqual($"Load successful: {eventsCountAfter} events loaded.",
                 statusTextBox.Text);
         }
@@ -308,7 +332,10 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert an error message is displayed in the status box
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
 
-            Assert.That(statusTextBox.Text.Contains("Error: HTTP error `BadRequest`."));
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Contains("Error: HTTP error `BadRequest`."));
+
+            Assert.IsTrue(messageAppears);
         }
     }
 }

@@ -42,6 +42,11 @@ jobs:
       - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
       - name: Make gradlew executable
         run: chmod +x ./Eventures.AndroidApp/gradlew
+      - name: Run Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./Eventures.AndroidApp/gradlew assembleRelease
       - run: ./Eventures.AndroidApp/gradlew build
       - run: npm install -g appium
       - run: dotnet test Eventures.AndroidApp.AppiumTests --no-build --verbosity normal

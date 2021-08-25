@@ -7,6 +7,7 @@ using OpenQA.Selenium.Appium.Service;
 using Eventures.Data;
 using Eventures.WebAPI;
 using Eventures.Tests.Common;
+using OpenQA.Selenium.Support.UI;
 
 namespace Eventures.AndroidApp.AppiumTests
 {
@@ -20,6 +21,7 @@ namespace Eventures.AndroidApp.AppiumTests
         private string ApiPath = @"../../../../Eventures.WebAPI";
         private string AppPath = @"../../../../Eventures.AndroidApp/app/build/outputs/apk/debug/eventures.apk";
         protected AndroidDriver<AndroidElement> driver;
+        protected WebDriverWait wait;
 
         [OneTimeSetUp]
         public void OneTimeSetUpBase()
@@ -27,6 +29,8 @@ namespace Eventures.AndroidApp.AppiumTests
             this.testDb = new TestDb();
             this.dbContext = testDb.CreateDbContext();
             this.testEventuresApp = new TestEventuresApp<Startup>(testDb, ApiPath);
+
+            // Android Emulator accesses server through "10.0.2.2"
             this.baseUrl = this.testEventuresApp.ServerUri
                 .Replace("127.0.0.1", "10.0.2.2");
 
@@ -44,6 +48,8 @@ namespace Eventures.AndroidApp.AppiumTests
 
             // Set an implicit wait for the UI interaction
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
         }
 
         [OneTimeTearDown]

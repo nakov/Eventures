@@ -13,35 +13,41 @@ namespace Eventures.AndroidApp.AppiumTests
         private string buttonRegisterId = "buttonRegister";
         private string buttonAddId = "buttonAdd";
         private string buttonReloadId = "buttonReload";
-        private string statusBoxId = "textViewStatus";
+        private string statusTextBoxId = "textViewStatus";
 
         [Test, Order(1)]
         public void Test_Connect_WithInvalidUrl()
         {
+            // Assert that [Login] and [Register] buttons are disabled
             var loginBtn = driver.FindElementById(buttonLoginId);
             Assert.That(loginBtn.Enabled == false);
             var registerBtn = driver.FindElementById(buttonRegisterId);
             Assert.That(registerBtn.Enabled == false);
 
+            // Locate and click on the [Connect] button
             var connectBtn = driver.FindElementById(buttonConnectId);
             connectBtn.Click();
 
+            // Locate the API URL field
             var apiUrlField = driver.FindElementById("editTextApiUrl");
             apiUrlField.Clear();
 
+            // Type in an invalid URL, e.g. with invalid port number (1234)
             var invalidUrl = "http://10.0.2.2:1234/api/";
             apiUrlField.SendKeys(invalidUrl);
 
+            // Click on the [Connect] button under the "Connect" form
             var confirmConnectBtn = driver.FindElementById("buttonConfirmConnect");
             confirmConnectBtn.Click();
 
-            var statusBox = driver.FindElementById(statusBoxId);
-            while (statusBox.Text == "Connecting ...")
-            {
-                statusBox = driver.FindElementById(statusBoxId);
-            }
+            // Locate the status box
+            var statusTextBox = driver.FindElementById(statusTextBoxId);
 
-            Assert.AreEqual("Could not connect. Try again.", statusBox.Text);
+            // Wait until the server stops connecting tries
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Equals("Could not connect. Try again."));
+
+            Assert.IsTrue(messageAppears);
 
             Assert.That(loginBtn.Enabled == false);
             Assert.That(registerBtn.Enabled == false);
@@ -65,13 +71,11 @@ namespace Eventures.AndroidApp.AppiumTests
             var confirmConnectBtn = driver.FindElementById("buttonConfirmConnect");
             confirmConnectBtn.Click();
 
-            var statusBox = driver.FindElementById(statusBoxId);
-            while (statusBox.Text == "Connecting ...")
-            {
-                statusBox = driver.FindElementById(statusBoxId);
-            }
+            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Equals("Connected successfully."));
 
-            Assert.AreEqual("Connected successfully.", statusBox.Text);
+            Assert.IsTrue(messageAppears);
 
             Assert.That(loginBtn.Enabled == true);
             Assert.That(registerBtn.Enabled == true);
@@ -118,14 +122,12 @@ namespace Eventures.AndroidApp.AppiumTests
             var confirmRegisterBtn = driver.FindElementById("buttonConfirmRegister");
             confirmRegisterBtn.Click();
 
-            var statusBox = driver.FindElementById(statusBoxId);
-            while (!statusBox.Text.Contains("Events found:"))
-            {
-                statusBox = driver.FindElementById(statusBoxId);
-            }
-
+            var statusTextBox = driver.FindElementById(statusTextBoxId);
             var eventsInDb = this.dbContext.Events.Count();
-            Assert.That(statusBox.Text.Contains($"Events found: {eventsInDb}"));
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Equals($"Events found: {eventsInDb}"));
+
+            Assert.IsTrue(messageAppears);
 
             Assert.That(addBtn.Enabled == true);
             Assert.That(reloadBtn.Enabled == true);
@@ -149,14 +151,12 @@ namespace Eventures.AndroidApp.AppiumTests
             var confirmLoginBtn = driver.FindElementById("buttonConfirmLogin");
             confirmLoginBtn.Click();
 
-            var statusBox = driver.FindElementById(statusBoxId);
-            while (!statusBox.Text.Contains("Events found:"))
-            {
-                statusBox = driver.FindElementById(statusBoxId);
-            }
-
+            var statusTextBox = driver.FindElementById(statusTextBoxId);
             var eventsInDb = this.dbContext.Events.Count();
-            Assert.That(statusBox.Text.Contains($"Events found: {eventsInDb}"));
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Equals($"Events found: {eventsInDb}"));
+
+            Assert.IsTrue(messageAppears);
 
             var addBtn = driver.FindElementById(buttonAddId);
             Assert.That(addBtn.Enabled == true);
@@ -172,14 +172,12 @@ namespace Eventures.AndroidApp.AppiumTests
             Assert.That(reloadBtn.Enabled == true);
             reloadBtn.Click();
 
-            var statusBox = driver.FindElementById(statusBoxId);
-            while (!statusBox.Text.Contains("Events found:"))
-            {
-                statusBox = driver.FindElementById(statusBoxId);
-            }
-
+            var statusTextBox = driver.FindElementById(statusTextBoxId);
             var eventsInDb = this.dbContext.Events.Count();
-            Assert.That(statusBox.Text.Contains($"Events found: {eventsInDb}"));
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Equals($"Events found: {eventsInDb}"));
+
+            Assert.IsTrue(messageAppears);
         }
 
         [Test]
@@ -234,15 +232,14 @@ namespace Eventures.AndroidApp.AppiumTests
             var createBtn = driver.FindElementById("buttonCreate");
             createBtn.Click();
 
-            var statusBox = driver.FindElementById(statusBoxId);
-            while (!statusBox.Text.Contains("Events found:"))
-            {
-                statusBox = driver.FindElementById(statusBoxId);
-            }
+            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Contains($"Events found: "));
+
+            Assert.IsTrue(messageAppears);
 
             var eventsInDbAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsInDbBefore + 1, eventsInDbAfter);
-            Assert.That(statusBox.Text.Contains($"Events found: {eventsInDbAfter}"));
         }
 
         [Test]
@@ -289,13 +286,11 @@ namespace Eventures.AndroidApp.AppiumTests
             var createBtn = driver.FindElementById("buttonCreate");
             createBtn.Click();
 
-            var statusBox = driver.FindElementById(statusBoxId);
-            while (statusBox.Text.Contains("Creating new event ..."))
-            {
-                statusBox = driver.FindElementById(statusBoxId);
-            }
+            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Equals("Could not create the new event. Try again."));
 
-            Assert.That(statusBox.Text.Contains("Could not create the new event. Try again."));
+            Assert.IsTrue(messageAppears);
 
             var eventsInDbAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsInDbBefore, eventsInDbAfter);
