@@ -21,11 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Tests.Common", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Data", "Eventures.Data\Eventures.Data.csproj", "{B4FD2B43-692B-4863-8B3B-F530CA4643EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Desktop", "Eventures.Desktop\Eventures.Desktop.csproj", "{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.AndroidApp.AppiumTests", "Eventures.AndroidApp.AppiumTests\Eventures.AndroidApp.AppiumTests.csproj", "{6009C202-AC6A-46E1-A031-6553AF4819A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Desktop.AppiumTests", "Eventures.Desktop.AppiumTests\Eventures.Desktop.AppiumTests.csproj", "{D801D311-1DC8-44AB-92D8-53FA232740B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.DesktopApp", "Eventures.DesktopApp\Eventures.DesktopApp.csproj", "{0F2AD6DA-CC39-4A34-AA42-F9738BAD036F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.AndroidApp.AppiumTests", "Eventures.AndroidApp.AppiumTests\Eventures.AndroidApp.AppiumTests.csproj", "{6009C202-AC6A-46E1-A031-6553AF4819A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.DesktopApp.AppiumTests", "Eventures.DesktopApp.AppiumTests\Eventures.DesktopApp.AppiumTests.csproj", "{9DC205F8-4648-4C37-A6A5-2DBD6E73BEBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,18 +69,18 @@ Global
 		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4FD2B43-692B-4863-8B3B-F530CA4643EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B3E64A7-5C5B-472E-8CD9-E90531ABBD7F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D801D311-1DC8-44AB-92D8-53FA232740B6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6009C202-AC6A-46E1-A031-6553AF4819A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6009C202-AC6A-46E1-A031-6553AF4819A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6009C202-AC6A-46E1-A031-6553AF4819A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6009C202-AC6A-46E1-A031-6553AF4819A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F2AD6DA-CC39-4A34-AA42-F9738BAD036F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F2AD6DA-CC39-4A34-AA42-F9738BAD036F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F2AD6DA-CC39-4A34-AA42-F9738BAD036F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F2AD6DA-CC39-4A34-AA42-F9738BAD036F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DC205F8-4648-4C37-A6A5-2DBD6E73BEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DC205F8-4648-4C37-A6A5-2DBD6E73BEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DC205F8-4648-4C37-A6A5-2DBD6E73BEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DC205F8-4648-4C37-A6A5-2DBD6E73BEBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

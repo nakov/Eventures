@@ -1,5 +1,5 @@
 ﻿
-namespace Eventures_Desktop
+namespace Eventures.DesktopApp
 {
     partial class FormAllEvents
     {
@@ -42,8 +42,8 @@ namespace Eventures_Desktop
             // listViewEvents
             // 
             this.listViewEvents.AccessibleName = "events list box";
-            this.listViewEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.listViewEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewEvents.FullRowSelect = true;
             this.listViewEvents.HideSelection = false;

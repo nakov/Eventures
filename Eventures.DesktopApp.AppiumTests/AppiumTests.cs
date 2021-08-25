@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 
-namespace Eventures.Desktop.AppiumTests
+namespace Eventures.DesktopApp.AppiumTests
 {
     public class AppiumTests : AppiumTestsBase
     {

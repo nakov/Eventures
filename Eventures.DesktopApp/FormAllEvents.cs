@@ -5,9 +5,9 @@ using RestSharp;
 using RestSharp.Serialization.Json;
 using System.Drawing;
 using System.Linq;
-using Eventures.Desktop.Data;
+using Eventures.DesktopApp.Data;
 
-namespace Eventures_Desktop
+namespace Eventures.DesktopApp
 {
     public partial class FormAllEvents : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace Eventures_Desktop
+﻿namespace Eventures.DesktopApp
 {
     partial class FormRegister
     {

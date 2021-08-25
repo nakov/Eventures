@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Eventures_Desktop
+namespace Eventures.DesktopApp
 {
     public class LoginResponse
     {

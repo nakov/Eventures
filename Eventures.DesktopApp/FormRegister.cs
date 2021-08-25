@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Eventures_Desktop
+namespace Eventures.DesktopApp
 {
     public partial class FormRegister : Form
     {

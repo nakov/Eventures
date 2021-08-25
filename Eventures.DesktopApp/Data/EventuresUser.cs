@@ -1,4 +1,4 @@
-﻿namespace Eventures.Desktop.Data
+﻿namespace Eventures.DesktopApp.Data
 {
     public class EventuresUser
     {

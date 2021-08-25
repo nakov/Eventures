@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Eventures_Desktop
+namespace Eventures.DesktopApp
 {
     static class Program
     {

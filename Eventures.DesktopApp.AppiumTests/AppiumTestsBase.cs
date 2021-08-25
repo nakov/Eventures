@@ -11,7 +11,7 @@ using System;
 using OpenQA.Selenium.Appium.Service.Options;
 using System.Collections.Generic;
 
-namespace Eventures.Desktop.AppiumTests
+namespace Eventures.DesktopApp.AppiumTests
 {
     public class AppiumTestsBase
     {
@@ -21,8 +21,8 @@ namespace Eventures.Desktop.AppiumTests
         protected string baseUrl;
         private AppiumLocalService appiumLocalService;
         private string ApiPath = @"../../../../Eventures.WebAPI";
-        private string AppPath = @"../../../../Eventures.Desktop/bin/Debug" +
-            @"/net5.0-windows/Eventures.Desktop.exe";
+        private string AppPath = @"../../../../Eventures.DesktopApp/bin/Debug" +
+            @"/net5.0-windows/Eventures.DesktopApp.exe";
         protected WindowsDriver<WindowsElement> driver;
 
         [OneTimeSetUp]
