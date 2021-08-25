@@ -1,15 +1,12 @@
-﻿
-using NUnit.Framework;
+﻿using System;
+using System.IO;
 using Eventures.Data;
 using Eventures.Tests.Common;
 using Eventures.WebAPI;
+using NUnit.Framework;
+using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Service;
 using OpenQA.Selenium.Appium.Windows;
-using OpenQA.Selenium.Appium;
-using System.IO;
-using System;
-using OpenQA.Selenium.Appium.Service.Options;
-using System.Collections.Generic;
 using OpenQA.Selenium.Support.UI;
 
 namespace Eventures.DesktopApp.AppiumTests
@@ -50,6 +47,7 @@ namespace Eventures.DesktopApp.AppiumTests
             // Set an implicit wait for the UI interaction
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
+            // Set an explicit wait for the UI interaction
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
         }
 

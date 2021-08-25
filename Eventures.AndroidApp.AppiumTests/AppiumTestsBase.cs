@@ -1,12 +1,12 @@
 using System;
 using System.IO;
+using Eventures.Data;
+using Eventures.WebAPI;
+using Eventures.Tests.Common;
 using NUnit.Framework;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.Service;
-using Eventures.Data;
-using Eventures.WebAPI;
-using Eventures.Tests.Common;
 using OpenQA.Selenium.Support.UI;
 
 namespace Eventures.AndroidApp.AppiumTests
@@ -49,6 +49,7 @@ namespace Eventures.AndroidApp.AppiumTests
             // Set an implicit wait for the UI interaction
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
+            // Set an explicit wait for the UI interaction
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
         }
 
