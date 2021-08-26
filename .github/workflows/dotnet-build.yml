@@ -40,12 +40,13 @@ jobs:
       - uses: actions/checkout@v2
       - run: dotnet restore Eventures.AndroidApp.AppiumTests
       - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
+      - run: cd ./Eventures.AndroidApp
       - name: Make gradlew executable
         run: chmod +x ./Eventures.AndroidApp/gradlew
       - name: Run Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: ./Eventures.AndroidApp/gradlew build
+          script: ./Eventures.AndroidApp/gradlew connectedCheck
       - run: npm install -g appium
       - run: dotnet test Eventures.AndroidApp.AppiumTests --no-build --verbosity normal
