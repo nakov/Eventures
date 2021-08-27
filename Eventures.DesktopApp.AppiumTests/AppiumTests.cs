@@ -209,7 +209,7 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert a success message is displayed 
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
             var messageAppears = this.wait
-                .Until(s => statusTextBox.Text.Contains("Load successful:"));
+                .Until(s => statusTextBox.Text.Contains("Load successful"));
 
             Assert.IsTrue(messageAppears);
 
@@ -254,17 +254,27 @@ namespace Eventures.DesktopApp.AppiumTests
             priceUpBtn.Click();
             priceUpBtn.Click();
 
+
+            // TODO: debug
+            Console.WriteLine("Page source before [Create] btn click:\r\n" + driver.PageSource);
+
             // Click on the [Create] button under the "Create" form
-            var createConfirmationBtn = driver
-                .FindElementByAccessibilityId("buttonCreateConfirm");
+            var createConfirmationBtn = driver.FindElementByAccessibilityId("buttonCreateConfirm");
             createConfirmationBtn.Click();
+
+            // TODO: debug
+            Console.WriteLine("Page source after [Create] btn click:\r\n" + driver.PageSource);
 
             Thread.Sleep(3000);
 
+            // TODO: debug
+            Console.WriteLine("Page source after 3000 ms click:\r\n" + driver.PageSource);
+
+
             // Assert a success message is displayed in the status bar
-            var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
-            var loadSuccessfulMsgAppered = this.wait
-                .Until(s => statusTextBox.Text.Contains("Load successful: 4 events loaded"));
+            var loadSuccessfulMsgAppered = 
+                this.wait.Until(s => driver.FindElementByXPath("/Window/StatusBar/Text")
+                    .Text.Contains($"Load successful: {eventsCountBefore+1} events loaded"));
             Assert.IsTrue(loadSuccessfulMsgAppered);
 
             // Assert the "Create a New Event" windows disappears
@@ -282,9 +292,6 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert the events count increased by 1
             var eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore + 1, eventsCountAfter);
-
-            Assert.AreEqual($"Load successful: {eventsCountAfter} events loaded.",
-                statusTextBox.Text);
         }
 
         [Test, Order(9)]
