@@ -157,7 +157,7 @@ namespace Eventures.DesktopApp.AppiumTests
             Assert.AreEqual($"Load successful: {eventsInDb} events loaded.", statusTextBox.Text);
         }
 
-        [Test]
+        [Test, Order(6)]
         public void Test_Login()
         {
             // Locate and click on the [Login] button
@@ -195,7 +195,7 @@ namespace Eventures.DesktopApp.AppiumTests
             Assert.AreEqual($"Load successful: {eventsInDb} events loaded.", statusTextBox.Text);
         }
 
-        [Test]
+        [Test, Order(7)]
         public void Test_Reload()
         {
             // Locate and click on the [Reload] button
@@ -217,7 +217,7 @@ namespace Eventures.DesktopApp.AppiumTests
             Assert.AreEqual($"Load successful: {eventsInDb} events loaded.", statusTextBox.Text);
         }
 
-        [Test]
+        [Test, Order(8)]
         public void Test_CreateEvent_ValidData()
         {
             // Get the events count before
@@ -284,7 +284,7 @@ namespace Eventures.DesktopApp.AppiumTests
                 statusTextBox.Text);
         }
 
-        [Test]
+        [Test, Order(9)]
         public void Test_CreateEvent_InvalidData()
         {
             // Get the events count before
@@ -332,8 +332,7 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert an error message is displayed in the status box
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
 
-            var messageAppears = this.wait
-                .Until(s => statusTextBox.Text.Contains("Error: HTTP error `BadRequest`."));
+            var messageAppears = this.wait.Until(s => statusTextBox.Text.Contains("Error"));
 
             Assert.IsTrue(messageAppears);
         }
