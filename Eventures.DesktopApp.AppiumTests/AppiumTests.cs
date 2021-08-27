@@ -261,7 +261,7 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert a success message is displayed in the status bar
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
             var loadSuccessfulMsgAppered = this.wait
-                .Until(s => statusTextBox.Text.Contains("Load successful"));
+                .Until(s => statusTextBox.Text.Contains("Load successful: 4 events loaded"));
             Assert.IsTrue(loadSuccessfulMsgAppered);
 
             // Assert the "Create a New Event" windows disappears
@@ -270,11 +270,6 @@ namespace Eventures.DesktopApp.AppiumTests
 
             // Assert the "Event Board" windows appears
             Assert.That(pageSource.Contains(AppiumTests.EventBoardWindowName));
-
-
-            // Debug only!!!
-            Console.WriteLine("Page source:\r\n\r\n");
-            Console.WriteLine(pageSource);
 
             // Assert the new event is displayed correctly
             Assert.That(pageSource.Contains(eventName));
