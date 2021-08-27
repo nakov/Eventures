@@ -30,9 +30,8 @@ namespace Eventures.AndroidApp.AppiumTests
             this.dbContext = testDb.CreateDbContext();
             this.testEventuresApp = new TestEventuresApp<Startup>(testDb, ApiPath);
 
-            // Android Emulator accesses server through "10.0.2.2"
-            this.baseUrl = this.testEventuresApp.ServerUri
-                .Replace("127.0.0.1", "10.0.2.2");
+            // Android Emulator accesses the server's localhost through "10.0.2.2"
+            this.baseUrl = this.testEventuresApp.ServerUri.Replace("127.0.0.1", "10.0.2.2");
 
             // Initialize Appium Local Service to start the Appium server automatically
             appiumLocalService = new AppiumServiceBuilder().UsingAnyFreePort().Build();
