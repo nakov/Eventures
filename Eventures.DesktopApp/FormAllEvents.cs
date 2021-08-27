@@ -182,8 +182,8 @@ namespace Eventures.DesktopApp
 
                 // Visualize the returned events
                 var events = new JsonDeserializer().Deserialize<List<Event>>(response);
-                ShowSuccessMsg($"Load successful: {events.Count} events loaded.");
                 DisplayEventsInListView(events);
+                ShowSuccessMsg($"Load successful: {events.Count} events loaded.");
             }
             catch (Exception ex)
             {
@@ -258,6 +258,7 @@ namespace Eventures.DesktopApp
                 totalTickets = totalTickets,
                 pricePerTicket = pricePerTicket
             });
+            
             ShowMsg($"Creating new event ...");
             var response = await this.restClient.ExecuteAsync(request);
             if (!response.IsSuccessful)
