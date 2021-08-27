@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 
 namespace Eventures.DesktopApp.AppiumTests
@@ -257,6 +258,8 @@ namespace Eventures.DesktopApp.AppiumTests
             var createConfirmationBtn = driver
                 .FindElementByAccessibilityId("buttonCreateConfirm");
             createConfirmationBtn.Click();
+
+            Thread.Sleep(3000);
 
             // Assert a success message is displayed in the status bar
             var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
