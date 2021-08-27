@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 
@@ -270,6 +271,11 @@ namespace Eventures.DesktopApp.AppiumTests
 
             // Assert the "Event Board" windows appears
             Assert.That(pageSource.Contains(AppiumTests.EventBoardWindowName));
+
+
+            // Debug only!!!
+            Debug.WriteLine("Page source:\r\n\r\n");
+            Debug.WriteLine(pageSource);
 
             // Assert the new event is displayed correctly
             Assert.That(pageSource.Contains(eventName));
