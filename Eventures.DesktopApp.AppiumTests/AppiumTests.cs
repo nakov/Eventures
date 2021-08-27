@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 
@@ -274,8 +273,8 @@ namespace Eventures.DesktopApp.AppiumTests
 
 
             // Debug only!!!
-            Debug.WriteLine("Page source:\r\n\r\n");
-            Debug.WriteLine(pageSource);
+            Console.WriteLine("Page source:\r\n\r\n");
+            Console.WriteLine(pageSource);
 
             // Assert the new event is displayed correctly
             Assert.That(pageSource.Contains(eventName));
