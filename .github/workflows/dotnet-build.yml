@@ -49,7 +49,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with: 
           api-level: 29
-          script: echo "Android emulator successfully started"
+          script: echo "Android emulator successfully started" &
       - run: npm install -g appium
       - run: dotnet restore Eventures.AndroidApp.AppiumTests
       - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
