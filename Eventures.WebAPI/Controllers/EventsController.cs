@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 using Eventures.Data;
 using Eventures.WebAPI.Models;
+using System;
 
 namespace Eventures.WebAPI.Controllers
 {
@@ -142,6 +143,9 @@ namespace Eventures.WebAPI.Controllers
             };
             dbContext.Events.Add(ev);
             dbContext.SaveChanges();
+
+            // TODO: debug
+            Console.WriteLine($"Event added. Events = {dbContext.Events.Count()}");
 
             var eventViewModel = CreateEventModel(ev);
 

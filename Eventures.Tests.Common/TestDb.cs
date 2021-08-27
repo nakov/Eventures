@@ -24,6 +24,7 @@ namespace Eventures.Tests.Common
             var dbContext = new ApplicationDbContext(optionsBuilder.Options);
             return dbContext;
         }
+
         public TestDb()
         {
             this.uniqueDbName = "Eventures-TestDb-" + DateTime.Now.Ticks;

@@ -259,7 +259,8 @@ namespace Eventures.DesktopApp.AppiumTests
             createConfirmationBtn.Click();
 
             // Wait until in the database the events count is increased by 1
-            this.wait.Until(s => this.dbContext.Events.Count() == eventsCountBefore + 1);
+            this.wait.Until(
+                s => this.testDb.CreateDbContext().Events.Count() == eventsCountBefore + 1);
 
             // Assert a success message is displayed in the status bar
             var loadSuccessfulMsgAppered = 
