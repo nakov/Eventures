@@ -254,22 +254,12 @@ namespace Eventures.DesktopApp.AppiumTests
             priceUpBtn.Click();
             priceUpBtn.Click();
 
-
-            // TODO: debug
-            Console.WriteLine("Page source before [Create] btn click:\r\n" + driver.PageSource);
-
             // Click on the [Create] button under the "Create" form
             var createConfirmationBtn = driver.FindElementByAccessibilityId("buttonCreateConfirm");
             createConfirmationBtn.Click();
 
-            // TODO: debug
-            Console.WriteLine("Page source after [Create] btn click:\r\n" + driver.PageSource);
-
-            Thread.Sleep(3000);
-
-            // TODO: debug
-            Console.WriteLine("Page source after 3000 ms click:\r\n" + driver.PageSource);
-
+            // Wait until in the database the events count is increased by 1
+            this.wait.Until(s => this.dbContext.Events.Count() == eventsCountBefore + 1);
 
             // Assert a success message is displayed in the status bar
             var loadSuccessfulMsgAppered = 
@@ -288,10 +278,6 @@ namespace Eventures.DesktopApp.AppiumTests
             Assert.That(pageSource.Contains(eventName));
             Assert.That(pageSource.Contains(eventPlace));
             Assert.That(pageSource.Contains(this.username));
-
-            // Assert the events count increased by 1
-            var eventsCountAfter = this.dbContext.Events.Count();
-            Assert.AreEqual(eventsCountBefore + 1, eventsCountAfter);
         }
 
         [Test, Order(9)]
