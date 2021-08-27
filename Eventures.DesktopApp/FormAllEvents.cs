@@ -264,8 +264,7 @@ namespace Eventures.DesktopApp
             if (!response.IsSuccessful)
             {
                 this.ShowError(response);
-                return;
-               
+                return;               
             }
 
             this.ShowSuccessMsg($"Event created.");
