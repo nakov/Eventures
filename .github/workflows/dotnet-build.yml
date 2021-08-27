@@ -33,7 +33,7 @@ jobs:
       - run: dotnet restore Eventures.DesktopApp.AppiumTests
       - run: dotnet build Eventures.DesktopApp.AppiumTests --no-restore
       - run: npm install -g appium
-      - run: dotnet test Eventures.DesktopApp.AppiumTests --no-build --verbosity normal
+      - run: dotnet test Eventures.DesktopApp.AppiumTests --no-build --verbosity diagnostic
   AndroidApp-tests:
     runs-on: macos-latest
     steps:
