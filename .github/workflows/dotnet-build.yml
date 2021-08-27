@@ -38,15 +38,17 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - run: dotnet restore Eventures.AndroidApp.AppiumTests
-      - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
       - run: cd ./Eventures.AndroidApp
       - name: Make gradlew executable
-        run: chmod +x ./Eventures.AndroidApp/gradlew
-      - name: Run Emulator
+        run: chmod +x ./gradlew
+      - name: Create the Android executable APK (./app/build/outputs/apk/debug/eventures.apk)
+        run: ./gradlew assembleDebug
+      - name: Run the Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: ./Eventures.AndroidApp/gradlew connectedCheck
+      - run: cd ..
       - run: npm install -g appium
+      - run: dotnet restore Eventures.AndroidApp.AppiumTests
+      - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
       - run: dotnet test Eventures.AndroidApp.AppiumTests --no-build --verbosity normal
