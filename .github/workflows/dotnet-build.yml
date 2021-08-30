@@ -38,6 +38,14 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+               ~/.gradle/caches
+               ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+               ${{ runner.os }}-gradle-
       - name: Make gradlew executable
         run: chmod +x ./Eventures.AndroidApp/gradlew
       - name: Create the Android executable APK (./app/build/outputs/apk/debug/eventures.apk)
