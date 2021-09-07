@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 
 namespace Eventures.DesktopApp.AppiumTests
@@ -263,9 +262,9 @@ namespace Eventures.DesktopApp.AppiumTests
                 s => this.testDb.CreateDbContext().Events.Count() == eventsCountBefore + 1);
 
             // Assert a success message is displayed in the status bar
-            var loadSuccessfulMsgAppered = 
+            var loadSuccessfulMsgAppered =
                 this.wait.Until(s => driver.FindElementByXPath("/Window/StatusBar/Text")
-                    .Text.Contains($"Load successful: {eventsCountBefore+1} events loaded"));
+                    .Text.Contains($"Load successful: {eventsCountBefore + 1} events loaded"));
             Assert.IsTrue(loadSuccessfulMsgAppered);
 
             // Assert the "Create a New Event" windows disappears
