@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import eventures.data.Event;
 import eventures.data.EventReponse;
 import eventures.data.EventuresAPI;
-import eventures.data.EventuresUser;
 import eventures.data.LoginResponse;
 import com.example.eventures.android.R;
 import eventures.data.UserLoginModel;
@@ -21,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import eventures.data.UserRegisterModel;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -142,33 +142,37 @@ public class ActivityEvents extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         if (response.code() != HttpURLConnection.HTTP_UNAUTHORIZED) {
-                            changeLoginRegisterButtonsAccessibility(false);
+                            changeUserButtonsAccessibility(false);
+                            changeEventButtonsAccessibility(false);
                             showErrorMsg("Cannot connect. Try again.");
                             return;
                         }
 
-                        changeLoginRegisterButtonsAccessibility(true);
+                        changeUserButtonsAccessibility(true);
                         showSuccessMsg("Connected successfully.");
                     }
 
                     @Override
                     public void onFailure(Call<List<Event>> call, Throwable t) {
-                        changeLoginRegisterButtonsAccessibility(false);
+                        changeUserButtonsAccessibility(false);
+                        changeEventButtonsAccessibility(false);
                         showErrorMsg("Could not connect. Try again.");
                     }
                 });
             }
             catch (Throwable t) {
-                changeLoginRegisterButtonsAccessibility(false);
+                changeUserButtonsAccessibility(false);
+                changeEventButtonsAccessibility(false);
                 showErrorMsg("Could not connect. Try again.");
             }
         } catch (Throwable t) {
-            changeLoginRegisterButtonsAccessibility(false);
+            changeUserButtonsAccessibility(false);
+            changeEventButtonsAccessibility(false);
             showErrorMsg("Could not connect. Try again.");
         }
     }
 
-    private void changeLoginRegisterButtonsAccessibility(Boolean enable) {
+    private void changeUserButtonsAccessibility(Boolean enable) {
         if(!enable) {
             this.buttonLogin.setEnabled(false);
             this.buttonRegister.setEnabled(false);
@@ -200,12 +204,12 @@ public class ActivityEvents extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.code() != HttpURLConnection.HTTP_OK) {
-                        changeAddReloadButtonsAccessibility(false);
+                        changeEventButtonsAccessibility(false);
                         showErrorMsg("Could not authorize. Try again.");
                         return;
                     }
 
-                    changeAddReloadButtonsAccessibility(true);
+                    changeEventButtonsAccessibility(true);
                     showSuccessMsg("Authorized successfully.");
                     token = response.body().getToken();
                     getEvents();
@@ -213,17 +217,17 @@ public class ActivityEvents extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    changeAddReloadButtonsAccessibility(false);
+                    changeEventButtonsAccessibility(false);
                     showErrorMsg("Could not authorize. Try again.");
                 }
             });
         } catch (Throwable t) {
-            changeAddReloadButtonsAccessibility(false);
+            changeEventButtonsAccessibility(false);
             showErrorMsg("Could not authorize. Try again.");
         }
     }
 
-    private void changeAddReloadButtonsAccessibility(Boolean enable) {
+    private void changeEventButtonsAccessibility(Boolean enable) {
         if(!enable) {
             this.buttonAdd.setEnabled(false);
             this.buttonReload.setEnabled(false);
@@ -293,7 +297,7 @@ public class ActivityEvents extends AppCompatActivity {
                     .build();
             EventuresAPI service = retrofit.create(EventuresAPI.class);
 
-            EventuresUser user = new EventuresUser();
+            UserRegisterModel user = new UserRegisterModel();
             user.setUsername(userName);
             user.setEmail(email);
             user.setPassword(password);
