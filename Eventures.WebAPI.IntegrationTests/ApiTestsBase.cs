@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Eventures.Data;
 using Eventures.Tests.Common;
 using Eventures.WebAPI.Models;
+using Eventures.WebAPI.Models.User;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
@@ -42,7 +43,7 @@ namespace Eventures.WebAPI.IntegrationTests
         {
             var userMaria = this.testDb.UserMaria;
             var response = await this.httpClient.PostAsJsonAsync("api/users/login",
-                new ApiLoginModel
+                new LoginModel
                 {
                     Username = userMaria.UserName,
                     Password = userMaria.UserName

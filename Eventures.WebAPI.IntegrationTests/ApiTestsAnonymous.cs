@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 
 using Eventures.WebAPI.Models;
+using Eventures.WebAPI.Models.User;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
@@ -47,7 +48,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Arrange: create a new register model
             string username = "user" + DateTime.Now.Ticks;
             string password = "pass" + DateTime.Now.Ticks;
-            var newUser = new ApiRegisterModel()
+            var newUser = new RegisterModel()
             {
                 FirstName = "Test",
                 LastName = "User",
@@ -81,7 +82,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // with invalid username: username == empty string
             string username = string.Empty;
             string password = "pass" + DateTime.Now.Ticks;
-            var newUser = new ApiRegisterModel()
+            var newUser = new RegisterModel()
             {
                 FirstName = "Test",
                 LastName = "User",
@@ -102,7 +103,7 @@ namespace Eventures.WebAPI.IntegrationTests
 
             var postResponseContent = postResponse.Content.ReadAsStringAsync();
             var postResponseResult = postResponseContent.Result;
-            Assert.That(postResponseResult.Contains("Username is required!"));
+            Assert.That(postResponseResult.Contains("The Username field is required."));
 
             var usersCountAfter = this.dbContext.Users.Count();
             Assert.AreEqual(usersCountBefore, usersCountAfter);
@@ -117,7 +118,7 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Act
             var postResponse = await httpClient
-                .PostAsJsonAsync("/api/users/login", new ApiLoginModel
+                .PostAsJsonAsync("/api/users/login", new LoginModel
                 {
                     Username = userMaria.UserName,
                     Password = userMaria.UserName
@@ -141,7 +142,7 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Act: send a POST request with invalid password
             var postResponse = await httpClient.PostAsJsonAsync("/api/users/login", 
-                new ApiLoginModel
+                new LoginModel
             {
                 Username = userMaria.UserName,
                 Password = wrongPassword
