@@ -17,6 +17,5 @@ namespace Eventures.DesktopApp.Data
         public decimal PricePerTicket { get; set; }
 
         public EventuresUser Owner { get; set; }
-        public string OwnerId { get; set; }
     }
 }

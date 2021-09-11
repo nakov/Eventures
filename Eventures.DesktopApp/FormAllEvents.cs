@@ -37,10 +37,10 @@ namespace Eventures.DesktopApp
                 var formConnect = new FormConnect();
                 if (formConnect.ShowDialog() != DialogResult.OK)
                 {
-                    this.Close();
+                    Close();
                     break;
                 } 
-                connected = this.Connect(formConnect.ApiUrl);
+                connected = Connect(formConnect.ApiUrl);
             }
         }
 
@@ -55,7 +55,7 @@ namespace Eventures.DesktopApp
                 var homeResponse = this.restClient.Execute(homeRequest);
                 if (!homeResponse.IsSuccessful)
                 {
-                    this.ShowError(homeResponse);
+                    ShowError(homeResponse);
                     return false;
                 }
             }
@@ -66,7 +66,11 @@ namespace Eventures.DesktopApp
             }
 
             // Successfully connected to the Web API
-            this.ShowSuccessMsg("Connected to the Web API.");
+            ShowSuccessMsg("Connected to the Web API.");
+
+            buttonLogin.Enabled = true;
+            buttonRegister.Enabled = true;
+
             return true;
         }
 
@@ -76,7 +80,7 @@ namespace Eventures.DesktopApp
             if (formRegister.ShowDialog() != DialogResult.OK)
                 return;
 
-            this.Register(
+            Register(
                 formRegister.Username,
                 formRegister.Email,
                 formRegister.Password,
@@ -105,18 +109,21 @@ namespace Eventures.DesktopApp
                 var registerResponse = await this.restClient.ExecuteAsync(registerRequest);
                 if (!registerResponse.IsSuccessful)
                 {
-                    this.ShowError(registerResponse);
+                    EventButtonsChangeAccessibility(false);
+                    ShowError(registerResponse);
                     return;
                 }
             }
             catch (Exception ex)
             {
+                EventButtonsChangeAccessibility(false);
                 ShowErrorMsg(ex.Message);
                 return;
             }
 
-            this.ShowSuccessMsg($"User `{username}` registered.");
-            this.Login(username, password);
+            EventButtonsChangeAccessibility(true);
+            ShowSuccessMsg($"User `{username}` registered.");
+            Login(username, password);
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
@@ -125,7 +132,7 @@ namespace Eventures.DesktopApp
             if (formLogin.ShowDialog() != DialogResult.OK)
                 return;
 
-            this.Login(
+            Login(
                 formLogin.Username,
                 formLogin.Password);
         }
@@ -141,7 +148,8 @@ namespace Eventures.DesktopApp
 
                 if (!loginResponse.IsSuccessful)
                 {
-                    this.ShowError(loginResponse);
+                    EventButtonsChangeAccessibility(false);
+                    ShowError(loginResponse);
                     return;
                 }
 
@@ -150,17 +158,19 @@ namespace Eventures.DesktopApp
             }
             catch (Exception ex)
             {
+                EventButtonsChangeAccessibility(false);
                 ShowErrorMsg(ex.Message);
                 return;
             }
 
-            this.ShowSuccessMsg($"User `{username}` successfully logged-in.");
-            this.LoadEvents();
+            EventButtonsChangeAccessibility(true);
+            ShowSuccessMsg($"User `{username}` successfully logged-in.");
+            LoadEvents();
         }
 
         private void buttonReload_Click(object sender, EventArgs e)
         {
-            this.LoadEvents();
+            LoadEvents();
         }
 
         private async void LoadEvents()
@@ -236,7 +246,7 @@ namespace Eventures.DesktopApp
             if (formCreateEvent.ShowDialog() != DialogResult.OK)
                 return;
 
-            this.Create(formCreateEvent.EvName,
+            Create(formCreateEvent.EvName,
                 formCreateEvent.Place,
                 formCreateEvent.Start,
                 formCreateEvent.End,
@@ -263,12 +273,12 @@ namespace Eventures.DesktopApp
             var response = await this.restClient.ExecuteAsync(request);
             if (!response.IsSuccessful)
             {
-                this.ShowError(response);
+                ShowError(response);
                 return;               
             }
 
-            this.ShowSuccessMsg($"Event created.");
-            this.LoadEvents();
+            ShowSuccessMsg($"Event created.");
+            LoadEvents();
         }
 
         private void ShowError(IRestResponse response)
@@ -278,10 +288,10 @@ namespace Eventures.DesktopApp
                 string errText = $"HTTP error `{response.StatusCode}`.";
                 if (!string.IsNullOrWhiteSpace(response.Content))
                     errText += $" Details: {response.Content}";
-                this.ShowErrorMsg(errText);
+                ShowErrorMsg(errText);
             }
             else
-                this.ShowErrorMsg($"HTTP error `{response.ErrorMessage}`.");
+                ShowErrorMsg($"HTTP error `{response.ErrorMessage}`.");
         }
 
         private void ShowMsg(string msg)
@@ -303,6 +313,20 @@ namespace Eventures.DesktopApp
             this.toolStripStatusLabel.Text = $"Error: {errMsg}";
             this.toolStripStatusLabel.ForeColor = Color.White;
             this.toolStripStatusLabel.BackColor = Color.Red;
+        }
+
+        private void EventButtonsChangeAccessibility(bool enable)
+        {
+            if (enable)
+            {
+                buttonCreate.Enabled = true;
+                buttonReload.Enabled = true;
+            }
+            else
+            {
+                buttonCreate.Enabled = false;
+                buttonReload.Enabled = false;
+            }
         }
     }
 }
