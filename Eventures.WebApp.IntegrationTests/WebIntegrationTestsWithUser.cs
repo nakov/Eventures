@@ -69,7 +69,7 @@ namespace Eventures.WebApp.IntegrationTests
             // Assert user's events count is correct
             var currentUser = this.testDb.UserMaria;
             var userEventsCount = this.dbContext.Events.Where(e => e.OwnerId == currentUser.Id).Count();
-            Assert.That(responseBody.Contains($"Your have <b>{userEventsCount}</b> event(s)!"));
+            Assert.That(responseBody.Contains($"You have <b>{userEventsCount}</b> event(s)!"));
         }
 
         [Test]
@@ -188,9 +188,9 @@ namespace Eventures.WebApp.IntegrationTests
 
             var deleteResponseBody = await deleteResponse.Content.ReadAsStringAsync();
 
-            // Assert that the an "Event not found" message appears
+            // Assert that the an "Oops, you don't have access here." message appears
             // because our current logged-in user is UserMaria, not the owner of the event
-            Assert.That(deleteResponseBody.Contains("Event not found."));
+            Assert.That(deleteResponseBody.Contains("Oops, you don't have access here."));
         }
 
         [Test]
@@ -264,9 +264,9 @@ namespace Eventures.WebApp.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, editResponse.StatusCode);
             var editResponseBody = await editResponse.Content.ReadAsStringAsync();
 
-            // Assert that an "Event not found" message appears on the page
+            // Assert that an "Oops, you don't have access here." message appears on the page
             // because our current logged-in user is UserMaria, not the owner of the event
-            Assert.That(editResponseBody.Contains("Event not found."));
+            Assert.That(editResponseBody.Contains("Oops, you don't have access here."));
         }
 
         [Test]

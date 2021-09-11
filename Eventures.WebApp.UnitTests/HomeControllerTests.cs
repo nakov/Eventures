@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Eventures.WebApp.Models;
 using Eventures.WebApp.Controllers;
+using Eventures.Tests.Common;
 
 namespace Eventures.WebApp.UnitTests
 {
@@ -14,6 +15,8 @@ namespace Eventures.WebApp.UnitTests
         {
             // Arrange
             var controller = new HomeController(dbContext);
+            TestingUtils
+                .AssignCurrentUserForController(controller, testDb.UserMaria);
 
             // Act
             var result = controller.Index();
@@ -29,6 +32,8 @@ namespace Eventures.WebApp.UnitTests
             // Arrange
             var controller = new HomeController(dbContext);
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
+            TestingUtils
+                .AssignCurrentUserForController(controller, testDb.UserMaria);
 
             // Act
             var result = controller.Error();
@@ -36,8 +41,23 @@ namespace Eventures.WebApp.UnitTests
             // Assert
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
-            var resultModel = viewResult.Model as ErrorViewModel;
-            Assert.IsNotNull(resultModel);
+        }
+
+        [Test]
+        public void Test_Error401()
+        {
+            // Arrange
+            var controller = new HomeController(dbContext);
+            controller.ControllerContext.HttpContext = new DefaultHttpContext();
+            TestingUtils
+                .AssignCurrentUserForController(controller, testDb.UserMaria);
+
+            // Act
+            var result = controller.Error401();
+
+            // Assert
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
         }
     }
 }
