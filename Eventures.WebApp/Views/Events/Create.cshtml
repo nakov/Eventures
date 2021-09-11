@@ -1,4 +1,4 @@
-﻿@model Eventures.WebApp.Models.EventCreateBindingModel
+﻿@model EventCreateBindingModel
 
 @{
     ViewData["Title"] = "Create Event";
@@ -42,7 +42,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="PricePerTicket" class="control-label"></label>
-                <input asp-for="PricePerTicket" class="form-control" placeholder="Price Per Ticket..." />
+                <input asp-for="PricePerTicket" class="form-control" step="0.01" type="number" value="0.00" placeholder="Price Per Ticket..." />
                 <span asp-validation-for="PricePerTicket" class="text-danger"></span>
             </div>
         </div>

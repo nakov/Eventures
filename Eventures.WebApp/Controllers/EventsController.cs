@@ -29,7 +29,8 @@ namespace Eventures.WebApp.Controllers
                 .Include(e => e.Owner)
                 .Select(e => CreateEventViewModel(e))
                 .ToList();
-            return this.View(events);
+
+            return View(events);
         }
 
         public IActionResult Create()
@@ -40,10 +41,11 @@ namespace Eventures.WebApp.Controllers
                 Place = "Some Place",
                 Start = DateTime.Now.Date.AddDays(7).AddHours(10),
                 End = DateTime.Now.Date.AddDays(7).AddHours(18),
-                PricePerTicket = 10,
+                PricePerTicket = 10.00M,
                 TotalTickets = 100
             };
-            return this.View(model);
+
+            return View(model);
         }
 
         [HttpPost]
@@ -51,7 +53,7 @@ namespace Eventures.WebApp.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                string currentUserId = GetUserId();
                 Event eventForDb = new Event
                 {
                     Name = bindingModel.Name,
@@ -65,22 +67,29 @@ namespace Eventures.WebApp.Controllers
                 dbContext.Events.Add(eventForDb);
                 dbContext.SaveChanges();
 
-                return this.RedirectToAction("All");
+                return RedirectToAction("All");
             }
 
-            return this.View();
+            return View();
         }
 
         public IActionResult Delete(int id)
         {
             Event ev = dbContext.Events.Find(id);
-            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (ev == null || currentUserId != ev.OwnerId)
+            if (ev == null)
             {
-                // Not an owner or event with this id doesn't exist -> display "Event not found"
-                return this.View();
+                // Event with this id doesn't exist -> display "Event not found"
+                return View();
             }
-            return this.View(CreateEventViewModel(ev));
+
+            string currentUserId = GetUserId();
+            if (currentUserId != ev.OwnerId)
+            {
+                // When current user is not an owner
+                return Unauthorized();
+            }
+
+            return View(CreateEventViewModel(ev));
         }
 
         [HttpPost]
@@ -89,29 +98,39 @@ namespace Eventures.WebApp.Controllers
             Event ev = dbContext.Events.Find(eventModel.Id);
             if (ev == null)
             {
-                return this.View();
+                return View();
                 
             }
-            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            string currentUserId = GetUserId();
             if (currentUserId != ev.OwnerId)
             {
                 // Not an owner -> return "Unauthorized"
                 return Unauthorized();
             }
+
             dbContext.Events.Remove(ev);
             dbContext.SaveChanges();
-            return this.RedirectToAction("All");
+
+            return RedirectToAction("All");
         }
 
         public IActionResult Edit(int id)
         {
             Event ev = dbContext.Events.Find(id);
-            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (ev == null || currentUserId != ev.OwnerId)
+            if (ev == null)
             {
-                // Not an owner or event with this id doesn't exist -> display "Event not found"
-                return this.View();
+                // Event with this id doesn't exist -> display "Event not found"
+                return View();
             }
+
+            string currentUserId = GetUserId();
+            if (currentUserId != ev.OwnerId)
+            {
+                // When current user is not an owner
+                return Unauthorized();
+            }
+
             EventCreateBindingModel model = new EventCreateBindingModel()
             {
                 Name = ev.Name,
@@ -121,7 +140,8 @@ namespace Eventures.WebApp.Controllers
                 PricePerTicket = ev.PricePerTicket,
                 TotalTickets = ev.TotalTickets
             };
-            return this.View(model);
+
+            return View(model);
         }
 
         [HttpPost]
@@ -130,18 +150,21 @@ namespace Eventures.WebApp.Controllers
             Event ev = dbContext.Events.Find(id);
             if (ev == null)
             {
-                return this.View();
+                return View();
             }
-            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            string currentUserId = GetUserId();
             if (currentUserId != ev.OwnerId)
             {
                 // Not an owner -> return "Unauthorized"
                 return Unauthorized();
             }
+
             if (!this.ModelState.IsValid)
             {
-                return this.View(); 
+                return View(); 
             }
+
             ev.Name = bindingModel.Name;
             ev.Place = bindingModel.Place;
             ev.Start = bindingModel.Start;
@@ -150,7 +173,7 @@ namespace Eventures.WebApp.Controllers
             ev.PricePerTicket = bindingModel.PricePerTicket;
 
             dbContext.SaveChanges();
-            return this.RedirectToAction("All");
+            return RedirectToAction("All");
         }
 
         private static EventViewModel CreateEventViewModel(Event ev)
@@ -165,5 +188,8 @@ namespace Eventures.WebApp.Controllers
                 Owner = ev.Owner?.UserName
             };
         }
+
+        private string GetUserId()
+            => this.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

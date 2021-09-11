@@ -65,6 +65,8 @@ namespace Eventures.WebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseStatusCodePagesWithRedirects("/Home/Error{0}");
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

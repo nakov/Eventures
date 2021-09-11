@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Eventures.WebApp.Models.EventViewModel>
+﻿@model IEnumerable<EventViewModel>
 
 @{
     ViewData["Title"] = "All Events";
 }
 
-<h1>All Events</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
