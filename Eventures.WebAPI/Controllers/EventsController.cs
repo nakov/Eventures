@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Security.Claims;
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-
 using Eventures.Data;
 using Eventures.WebAPI.Models;
 using Eventures.WebAPI.Models.User;
 using Eventures.WebAPI.Models.Event;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Eventures.WebAPI.Controllers
 {

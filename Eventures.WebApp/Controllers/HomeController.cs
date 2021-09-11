@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using System.Security.Claims;
 
 using Eventures.Data;
 using Eventures.WebApp.Models;
-using System.Security.Claims;
-using System.Linq;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eventures.WebApp.Controllers
 {

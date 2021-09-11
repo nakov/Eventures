@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
+
+using Eventures.DesktopApp.Data;
+
 using RestSharp;
 using RestSharp.Serialization.Json;
-using System.Drawing;
-using System.Linq;
-using Eventures.DesktopApp.Data;
 
 namespace Eventures.DesktopApp
 {

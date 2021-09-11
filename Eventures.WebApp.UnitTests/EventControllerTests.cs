@@ -3,13 +3,13 @@ using System.Net;
 using System.Linq;
 using System.Collections.Generic;
 
-using NUnit.Framework;
-using Microsoft.AspNetCore.Mvc;
-
 using Eventures.Data;
 using Eventures.WebApp.Models;
 using Eventures.WebApp.Controllers;
 using Eventures.Tests.Common;
+
+using NUnit.Framework;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eventures.WebApp.UnitTests
 {

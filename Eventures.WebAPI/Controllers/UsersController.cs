@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 
+using Eventures.Data;
+using Eventures.WebAPI.Models;
+using Eventures.WebAPI.Models.User;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,10 +17,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-
-using Eventures.Data;
-using Eventures.WebAPI.Models;
-using Eventures.WebAPI.Models.User;
 
 namespace Eventures.WebAPI.Controllers
 {

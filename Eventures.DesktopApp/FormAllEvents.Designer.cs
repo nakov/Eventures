@@ -1,5 +1,4 @@
-﻿
-namespace Eventures.DesktopApp
+﻿namespace Eventures.DesktopApp
 {
     partial class FormAllEvents
     {

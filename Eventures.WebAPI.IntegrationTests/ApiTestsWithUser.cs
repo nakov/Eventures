@@ -6,13 +6,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using NUnit.Framework;
-using Newtonsoft.Json;
-
 using Eventures.Data;
 using Eventures.WebAPI.Models;
 using Eventures.WebAPI.Models.Event;
 using Eventures.WebAPI.Models.User;
+
+using NUnit.Framework;
+using Newtonsoft.Json;
 
 namespace Eventures.WebAPI.IntegrationTests
 {

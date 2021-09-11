@@ -2,7 +2,6 @@ using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-using Eventures.WebApp.Models;
 using Eventures.WebApp.Controllers;
 using Eventures.Tests.Common;
 

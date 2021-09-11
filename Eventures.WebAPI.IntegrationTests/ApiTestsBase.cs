@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Net.Http;
-
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
-
-using NUnit.Framework;
 
 using Eventures.Data;
 using Eventures.Tests.Common;
 using Eventures.WebAPI.Models;
 using Eventures.WebAPI.Models.User;
+
+using NUnit.Framework;
 
 namespace Eventures.WebAPI.IntegrationTests
 {

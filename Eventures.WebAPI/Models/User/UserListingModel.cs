@@ -2,10 +2,10 @@ namespace Eventures.WebAPI.Models.User
 {
     public class UserListingModel
     {
-        public string Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
+        public string Id { get; init; }
+        public string FirstName { get; init; }
+        public string LastName { get; init; }
+        public string Username { get; init; }
+        public string Email { get; init; }
     }
 }

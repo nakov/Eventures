@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using System.Globalization;
 using System.Security.Claims;
+using System.Collections.Generic;
+
+using Eventures.Data;
+using Eventures.WebApp.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using Eventures.Data;
-using Eventures.WebApp.Models;
 
 namespace Eventures.WebApp.Controllers
 {

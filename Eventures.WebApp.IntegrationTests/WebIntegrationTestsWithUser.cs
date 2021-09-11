@@ -5,9 +5,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using NUnit.Framework;
-
 using Eventures.Data;
+
+using NUnit.Framework;
 
 namespace Eventures.WebApp.IntegrationTests
 {

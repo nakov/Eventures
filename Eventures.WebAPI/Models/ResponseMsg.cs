@@ -2,6 +2,6 @@
 {
     public class ResponseMsg
     {
-        public string Message { get; set; }
+        public string Message { get; init; }
     }
 }

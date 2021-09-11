@@ -4,10 +4,10 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using NUnit.Framework;
-
 using Eventures.WebAPI.Models;
 using Eventures.WebAPI.Models.User;
+
+using NUnit.Framework;
 
 namespace Eventures.WebAPI.IntegrationTests
 {

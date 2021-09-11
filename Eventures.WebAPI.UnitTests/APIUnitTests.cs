@@ -5,16 +5,16 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-using NUnit.Framework;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-
 using Eventures.Data;
 using Eventures.Tests.Common;
 using Eventures.WebAPI.Controllers;
 using Eventures.WebAPI.Models;
 using Eventures.WebAPI.Models.Event;
 using Eventures.WebAPI.Models.User;
+
+using NUnit.Framework;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Eventures.WebAPI.UnitTests
 {

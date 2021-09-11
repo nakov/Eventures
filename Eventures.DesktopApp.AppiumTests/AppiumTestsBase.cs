@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+
 using Eventures.Data;
-using Eventures.Tests.Common;
 using Eventures.WebAPI;
+using Eventures.Tests.Common;
+
 using NUnit.Framework;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Service;

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using System.Collections.Generic;
+
+using Eventures.Data;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Eventures.Data;
 
 namespace Eventures.Tests.Common
 {
