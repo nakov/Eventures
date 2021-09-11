@@ -13,6 +13,8 @@ using Eventures.Data;
 using Eventures.Tests.Common;
 using Eventures.WebAPI.Controllers;
 using Eventures.WebAPI.Models;
+using Eventures.WebAPI.Models.Event;
+using Eventures.WebAPI.Models.User;
 
 namespace Eventures.WebAPI.UnitTests
 {
@@ -56,7 +58,7 @@ namespace Eventures.WebAPI.UnitTests
         public async Task Test_User_Register()
         {
             // Arrange: create a new register model
-            var newUser = new ApiRegisterModel()
+            var newUser = new RegisterModel()
             {
                 Username = "newUser",
                 FirstName = "Peter",
@@ -84,7 +86,7 @@ namespace Eventures.WebAPI.UnitTests
         {
             // Arrange: create a new register model with UserMaria data
             var userMaria = this.testDb.UserMaria;
-            var newUser = new ApiRegisterModel()
+            var newUser = new RegisterModel()
             {
                 Username = userMaria.UserName,
                 FirstName = userMaria.FirstName,
@@ -111,7 +113,7 @@ namespace Eventures.WebAPI.UnitTests
         public async Task Test_User_Register_UnmatchingPasswords()
         {
             // Arrange: create a new register model
-            var newUser = new ApiRegisterModel()
+            var newUser = new RegisterModel()
             {
                 Username = "user",
                 FirstName = "Peter",
@@ -141,7 +143,7 @@ namespace Eventures.WebAPI.UnitTests
         {
             // Arrange: create a login model
             var userMariaUsername = this.testDb.UserMaria.UserName;
-            var user = new ApiLoginModel()
+            var user = new LoginModel()
             {
                 Username = userMariaUsername,
                 Password = userMariaUsername
@@ -162,7 +164,7 @@ namespace Eventures.WebAPI.UnitTests
         public async Task Test_User_Login_InvalidCredentials()
         {
             // Arrange: create a login model
-            var user = new ApiLoginModel()
+            var user = new LoginModel()
             {
                 Username = this.testDb.UserMaria.UserName,
                 Password = "invalidPassword"
@@ -190,7 +192,7 @@ namespace Eventures.WebAPI.UnitTests
             // Assert the users are returned successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
 
-            var resultValue = result.Value as IEnumerable<ApiUserListingModel>;
+            var resultValue = result.Value as IEnumerable<UserListingModel>;
             Assert.AreEqual(this.dbContext.Users.Count(), resultValue.Count());
         }
 
@@ -220,7 +222,7 @@ namespace Eventures.WebAPI.UnitTests
             // Assert the events are returned successfully
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
 
-            var resultValues = result.Value as List<ApiEventListingModel>;
+            var resultValues = result.Value as List<EventListingModel>;
             Assert.AreEqual(this.dbContext.Events.Count(), resultValues.Count());
 
             var firstResult = resultValues.ToList()[0];
@@ -243,7 +245,7 @@ namespace Eventures.WebAPI.UnitTests
 
             // Assert the correct event is returned
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
-            var resultValue = result.Value as ApiEventListingModel;
+            var resultValue = result.Value as EventListingModel;
             Assert.AreEqual(this.testDb.EventSoftuniada.Id, resultValue.Id);
         }
 
@@ -251,7 +253,7 @@ namespace Eventures.WebAPI.UnitTests
         public void Test_Events_Create()
         {
             // Arrange: create a new event binding model
-            var newEventData = new EventCreateBindingModel()
+            var newEventData = new EventBindingModel()
             {
                 Name = "New Event " + DateTime.Now.Ticks,
                 Place = "Sofia",
@@ -270,11 +272,11 @@ namespace Eventures.WebAPI.UnitTests
             Assert.AreEqual((int)HttpStatusCode.Created, result.StatusCode);
 
             // Check response data
-            var resultValue = result.Value as ApiEventListingModel;
+            var resultValue = result.Value as EventListingModel;
             Assert.IsTrue(resultValue.Id > 0);
             Assert.AreEqual(newEventData.Place, resultValue.Place);
-            Assert.AreEqual(newEventData.Start, resultValue.Start);
-            Assert.AreEqual(newEventData.End, resultValue.End);
+            Assert.AreEqual(newEventData.Start.ToString("dd/MM/yyyy HH:mm"), resultValue.Start);
+            Assert.AreEqual(newEventData.End.ToString("dd/MM/yyyy HH:mm"), resultValue.End);
             Assert.AreEqual(newEventData.PricePerTicket, resultValue.PricePerTicket);
             Assert.AreEqual(newEventData.TotalTickets, resultValue.TotalTickets);
 
@@ -310,7 +312,7 @@ namespace Eventures.WebAPI.UnitTests
             dbContext.SaveChanges();
 
             // Create an event binding model with changed event name
-            var changedEvent = new EventCreateBindingModel()
+            var changedEvent = new EventBindingModel()
             {
                 Name = "House Party" + DateTime.Now.Ticks,
                 Place = "Ibiza",
@@ -345,7 +347,7 @@ namespace Eventures.WebAPI.UnitTests
         {
             // Arrange: create event binding model with chnaged event name
             var changedName = "Softuniada 2021 (New Edition)";
-            var changedEvent = new EventCreateBindingModel()
+            var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
                 Place = "Sofia",
@@ -379,7 +381,7 @@ namespace Eventures.WebAPI.UnitTests
 
             // Create event binding model with changed event name
             var changedName = "OpenFest 2021 (New Edition)";
-            var changedEvent = new EventCreateBindingModel()
+            var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
                 Place = "Online",
@@ -530,7 +532,7 @@ namespace Eventures.WebAPI.UnitTests
             Assert.That(this.dbContext.Events.Find(newEvent.Id) == null);
 
             // Assert the event is returned
-            var resultValue = result.Value as ApiEventListingModel;
+            var resultValue = result.Value as EventListingModel;
             Assert.IsNotNull(resultValue);
             Assert.That(resultValue.Id == newEvent.Id);
             Assert.That(resultValue.Name == newEvent.Name);

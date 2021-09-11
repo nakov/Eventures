@@ -1,6 +1,6 @@
-namespace Eventures.WebAPI.Models
+namespace Eventures.WebAPI.Models.User
 {
-    public class ApiUserListingModel
+    public class UserListingModel
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
