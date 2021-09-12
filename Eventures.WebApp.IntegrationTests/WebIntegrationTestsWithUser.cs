@@ -108,8 +108,8 @@ namespace Eventures.WebApp.IntegrationTests
                 {
                     { "Name", eventName },
                     { "Place", eventPlace },
-                    { "Start", $"{DateTime.UtcNow}"},
-                    { "End", $"{DateTime.UtcNow.AddHours(3)}"},
+                    { "Start", DateTime.UtcNow.ToString("r")},
+                    { "End", DateTime.UtcNow.AddHours(3).ToString("r")},
                     { "TotalTickets", "120"},
                     { "PricePerTicket", "20"}
                 });
@@ -149,8 +149,8 @@ namespace Eventures.WebApp.IntegrationTests
                 {
                     { "Name", invalidName },
                     { "Place", "Beach" },
-                    { "Start", $"{DateTime.UtcNow}"},
-                    { "End", $"{DateTime.UtcNow.AddHours(3)}"},
+                    { "Start", DateTime.UtcNow.ToString("r")},
+                    { "End", DateTime.UtcNow.AddHours(3).ToString("r")},
                     { "TotalTickets", "120"},
                     { "PricePerTicket", "20"}
                 });
@@ -292,8 +292,8 @@ namespace Eventures.WebApp.IntegrationTests
                 {
                     { "Name", editedEventName },
                     { "Place", softuniadaEvent.Place },
-                    { "Start", softuniadaEvent.Start.ToString()},
-                    { "End", softuniadaEvent.End.ToString()},
+                    { "Start", softuniadaEvent.Start.ToString("r")},
+                    { "End", softuniadaEvent.End.ToString("r")},
                     { "TotalTickets", softuniadaEvent.TotalTickets.ToString()},
                     { "PricePerTicket", softuniadaEvent.PricePerTicket.ToString()}
                 });
@@ -338,8 +338,8 @@ namespace Eventures.WebApp.IntegrationTests
                 {
                     { "Name", invalidEventName },
                     { "Place", softuniadaEvent.Place },
-                    { "Start", softuniadaEvent.Start.ToString()},
-                    { "End", softuniadaEvent.End.ToString()},
+                    { "Start", softuniadaEvent.Start.ToString("r")},
+                    { "End", softuniadaEvent.End.ToString("r")},
                     { "TotalTickets", softuniadaEvent.TotalTickets.ToString()},
                     { "PricePerTicket", softuniadaEvent.PricePerTicket.ToString()}
                 });
