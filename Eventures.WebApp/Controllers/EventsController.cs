@@ -185,6 +185,8 @@ namespace Eventures.WebApp.Controllers
                 Place = ev.Place,
                 Start = ev.Start.ToString("dd-MMM-yyyy HH:mm", CultureInfo.InvariantCulture),
                 End = ev.End.ToString("dd-MMM-yyyy HH:mm", CultureInfo.InvariantCulture),
+                TotalTickets = ev.TotalTickets,
+                PricePerTicket = ev.PricePerTicket,
                 Owner = ev.Owner?.UserName
             };
         }

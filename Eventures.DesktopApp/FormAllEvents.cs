@@ -232,7 +232,7 @@ namespace Eventures.DesktopApp
                     ev.Start.ToString(),
                     ev.End.ToString(),
                     ev.TotalTickets.ToString(),
-                    ev.PricePerTicket.ToString(),
+                    ev.PricePerTicket.ToString("f2"),
                     ev.Owner.UserName
                 });
                 this.listViewEvents.Items.Add(item);
