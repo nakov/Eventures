@@ -9,8 +9,8 @@ namespace Eventures.DesktopApp.Data
 
         public string Name { get; set; }
         public string Place { get; set; }
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
+        public string Start { get; set; }
+        public string End { get; set; }
         public int TotalTickets { get; set; }
 
         [Column(TypeName = "decimal(12,3)")]

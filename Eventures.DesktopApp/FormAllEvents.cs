@@ -229,8 +229,8 @@ namespace Eventures.DesktopApp
                     "" + ev.Id,
                     ev.Name,
                     ev.Place,
-                    ev.Start.ToString(),
-                    ev.End.ToString(),
+                    ev.Start,
+                    ev.End,
                     ev.TotalTickets.ToString(),
                     ev.PricePerTicket.ToString("f2"),
                     ev.Owner.UserName
