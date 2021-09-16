@@ -1,9 +1,12 @@
-using NUnit.Framework;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 using Eventures.WebApp.Controllers;
 using Eventures.Tests.Common;
+using Eventures.WebApp.Models;
+
+using NUnit.Framework;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace Eventures.WebApp.UnitTests
 {
@@ -13,9 +16,9 @@ namespace Eventures.WebApp.UnitTests
         public void Test_Index()
         {
             // Arrange
-            var controller = new HomeController(dbContext);
+            var controller = new HomeController(this.dbContext);
             TestingUtils
-                .AssignCurrentUserForController(controller, testDb.UserMaria);
+                .AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Act
             var result = controller.Index();
@@ -23,16 +26,19 @@ namespace Eventures.WebApp.UnitTests
             // Assert
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
+
+            var resultModel = viewResult.Model as HomeViewModel;
+            Assert.AreEqual(this.dbContext.Events.Count(), resultModel.AllEventsCount);
         }
 
         [Test]
         public void Test_Error()
         {
             // Arrange
-            var controller = new HomeController(dbContext);
+            var controller = new HomeController(this.dbContext);
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             TestingUtils
-                .AssignCurrentUserForController(controller, testDb.UserMaria);
+                .AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Act
             var result = controller.Error();
@@ -46,10 +52,10 @@ namespace Eventures.WebApp.UnitTests
         public void Test_Error401()
         {
             // Arrange
-            var controller = new HomeController(dbContext);
+            var controller = new HomeController(this.dbContext);
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             TestingUtils
-                .AssignCurrentUserForController(controller, testDb.UserMaria);
+                .AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Act
             var result = controller.Error401();

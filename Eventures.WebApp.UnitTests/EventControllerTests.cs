@@ -42,9 +42,9 @@ namespace Eventures.WebApp.UnitTests
             Assert.AreEqual(3, resultModel.Count);
 
             // Assert events are correct
-            Assert.AreEqual(testDb.EventSoftuniada.Name, resultModel[0].Name);
-            Assert.AreEqual(testDb.EventOpenFest.Name, resultModel[1].Name);
-            Assert.AreEqual(testDb.EventMSBuild.Name, resultModel[2].Name);
+            Assert.AreEqual(this.testDb.EventSoftuniada.Name, resultModel[0].Name);
+            Assert.AreEqual(this.testDb.EventOpenFest.Name, resultModel[1].Name);
+            Assert.AreEqual(this.testDb.EventMSBuild.Name, resultModel[2].Name);
         }
 
         [Test]
@@ -75,10 +75,10 @@ namespace Eventures.WebApp.UnitTests
                 TotalTickets = 500,
                 PricePerTicket = 20
             };
-            int eventsCountBefore = dbContext.Events.Count();
+            int eventsCountBefore = this.dbContext.Events.Count();
 
             // Set UserMaria as current logged user
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Act
             var result = controller.Create(newEventData);
@@ -88,12 +88,12 @@ namespace Eventures.WebApp.UnitTests
             Assert.AreEqual("All", redirectResult.ActionName);
 
             // Assert the count of events is +1
-            int eventsCountAfter = dbContext.Events.Count();
+            int eventsCountAfter = this.dbContext.Events.Count();
             Assert.That(eventsCountAfter == eventsCountBefore + 1);
 
             // Assert the new event appeared in the database
             var newEventInDb =
-                dbContext.Events.FirstOrDefault(e => e.Name == newEventData.Name);
+                this.dbContext.Events.FirstOrDefault(e => e.Name == newEventData.Name);
             Assert.IsTrue(newEventInDb.Id > 0);
             Assert.AreEqual(newEventData.Place, newEventInDb.Place);
             Assert.AreEqual(newEventData.Start, newEventInDb.Start);
@@ -117,9 +117,9 @@ namespace Eventures.WebApp.UnitTests
                 PricePerTicket = 20
             };
 
-            int eventsCountBefore = dbContext.Events.Count();
+            int eventsCountBefore = this.dbContext.Events.Count();
 
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Add error to the controller for the invalid name
             controller.ModelState.AddModelError("Name", "The Name field is required");
@@ -131,8 +131,8 @@ namespace Eventures.WebApp.UnitTests
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
 
-            int eventsCountAfter = dbContext.Events.Count();
-            Assert.That(eventsCountAfter == eventsCountBefore);
+            int eventsCountAfter = this.dbContext.Events.Count();
+            Assert.AreEqual(eventsCountAfter, eventsCountBefore);
 
             // Remove ModelState error for next tests
             controller.ModelState.Remove("Name");
@@ -150,12 +150,12 @@ namespace Eventures.WebApp.UnitTests
                 End = DateTime.Now.AddMonths(3),
                 TotalTickets = 20,
                 PricePerTicket = 120.00m,
-                OwnerId = testDb.UserMaria.Id
+                OwnerId = this.testDb.UserMaria.Id
             };
-            dbContext.Add(newEvent);
-            dbContext.SaveChanges();
+            this.dbContext.Add(newEvent);
+            this.dbContext.SaveChanges();
 
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Act
             var result = controller.Delete(newEvent.Id);
@@ -163,6 +163,7 @@ namespace Eventures.WebApp.UnitTests
             // Assert the event was deleted and returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
+
             var resultModel = viewResult.Model as EventViewModel;
             Assert.IsNotNull(resultModel);
             Assert.That(resultModel.Id == newEvent.Id);
@@ -174,8 +175,8 @@ namespace Eventures.WebApp.UnitTests
         public void Test_DeletePage_InvalidId()
         {
             // Arrange
-            int eventsCountBefore = dbContext.Events.Count();
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            int eventsCountBefore = this.dbContext.Events.Count();
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             var invalidId = -1;
             // Act: send invalid id
@@ -187,8 +188,8 @@ namespace Eventures.WebApp.UnitTests
             var resultModel = viewResult.Model as EventViewModel;
             Assert.IsNull(resultModel);
 
-            int eventsCountAfter = dbContext.Events.Count();
-            Assert.That(eventsCountAfter == eventsCountBefore);
+            int eventsCountAfter = this.dbContext.Events.Count();
+            Assert.AreEqual(eventsCountAfter, eventsCountBefore);
         }
 
         [Test]
@@ -203,10 +204,10 @@ namespace Eventures.WebApp.UnitTests
                 End = DateTime.Now.AddMonths(3),
                 TotalTickets = 20,
                 PricePerTicket = 120.00m,
-                OwnerId = testDb.UserMaria.Id
+                OwnerId = this.testDb.UserMaria.Id
             };
-            dbContext.Add(newEvent);
-            dbContext.SaveChanges();
+            this.dbContext.Add(newEvent);
+            this.dbContext.SaveChanges();
 
             // Create a view model with the new event id as content
             EventViewModel model = new EventViewModel()
@@ -214,7 +215,7 @@ namespace Eventures.WebApp.UnitTests
                 Id = newEvent.Id
             };
 
-            int eventsCountBefore = dbContext.Events.Count();
+            int eventsCountBefore = this.dbContext.Events.Count();
 
             // Act
             var result = controller.Delete(model);
@@ -224,11 +225,11 @@ namespace Eventures.WebApp.UnitTests
             Assert.AreEqual("All", redirectResult.ActionName);
 
             // Assert the event is deleted
-            dbContext = this.testDb.CreateDbContext();
-            int eventsCountAfter = dbContext.Events.Count();
-            Assert.That(eventsCountAfter == eventsCountBefore - 1);
+            this.dbContext = this.testDb.CreateDbContext();
+            int eventsCountAfter = this.dbContext.Events.Count();
+            Assert.AreEqual(eventsCountAfter, eventsCountBefore - 1);
 
-            var deletedEventInDb = dbContext.Events.Find(model.Id);
+            var deletedEventInDb = this.dbContext.Events.Find(model.Id);
             Assert.IsNull(deletedEventInDb);
         }
 
@@ -241,7 +242,7 @@ namespace Eventures.WebApp.UnitTests
             {
                 Id = invalidId
             };
-            int eventsCountBefore = dbContext.Events.Count();
+            int eventsCountBefore = this.dbContext.Events.Count();
 
             // Act
             var result = controller.Delete(model);
@@ -253,8 +254,8 @@ namespace Eventures.WebApp.UnitTests
             var resultModel = viewResult.Model as EventViewModel;
             Assert.IsNull(resultModel);
 
-            int eventsCountAfter = dbContext.Events.Count();
-            Assert.That(eventsCountAfter == eventsCountBefore);
+            int eventsCountAfter = this.dbContext.Events.Count();
+            Assert.AreEqual(eventsCountAfter, eventsCountBefore);
         }
 
         [Test]
@@ -270,7 +271,7 @@ namespace Eventures.WebApp.UnitTests
             };
 
             // Assign UserMaria to the controller
-            int eventsCountBefore = dbContext.Events.Count();
+            int eventsCountBefore = this.dbContext.Events.Count();
 
             TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
@@ -284,8 +285,8 @@ namespace Eventures.WebApp.UnitTests
             Assert.IsNotNull(unauthorizedResult);
 
             // Assert the event is not deleted from the database
-            int eventsCountAfter = dbContext.Events.Count();
-            Assert.That(eventsCountBefore == eventsCountAfter);
+            int eventsCountAfter = this.dbContext.Events.Count();
+            Assert.AreEqual(eventsCountBefore, eventsCountAfter);
         }
 
         [Test]
@@ -293,7 +294,7 @@ namespace Eventures.WebApp.UnitTests
         {
             // Arrange: get the "Softuniada" event from the database for editing
             var softuniadaEvent = this.testDb.EventSoftuniada;
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Act
             var result = controller.Edit(softuniadaEvent.Id);
@@ -305,19 +306,19 @@ namespace Eventures.WebApp.UnitTests
             // Assert fields are filled with correct data
             var resultModel = viewResult.Model as EventCreateBindingModel;
             Assert.IsNotNull(resultModel);
-            Assert.That(resultModel.Name == softuniadaEvent.Name);
-            Assert.That(resultModel.Place == softuniadaEvent.Place);
-            Assert.That(resultModel.Start == softuniadaEvent.Start);
-            Assert.That(resultModel.End == softuniadaEvent.End);
-            Assert.That(resultModel.PricePerTicket == softuniadaEvent.PricePerTicket);
-            Assert.That(resultModel.TotalTickets == softuniadaEvent.TotalTickets);
+            Assert.AreEqual(resultModel.Name, softuniadaEvent.Name);
+            Assert.AreEqual(resultModel.Place, softuniadaEvent.Place);
+            Assert.AreEqual(resultModel.Start, softuniadaEvent.Start);
+            Assert.AreEqual(resultModel.End, softuniadaEvent.End);
+            Assert.AreEqual(resultModel.PricePerTicket, softuniadaEvent.PricePerTicket);
+            Assert.AreEqual(resultModel.TotalTickets, softuniadaEvent.TotalTickets);
         }
 
         [Test]
         public void Test_Edit_InvalidId()
         {
             // Arrange
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             var invalidId = -1;
             // Act: send invalid id
@@ -326,6 +327,7 @@ namespace Eventures.WebApp.UnitTests
             // Assert an event is not returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
+
             var resultModel = viewResult.Model as EventCreateBindingModel;
             Assert.IsNull(resultModel);
         }
@@ -342,10 +344,10 @@ namespace Eventures.WebApp.UnitTests
                 End = DateTime.Now.AddMonths(3),
                 TotalTickets = 20,
                 PricePerTicket = 120.00m,
-                OwnerId = testDb.UserMaria.Id
+                OwnerId = this.testDb.UserMaria.Id
             };
-            dbContext.Add(newEvent);
-            dbContext.SaveChanges();
+            this.dbContext.Add(newEvent);
+            this.dbContext.SaveChanges();
 
             // Create an event binding model where only the name is changed
             var changedName = "Party" + DateTime.Now.Ticks;
@@ -368,7 +370,7 @@ namespace Eventures.WebApp.UnitTests
 
             // Assert the name of the event is edited in the database
             this.dbContext = this.testDb.CreateDbContext();
-            var editedEvent = dbContext.Events.Find(newEvent.Id);
+            var editedEvent = this.dbContext.Events.Find(newEvent.Id);
             Assert.IsNotNull(editedEvent);
             Assert.AreEqual(model.Name, editedEvent.Name);
         }
@@ -378,7 +380,7 @@ namespace Eventures.WebApp.UnitTests
         {
             // Arrange: get the "Softuniada" event from the database for editing
             var softuniadaEvent = this.testDb.EventSoftuniada;
-            TestingUtils.AssignCurrentUserForController(controller, testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Create an event binding model with invalid name: name == empty string
             var invalidName = string.Empty;
@@ -403,7 +405,7 @@ namespace Eventures.WebApp.UnitTests
             Assert.IsNull(redirectResult);
 
             // Assert the event's name is not edited
-            var editedEvent = dbContext.Events.Find(softuniadaEvent.Id);
+            var editedEvent = this.dbContext.Events.Find(softuniadaEvent.Id);
             Assert.IsNotNull(editedEvent);
             Assert.AreEqual(softuniadaEvent.Name, editedEvent.Name);
 
@@ -442,7 +444,7 @@ namespace Eventures.WebApp.UnitTests
             Assert.IsNotNull(unauthorizedResult);
 
             // Assert the event's name is not edited
-            var editedEvent = dbContext.Events.Find(openFestEvent.Id);
+            var editedEvent = this.dbContext.Events.Find(openFestEvent.Id);
             Assert.IsNotNull(editedEvent);
             Assert.AreEqual(openFestEvent.Name, editedEvent.Name);
         }
