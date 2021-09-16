@@ -20,6 +20,7 @@ namespace Eventures.WebApp.UnitTests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
+            // Instantiate the controller class with the testing database
             this.controller = new EventsController(
                 this.testDb.CreateDbContext());
         }
@@ -89,7 +90,7 @@ namespace Eventures.WebApp.UnitTests
 
             // Assert the count of events is +1
             int eventsCountAfter = this.dbContext.Events.Count();
-            Assert.That(eventsCountAfter == eventsCountBefore + 1);
+            Assert.AreEqual(eventsCountBefore + 1, eventsCountAfter);
 
             // Assert the new event appeared in the database
             var newEventInDb =
@@ -132,7 +133,7 @@ namespace Eventures.WebApp.UnitTests
             Assert.IsNotNull(viewResult);
 
             int eventsCountAfter = this.dbContext.Events.Count();
-            Assert.AreEqual(eventsCountAfter, eventsCountBefore);
+            Assert.AreEqual(eventsCountBefore, eventsCountAfter);
 
             // Remove ModelState error for next tests
             controller.ModelState.Remove("Name");
@@ -189,7 +190,7 @@ namespace Eventures.WebApp.UnitTests
             Assert.IsNull(resultModel);
 
             int eventsCountAfter = this.dbContext.Events.Count();
-            Assert.AreEqual(eventsCountAfter, eventsCountBefore);
+            Assert.AreEqual(eventsCountBefore, eventsCountAfter);
         }
 
         [Test]
@@ -227,7 +228,7 @@ namespace Eventures.WebApp.UnitTests
             // Assert the event is deleted
             this.dbContext = this.testDb.CreateDbContext();
             int eventsCountAfter = this.dbContext.Events.Count();
-            Assert.AreEqual(eventsCountAfter, eventsCountBefore - 1);
+            Assert.AreEqual(eventsCountBefore - 1, eventsCountAfter);
 
             var deletedEventInDb = this.dbContext.Events.Find(model.Id);
             Assert.IsNull(deletedEventInDb);
@@ -255,7 +256,7 @@ namespace Eventures.WebApp.UnitTests
             Assert.IsNull(resultModel);
 
             int eventsCountAfter = this.dbContext.Events.Count();
-            Assert.AreEqual(eventsCountAfter, eventsCountBefore);
+            Assert.AreEqual(eventsCountBefore, eventsCountAfter);
         }
 
         [Test]
