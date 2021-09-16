@@ -185,24 +185,15 @@ namespace Eventures.WebApp.SeleniumTests
             Assert.AreEqual(this.baseUrl + "/Events/Create", driver.Url);
 
             // Assert that an error message appears on the page
-            Assert.That(driver.PageSource.Contains("The Name field is required."));
+            var errorSpan = driver.FindElement(By.Id("Name-error"));
+            Assert.AreEqual(errorSpan.Text, "The Name field is required.");
         }
 
         [Test]
         public void Test_DeleteEvent()
         {
-            // Arrange: go to the "Create Event" page and create a new event for deleting
-            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
-            Assert.That(driver.Title.Contains("Create Event"));
-            
-            var eventName = "Best Show" + DateTime.UtcNow.Ticks;
-            var nameField = driver.FindElement(By.Id("Name"));
-            nameField.Clear();
-            nameField.SendKeys(eventName);
-
-            var createButton = driver.FindElement(By
-                .XPath("//input[contains(@value,'Create')]"));
-            createButton.Click();
+            // Create an event for deleting
+            string eventName = CreateEvent();
 
             // Assert user is redirected to the "All Events" page
             // The new event should appear on the page
@@ -241,17 +232,8 @@ namespace Eventures.WebApp.SeleniumTests
         [Test]
         public void Test_EditEvent_ValidData()
         {
-            // Arrange: go to the "Create Event" page and create a new event for editing
-            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
-            Assert.That(driver.Title.Contains("Create Event"));
-
-            var eventName = "Best Show" + DateTime.UtcNow.Ticks;
-            var nameField = driver.FindElement(By.Id("Name"));
-            nameField.Clear();
-            nameField.SendKeys(eventName);
-
-            var createButton = driver.FindElement(By.XPath("//input[contains(@value,'Create')]"));
-            createButton.Click();
+            // Create an event for editing
+            string eventName = CreateEvent();
 
             // Assert user is redirected to the "All Events" page and the new event appears on the page
             Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
@@ -294,17 +276,8 @@ namespace Eventures.WebApp.SeleniumTests
         [Test]
         public void Test_EditEvent_InvalidData()
         {
-            // Arrange: go to the "Create Event" page and create a new event for editing
-            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
-            Assert.That(driver.Title.Contains("Create Event"));
-
-            var eventName = "Best Show" + DateTime.UtcNow.Ticks;
-            var nameField = driver.FindElement(By.Id("Name"));
-            nameField.Clear();
-            nameField.SendKeys(eventName);
-
-            var createButton = driver.FindElement(By.XPath("//input[contains(@value,'Create')]"));
-            createButton.Click();
+            // Create an event for editing
+            string eventName = CreateEvent();
 
             // Assert the user is redirected to the "All Events" page and the new event appears on the page
             Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
@@ -337,7 +310,8 @@ namespace Eventures.WebApp.SeleniumTests
             Assert.That(driver.Url.Contains("/Events/Edit/"));
 
             // Assert an error message appears on the page
-            Assert.That(driver.PageSource.Contains("The Name field is required."));
+            var errorSpan = driver.FindElement(By.Id("Name-error"));
+            Assert.AreEqual(errorSpan.Text, "The Name field is required.");
         }
 
         private void RegisterUserForTesting()
@@ -356,6 +330,22 @@ namespace Eventures.WebApp.SeleniumTests
 
             Assert.AreEqual(this.baseUrl + "/", driver.Url);
             Assert.That(driver.PageSource.Contains($"Welcome, {username}"));
+        }
+
+        private string CreateEvent()
+        {
+            // Arrange: go to the "Create Event" page and create a new event
+            driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
+            Assert.That(driver.Title.Contains("Create Event"));
+
+            var eventName = "Best Show" + DateTime.UtcNow.Ticks;
+            var nameField = driver.FindElement(By.Id("Name"));
+            nameField.Clear();
+            nameField.SendKeys(eventName);
+
+            var createButton = driver.FindElement(By.XPath("//input[contains(@value,'Create')]"));
+            createButton.Click();
+            return eventName;
         }
     }
 }
