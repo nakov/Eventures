@@ -2,10 +2,10 @@
 using System.Net.Http;
 using System.Text.RegularExpressions;
 
-using NUnit.Framework;
-
 using Eventures.Tests.Common;
 using Eventures.Data;
+
+using NUnit.Framework;
 
 namespace Eventures.WebApp.IntegrationTests
 {

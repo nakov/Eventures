@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Diagnostics;
 
+using Eventures.Data;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Hosting.Server;
-
-using Eventures.Data;
 
 namespace Eventures.Tests.Common
 {

@@ -1,7 +1,7 @@
-using NUnit.Framework;
-
 using Eventures.Data;
 using Eventures.Tests.Common;
+
+using NUnit.Framework;
 
 namespace Eventures.WebApp.UnitTests
 {

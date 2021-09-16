@@ -6,11 +6,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using NUnit.Framework;
-using Newtonsoft.Json;
-
 using Eventures.Data;
 using Eventures.WebAPI.Models;
+using Eventures.WebAPI.Models.Event;
+using Eventures.WebAPI.Models.User;
+
+using NUnit.Framework;
+using Newtonsoft.Json;
 
 namespace Eventures.WebAPI.IntegrationTests
 {
@@ -33,7 +35,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Assert users are returned successfully
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var resposeContent = response.Content.ReadAsAsync<List<ApiUserListingModel>>();
+            var resposeContent = response.Content.ReadAsAsync<List<UserListingModel>>();
             var responseResult = resposeContent.Result;
             Assert.AreEqual(this.dbContext.Users.Count(), 
                 responseResult.Count());
@@ -52,7 +54,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Assert the events are returned successfully
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var responseContent = response.Content.ReadAsAsync<List<ApiEventListingModel>>().Result;
+            var responseContent = response.Content.ReadAsAsync<List<EventListingModel>>().Result;
             Assert.AreEqual(this.dbContext.Events.Count(), responseContent.Count());
             Assert.AreEqual(this.dbContext.Events.FirstOrDefault().Name, responseContent.FirstOrDefault().Name);
             Assert.AreEqual(this.dbContext.Events.LastOrDefault().Name, responseContent.LastOrDefault().Name);
@@ -71,7 +73,7 @@ namespace Eventures.WebAPI.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             var responseContent = response.Content
-                .ReadAsAsync<ApiEventListingModel>().Result;
+                .ReadAsAsync<EventListingModel>().Result;
             Assert.AreEqual(this.dbContext.Events.FirstOrDefault().Name, 
                 responseContent.Name);
         }
@@ -98,7 +100,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Arrange: create a new binding model
             var eventName = "Party";
             var eventPlace = "Beach";
-            var newEvent = new EventCreateBindingModel()
+            var newEvent = new EventBindingModel()
             {
                 Name = eventName,
                 Place = eventPlace,
@@ -128,7 +130,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // with invalid name: name == empty string
             var invalidEventName = string.Empty;
             var eventPlace = "Beach";
-            var newEvent = new EventCreateBindingModel()
+            var newEvent = new EventBindingModel()
             {
                 Name = invalidEventName,
                 Place = eventPlace,
@@ -161,7 +163,7 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Create new event binding model, where only the event name is changed
             var changedName = "Softuniada 2021 (New Edition)";
-            var changedEvent = new EventCreateBindingModel()
+            var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
                 Place = "Sofia",
@@ -194,7 +196,7 @@ namespace Eventures.WebAPI.IntegrationTests
         {
             // Arrange: create an event binding model with changed name
             var changedName = "Softuniada 2021 (New Edition)";
-            var changedEvent = new EventCreateBindingModel()
+            var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
                 Place = "Sofia",
@@ -228,7 +230,7 @@ namespace Eventures.WebAPI.IntegrationTests
             // Create new event binding model, where only the event name is changed
             // The name is invalid
             var changedName = string.Empty;
-            var changedEvent = new EventCreateBindingModel()
+            var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
                 Place = "Sofia",
@@ -263,7 +265,7 @@ namespace Eventures.WebAPI.IntegrationTests
 
             // Create an event binding model with changed name
             var changedName = "OpenFest 2021 (New Edition)";
-            var changedEvent = new EventCreateBindingModel()
+            var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
                 Place = "Online",
@@ -443,7 +445,7 @@ namespace Eventures.WebAPI.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, deleteResponse.StatusCode);
 
             var deleteResponseContent = deleteResponse.Content
-                .ReadAsAsync<ApiEventListingModel>().Result;
+                .ReadAsAsync<EventListingModel>().Result;
             Assert.AreEqual(newEvent.Name, deleteResponseContent.Name);
 
             var eventsCountAfter = this.dbContext.Events.Count();

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+
 using NUnit.Framework;
 
 namespace Eventures.DesktopApp.AppiumTests
@@ -84,27 +85,14 @@ namespace Eventures.DesktopApp.AppiumTests
         }
 
         [Test, Order(4)]
-        public void Test_Reload_Unauthorized()
-        {
-            // Locate and click on the [Reload] button
-            var reloadBtn = driver.FindElementByAccessibilityId("buttonReload");
-            reloadBtn.Click();
-
-            // Assert the "Event Board" window is displayed
-            Assert.That(driver.PageSource.Contains(AppiumTests.EventBoardWindowName));
-
-            // Assert an error message is displayed in the status box
-            // as the current user is not logged-in
-            var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
-            var messageAppears = this.wait
-                .Until(s => statusTextBox.Text.Contains("Error: HTTP error `Unauthorized`"));
-
-            Assert.IsTrue(messageAppears);
-        }
-
-        [Test, Order(5)]
         public void Test_Register()
         {
+            // Assert the [Create] and [Reload] buttons are disabled
+            var createBtn = driver.FindElementByAccessibilityId("buttonCreate");
+            Assert.IsFalse(createBtn.Enabled);
+            var reloadBtn = driver.FindElementByAccessibilityId("buttonReload");
+            Assert.IsFalse(reloadBtn.Enabled);
+
             // Locate and click on the [Register] button
             var registerBtn = driver.FindElementByAccessibilityId("buttonRegister");
             registerBtn.Click();
@@ -155,9 +143,13 @@ namespace Eventures.DesktopApp.AppiumTests
 
             // Assert a success message is displayed in the status box
             Assert.AreEqual($"Load successful: {eventsInDb} events loaded.", statusTextBox.Text);
+
+            // Assert the [Create] and [Reload] buttons are enabled
+            Assert.IsTrue(createBtn.Enabled);
+            Assert.IsTrue(reloadBtn.Enabled);
         }
 
-        [Test, Order(6)]
+        [Test]
         public void Test_Login()
         {
             // Locate and click on the [Login] button
@@ -193,9 +185,15 @@ namespace Eventures.DesktopApp.AppiumTests
 
             // Assert a success message is displayed in the status box
             Assert.AreEqual($"Load successful: {eventsInDb} events loaded.", statusTextBox.Text);
+
+            // Assert the [Create] and [Reload] buttons are enabled
+            var createBtn = driver.FindElementByAccessibilityId("buttonCreate");
+            Assert.IsTrue(createBtn.Enabled);
+            var reloadBtn = driver.FindElementByAccessibilityId("buttonReload");
+            Assert.IsTrue(reloadBtn.Enabled);
         }
 
-        [Test, Order(7)]
+        [Test]
         public void Test_Reload()
         {
             // Locate and click on the [Reload] button
@@ -217,7 +215,7 @@ namespace Eventures.DesktopApp.AppiumTests
             Assert.AreEqual($"Load successful: {eventsInDb} events loaded.", statusTextBox.Text);
         }
 
-        [Test, Order(8)]
+        [Test]
         public void Test_CreateEvent_ValidData()
         {
             // Get the events count before
@@ -280,7 +278,7 @@ namespace Eventures.DesktopApp.AppiumTests
             Assert.That(pageSource.Contains(this.username));
         }
 
-        [Test, Order(9)]
+        [Test]
         public void Test_CreateEvent_InvalidData()
         {
             // Get the events count before

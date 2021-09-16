@@ -1,17 +1,18 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
+
+using Eventures.Data;
+using Eventures.WebAPI.Models;
+using Eventures.WebAPI.Models.User;
+using Eventures.WebAPI.Models.Event;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-using Eventures.Data;
-using Eventures.WebAPI.Models;
-using System;
-using System.Diagnostics;
-
 namespace Eventures.WebAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/events")]
     public class EventsController : Controller
@@ -34,7 +35,8 @@ namespace Eventures.WebAPI.Controllers
         ///         
         ///     }
         /// </remarks>
-        /// <response code="200">Returns "OK" with events count</response>  
+        /// <response code="200">Returns "OK" with events count</response> 
+        [AllowAnonymous]
         [HttpGet("count")]
         public IActionResult GetEventsCount()
         {
@@ -56,19 +58,31 @@ namespace Eventures.WebAPI.Controllers
         /// </remarks>
         /// <response code="200">Returns "OK" with a list of all events</response>
         /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>    
-        [Authorize]
-        [HttpGet] 
+        [HttpGet]
         public IActionResult GetEvents()
         {
-            var events = new List<ApiEventListingModel>();
+            var events = this.dbContext
+                .Events
+                .Select(e => new EventListingModel()
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Place = e.Place,
+                    Start = e.Start.ToString("dd/MM/yyyy HH:mm"),
+                    End = e.End.ToString("dd/MM/yyyy HH:mm"),
+                    TotalTickets = e.TotalTickets,
+                    PricePerTicket = e.PricePerTicket,
+                    Owner = new UserListingModel()
+                    {
+                        Id = e.OwnerId,
+                        Username = e.Owner.UserName,
+                        FirstName = e.Owner.FirstName,
+                        LastName = e.Owner.LastName,
+                        Email = e.Owner.Email
+                    }
+                })
+                .ToList();
 
-            var dbEvents = this.dbContext.Events.ToList();
-            foreach (var ev in dbEvents)
-            {
-                ev.Owner = this.dbContext.Users.Find(ev.OwnerId);
-                var eventViewModel = CreateEventModel(ev);
-                events.Add(eventViewModel);
-            }
             return Ok(events);
         }
 
@@ -88,19 +102,18 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="200">Returns "OK" with the event</response>
         /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>    
         /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>    
-        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetEventById(int id)
         {
-            var dbEvent = this.dbContext.Events.Find(id);
-            if (dbEvent == null)
+            var eventExists = this.dbContext.Events.Any(e => e.Id == id);
+            if (!eventExists)
             {
                 return NotFound(
                     new ResponseMsg { Message = $"Event #{id} not found." });
             }
-            dbEvent.Owner = this.dbContext.Users.Find(dbEvent.OwnerId);
-            var eventViewModel = CreateEventModel(dbEvent);
-            return Ok(eventViewModel);
+
+            var eventModel = CreateEventListingModelById(id);
+            return Ok(eventModel);
         }
 
         /// <summary>
@@ -124,13 +137,9 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="201">Returns "Created" with the created event</response>
         /// <response code="400">Returns "Bad Request" when an invalid request is sent</response>   
         /// <response code="401">Returns "Unauthorized" when user is not authenticated</response>   
-        [Authorize]
         [HttpPost("create")]
-        public IActionResult CreateEvent(EventCreateBindingModel bindingModel)
+        public IActionResult CreateEvent(EventBindingModel bindingModel)
         {
-            string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
-            var currentUser = this.dbContext.Users
-                .FirstOrDefault(x => x.UserName == currentUsername);
             Event ev = new Event
             {
                 Name = bindingModel.Name,
@@ -139,19 +148,15 @@ namespace Eventures.WebAPI.Controllers
                 End = bindingModel.End,
                 TotalTickets = bindingModel.TotalTickets,
                 PricePerTicket = bindingModel.PricePerTicket,
-                Owner = currentUser,
-                OwnerId = currentUser.Id
+                OwnerId = GetCurrentUserId()
             };
+
             dbContext.Events.Add(ev);
             dbContext.SaveChanges();
 
-            // TODO: debug
-            Console.WriteLine($"Event added. Events = {dbContext.Events.Count()}");
-            Debug.WriteLine($"Event added. Events = {dbContext.Events.Count()}");
+            var eventModel = CreateEventListingModelById(ev.Id);
 
-            var eventViewModel = CreateEventModel(ev);
-
-            return CreatedAtAction("GetEventById", new { id = ev.Id }, eventViewModel);
+            return CreatedAtAction("GetEventById", new { id = ev.Id }, eventModel);
         }
 
         /// <summary>
@@ -177,20 +182,19 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="400">Returns "Bad Request" when an invalid request is sent</response>   
         /// <response code="401">Returns "Unauthorized" when user is not authenticated or is not the owner of the event</response>  
         /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>  
-        [Authorize]
         [HttpPut("{id}")]
-        public IActionResult PutEvent(int id, EventCreateBindingModel eventModel)
+        public IActionResult PutEvent(int id, EventBindingModel eventModel)
         {
-            var ev = dbContext.Events.Find(id);
-            if (ev == null)
+            var eventExists = this.dbContext.Events.Any(e => e.Id == id);
+            if (!eventExists)
             {
-                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
+                return NotFound(
+                    new ResponseMsg { Message = $"Event #{id} not found." });
             }
+            
+            var ev = this.dbContext.Events.FirstOrDefault(e => e.Id == id);
 
-            string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
-            var currentUser = this.dbContext.Users
-                .FirstOrDefault(x => x.UserName == currentUsername);
-            if(currentUser.Id != ev.OwnerId)
+            if (GetCurrentUserId() != ev.OwnerId)
             {
                 return Unauthorized(
                     new ResponseMsg { Message = "Cannot edit event, when not an owner." });
@@ -225,25 +229,26 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="400">Returns "Bad Request" when an invalid request is sent</response>   
         /// <response code="401">Returns "Unauthorized" when user is not authenticated or is not the owner of the event</response>  
         /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>  
-        [Authorize]
         [HttpPatch("{id}")]
         public IActionResult PatchEvent(int id, PatchEventModel eventModel)
         {
-            var ev = dbContext.Events.Find(id);
-            if (ev == null)
+            var eventExists = this.dbContext.Events.Any(e => e.Id == id);
+            if (!eventExists)
             {
-                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
+                return NotFound(
+                    new ResponseMsg { Message = $"Event #{id} not found." });
             }
 
-            string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
-            var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
-            if (currentUser.Id != ev.OwnerId)
+            var ev = this.dbContext.Events.FirstOrDefault(e => e.Id == id);
+
+            if (GetCurrentUserId() != ev.OwnerId)
             {
-                return Unauthorized(new ResponseMsg { Message = "Cannot edit event, when not an owner." });
+                return Unauthorized(
+                    new ResponseMsg { Message = "Cannot edit event, when not an owner." });
             }
 
-            ev.Name = eventModel.Name == null || eventModel.Name == string.Empty ? ev.Name : eventModel.Name;
-            ev.Place = eventModel.Place == null || eventModel.Place == string.Empty ? ev.Place : eventModel.Place;
+            ev.Name = String.IsNullOrEmpty(eventModel.Name) ? ev.Name : eventModel.Name;
+            ev.Place = String.IsNullOrEmpty(eventModel.Place) ? ev.Place : eventModel.Place;
             ev.Start = eventModel.Start == null ? ev.Start : eventModel.Start.Value;
             ev.End = eventModel.End == null ? ev.End : eventModel.End.Value;
             ev.TotalTickets = eventModel.TotalTickets == null ? ev.TotalTickets : eventModel.TotalTickets.Value;
@@ -258,7 +263,7 @@ namespace Eventures.WebAPI.Controllers
         /// </summary>
         /// <remarks>
         /// You should be an authenticated user!
-        /// You should be the owner of the edited event!
+        /// You should be the owner of the deleted event!
         /// 
         /// Sample request:
         ///
@@ -270,52 +275,64 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="200">Returns "OK" with the deleted event</response>
         /// <response code="401">Returns "Unauthorized" when user is not authenticated or is not the owner of the event</response>  
         /// <response code="404">Returns "Not Found" when event with the given id doesn't exist</response>  
-        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult DeleteEvent(int id)
         {
-            Event ev = dbContext.Events.Find(id);
-            if (ev == null)
+            var eventExists = this.dbContext.Events.Any(e => e.Id == id);
+            if (!eventExists)
             {
-                return NotFound(new ResponseMsg { Message = $"Event #{id} not found." });
-            };
-
-            string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
-            var currentUser = this.dbContext.Users.FirstOrDefault(x => x.UserName == currentUsername);
-            if (currentUser.Id != ev.OwnerId)
-            {
-                return Unauthorized(new ResponseMsg { Message = "Cannot delete event, when not an owner." });
+                return NotFound(
+                    new ResponseMsg { Message = $"Event #{id} not found." });
             }
+
+            var ev = this.dbContext.Events.FirstOrDefault(e => e.Id == id);
+
+            if (GetCurrentUserId() != ev.OwnerId)
+            {
+                return Unauthorized(
+                    new ResponseMsg { Message = "Cannot delete event, when not an owner." });
+            }
+
+            var eventModel = CreateEventListingModelById(ev.Id);
+
             dbContext.Events.Remove(ev);
             dbContext.SaveChanges();
 
-            var eventViewModel = CreateEventModel(ev);
-            
-            return Ok(eventViewModel);
+            return Ok(eventModel);
         }
 
-        private ApiEventListingModel CreateEventModel(Event ev)
-        {
-            var eventModel = new ApiEventListingModel()
-            {
-                Id = ev.Id,
-                Name = ev.Name,
-                Place = ev.Place,
-                Start = ev.Start,
-                End = ev.End,
-                TotalTickets = ev.TotalTickets,
-                PricePerTicket = ev.PricePerTicket,
-                Owner = new ApiUserListingModel()
+        private EventListingModel CreateEventListingModelById(int id)
+            => this.dbContext
+                .Events
+                .Where(e => e.Id == id)
+                .Select(ev => new EventListingModel()
                 {
-                    FirstName = ev.Owner.FirstName,
-                    LastName = ev.Owner.LastName,
-                    Id = ev.Owner.Id,
-                    Username = ev.Owner.UserName,
-                    Email = ev.Owner.Email
-                }
-            };
+                    Id = ev.Id,
+                    Name = ev.Name,
+                    Place = ev.Place,
+                    Start = ev.Start.ToString("dd/MM/yyyy HH:mm"),
+                    End = ev.End.ToString("dd/MM/yyyy HH:mm"),
+                    TotalTickets = ev.TotalTickets,
+                    PricePerTicket = ev.PricePerTicket,
+                    Owner = new UserListingModel()
+                    {
+                        FirstName = ev.Owner.FirstName,
+                        LastName = ev.Owner.LastName,
+                        Id = ev.Owner.Id,
+                        Username = ev.Owner.UserName,
+                        Email = ev.Owner.Email
+                    }
+                })
+                .FirstOrDefault();
 
-            return eventModel;
+        private string GetCurrentUserId()
+        {
+            string currentUsername = this.User.FindFirst(ClaimTypes.Name)?.Value;
+            var currentUserId = this.dbContext
+                .Users
+                .FirstOrDefault(x => x.UserName == currentUsername)
+                .Id;
+            return currentUserId;
         }
     }
 }

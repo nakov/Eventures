@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 using NUnit.Framework;
 
 namespace Eventures.AndroidApp.AppiumTests
@@ -8,25 +9,25 @@ namespace Eventures.AndroidApp.AppiumTests
     {
         private string username = "newUser" + DateTime.UtcNow.Ticks;
         private string password = "newPassword12";
-        private string buttonConnectId = "buttonConnect";
-        private string buttonLoginId = "buttonLogin";
-        private string buttonRegisterId = "buttonRegister";
-        private string buttonAddId = "buttonAdd";
-        private string buttonReloadId = "buttonReload";
-        private string statusTextBoxId = "textViewStatus";
+        private const string ButtonConnectId = "buttonConnect";
+        private const string ButtonLoginId = "buttonLogin";
+        private const string ButtonRegisterId = "buttonRegister";
+        private const string ButtonAddId = "buttonAdd";
+        private const string ButtonReloadId = "buttonReload";
+        private const string StatusTextBoxId = "textViewStatus";
 
         [Test, Order(1)]
         public void Test_Connect_WithInvalidUrl()
         {
             // Assert that [Login] and [Register] buttons are disabled
-            var loginBtn = driver.FindElementById(buttonLoginId);
+            var loginBtn = driver.FindElementById(ButtonLoginId);
             Assert.That(loginBtn.Enabled == false);
 
-            var registerBtn = driver.FindElementById(buttonRegisterId);
+            var registerBtn = driver.FindElementById(ButtonRegisterId);
             Assert.That(registerBtn.Enabled == false);
 
             // Locate and click on the [Connect] button
-            var connectBtn = driver.FindElementById(buttonConnectId);
+            var connectBtn = driver.FindElementById(ButtonConnectId);
             connectBtn.Click();
 
             // Locate the "API URL" field
@@ -42,7 +43,7 @@ namespace Eventures.AndroidApp.AppiumTests
             confirmConnectBtn.Click();
 
             // Locate the status box
-            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var statusTextBox = driver.FindElementById(StatusTextBoxId);
 
             // Wait until the server finishes connecting
             // and assert that an error message appears
@@ -60,14 +61,14 @@ namespace Eventures.AndroidApp.AppiumTests
         public void Test_Connect_WithValidUrl()
         {
             // Assert that [Login] and [Register] buttons are disabled
-            var loginBtn = driver.FindElementById(buttonLoginId);
+            var loginBtn = driver.FindElementById(ButtonLoginId);
             Assert.That(loginBtn.Enabled == false);
 
-            var registerBtn = driver.FindElementById(buttonRegisterId);
+            var registerBtn = driver.FindElementById(ButtonRegisterId);
             Assert.That(registerBtn.Enabled == false);
 
             // Locate and click on the [Connect] button
-            var connectBtn = driver.FindElementById(buttonConnectId);
+            var connectBtn = driver.FindElementById(ButtonConnectId);
             connectBtn.Click();
 
             // Locate the "API URL" field and send valid URL from the local server
@@ -80,7 +81,7 @@ namespace Eventures.AndroidApp.AppiumTests
             confirmConnectBtn.Click();
 
             // Locate the status box
-            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var statusTextBox = driver.FindElementById(StatusTextBoxId);
 
             // Wait until the server finishes connecting
             // and assert that a success message appears
@@ -98,14 +99,14 @@ namespace Eventures.AndroidApp.AppiumTests
         public void Test_Register()
         {
             // Assert the [Add] and [Reload] buttons are disabled
-            var addBtn = driver.FindElementById(buttonAddId);
+            var addBtn = driver.FindElementById(ButtonAddId);
             Assert.That(addBtn.Enabled == false);
 
-            var reloadBtn = driver.FindElementById(buttonReloadId);
+            var reloadBtn = driver.FindElementById(ButtonReloadId);
             Assert.That(reloadBtn.Enabled == false);
 
             // Locate and click on the [Register] button
-            var registerBtn = driver.FindElementById(buttonRegisterId);
+            var registerBtn = driver.FindElementById(ButtonRegisterId);
             Assert.That(registerBtn.Enabled == true);
             registerBtn.Click();
 
@@ -140,7 +141,7 @@ namespace Eventures.AndroidApp.AppiumTests
             confirmRegisterBtn.Click();
 
             // Locate the status box
-            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var statusTextBox = driver.FindElementById(StatusTextBoxId);
 
             // Wait until the server finishes authorizing
             // and assert that events are displayed
@@ -162,7 +163,7 @@ namespace Eventures.AndroidApp.AppiumTests
         public void Test_Login()
         {
             // Locate and click on the [Login] button
-            var loginBtn = driver.FindElementById(buttonLoginId);
+            var loginBtn = driver.FindElementById(ButtonLoginId);
             Assert.That(loginBtn.Enabled == true);
             loginBtn.Click();
 
@@ -180,7 +181,7 @@ namespace Eventures.AndroidApp.AppiumTests
             confirmLoginBtn.Click();
 
             // Locate the status box
-            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var statusTextBox = driver.FindElementById(StatusTextBoxId);
 
             // Wait until the server finishes authorizing
             // and assert that events are displayed
@@ -194,10 +195,10 @@ namespace Eventures.AndroidApp.AppiumTests
             Assert.AreEqual($"Events found: {eventsInDb}", statusTextBox.Text);
 
             // Assert the [Add] and [Reload] buttons are enabled
-            var addBtn = driver.FindElementById(buttonAddId);
+            var addBtn = driver.FindElementById(ButtonAddId);
             Assert.That(addBtn.Enabled == true);
 
-            var reloadBtn = driver.FindElementById(buttonReloadId);
+            var reloadBtn = driver.FindElementById(ButtonReloadId);
             Assert.That(reloadBtn.Enabled == true);
         }
 
@@ -205,12 +206,12 @@ namespace Eventures.AndroidApp.AppiumTests
         public void Test_Reload()
         {
             // Locate and click on the [Reload] button
-            var reloadBtn = driver.FindElementById(buttonReloadId);
+            var reloadBtn = driver.FindElementById(ButtonReloadId);
             Assert.That(reloadBtn.Enabled == true);
             reloadBtn.Click();
 
             // Locate the status box
-            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var statusTextBox = driver.FindElementById(StatusTextBoxId);
 
             // Wait until the server finishes authorizing
             // and assert that events are displayed
@@ -231,7 +232,7 @@ namespace Eventures.AndroidApp.AppiumTests
             var eventsInDbBefore = this.dbContext.Events.Count();
 
             // Locate and click on the [Add] button
-            var addBtn = driver.FindElementById(buttonAddId);
+            var addBtn = driver.FindElementById(ButtonAddId);
             Assert.That(addBtn.Enabled == true);
             addBtn.Click();
 
@@ -288,7 +289,7 @@ namespace Eventures.AndroidApp.AppiumTests
             createBtn.Click();
 
             // Locate the status box
-            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var statusTextBox = driver.FindElementById(StatusTextBoxId);
 
             // Wait until the server finishes creating the event
             // and assert that events are displayed
@@ -309,7 +310,7 @@ namespace Eventures.AndroidApp.AppiumTests
             var eventsInDbBefore = this.dbContext.Events.Count();
 
             // Locate and click on the [Add] button
-            var addBtn = driver.FindElementById(buttonAddId);
+            var addBtn = driver.FindElementById(ButtonAddId);
             Assert.That(addBtn.Enabled == true);
             addBtn.Click();
 
@@ -353,7 +354,7 @@ namespace Eventures.AndroidApp.AppiumTests
             createBtn.Click();
 
             // Locate the status box
-            var statusTextBox = driver.FindElementById(statusTextBoxId);
+            var statusTextBox = driver.FindElementById(StatusTextBoxId);
 
             // Wait until the server finishes trying to create the event
             // and assert that an error message is displayed

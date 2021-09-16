@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Eventures.WebApp.Models.EventViewModel>
+﻿@model IEnumerable<EventViewModel>
 
 @{
     ViewData["Title"] = "All Events";
 }
 
-<h1>All Events</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -16,13 +16,19 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Place)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Start)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.End)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Place)
+                @Html.DisplayNameFor(model => model.TotalTickets)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PricePerTicket)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Owner)
@@ -39,13 +45,19 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Place)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Start)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.End)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Place)
+                @Html.DisplayFor(modelItem => item.TotalTickets)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PricePerTicket)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Owner)

@@ -1,8 +1,10 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using System.Security.Claims;
 
 using Eventures.Data;
 using Eventures.WebApp.Models;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eventures.WebApp.Controllers
 {
@@ -17,13 +19,27 @@ namespace Eventures.WebApp.Controllers
 
         public IActionResult Index()
         {
-            return View(this.dbContext.Events);
+            var userEventsCount = -1;
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                userEventsCount = this.dbContext.Events.Where(e => e.OwnerId == currentUserId).Count();
+            }
+
+            var homeModel = new HomeViewModel()
+            {
+                AllEventsCount = this.dbContext.Events.Count(),
+                UserEventsCount = userEventsCount
+            };
+
+            return View(homeModel);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+            => View();
+
+        public IActionResult Error401()
+            => View();
     }
 }

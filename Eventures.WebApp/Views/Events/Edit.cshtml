@@ -1,14 +1,14 @@
-﻿@model Eventures.WebApp.Models.EventCreateBindingModel
+﻿@model EventCreateBindingModel
 
 @{
     ViewData["Title"] = "Edit Event";
 }
 
+<h1>@ViewData["Title"]</h1>
+<hr />
+
 @if (Model != null)
 {
-    <h1>Edit Event</h1>
-    <hr />
-
     <form asp-action="Edit">
         <div class="row">
             <div class="col-md-4">

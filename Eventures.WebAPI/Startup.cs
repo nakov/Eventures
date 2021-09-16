@@ -15,6 +15,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using Eventures.Data;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Eventures.WebAPI
 {

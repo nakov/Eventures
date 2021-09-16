@@ -22,5 +22,5 @@ public interface EventuresAPI {
     Call<LoginResponse> login(@Body UserLoginModel user);
 
     @POST("users/register")
-    Call<EventReponse> register(@Body EventuresUser user);
+    Call<EventReponse> register(@Body UserRegisterModel user);
 }

@@ -1,10 +1,10 @@
 ﻿using System;
 
+using Eventures.Data;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-using Eventures.Data;
 
 namespace Eventures.Tests.Common
 {
@@ -66,7 +66,7 @@ namespace Eventures.Tests.Common
                 Start = DateTime.Now.AddMonths(3),
                 End = DateTime.Now.AddMonths(3),
                 TotalTickets = 200,
-                PricePerTicket = 12.00m,
+                PricePerTicket = 12.50m,
                 OwnerId = UserMaria.Id
             };
             dbContext.Add(this.EventSoftuniada);

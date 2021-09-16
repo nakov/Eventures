@@ -1,5 +1,4 @@
-﻿
-namespace Eventures.DesktopApp
+﻿namespace Eventures.DesktopApp
 {
     partial class FormAllEvents
     {
@@ -67,6 +66,7 @@ namespace Eventures.DesktopApp
             this.buttonReload.Text = "⟳ Reload";
             this.buttonReload.UseVisualStyleBackColor = true;
             this.buttonReload.Click += new System.EventHandler(this.buttonReload_Click);
+            this.buttonReload.Enabled = false;
             // 
             // statusStrip
             // 
@@ -98,6 +98,7 @@ namespace Eventures.DesktopApp
             this.buttonCreate.Text = "✚ Create";
             this.buttonCreate.UseVisualStyleBackColor = true;
             this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
+            this.buttonCreate.Enabled = false;
             // 
             // buttonLogin
             // 
@@ -109,6 +110,7 @@ namespace Eventures.DesktopApp
             this.buttonLogin.Text = "➞ Login";
             this.buttonLogin.UseVisualStyleBackColor = true;
             this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
+            this.buttonLogin.Enabled = false;
             // 
             // buttonRegister
             // 
@@ -120,6 +122,7 @@ namespace Eventures.DesktopApp
             this.buttonRegister.Text = "✓ Register";
             this.buttonRegister.UseVisualStyleBackColor = true;
             this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
+            this.buttonRegister.Enabled = false;
             // 
             // FormAllEvents
             // 

@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 
+using Eventures.Data;
+using Eventures.WebAPI.Models;
+using Eventures.WebAPI.Models.User;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,9 +17,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-
-using Eventures.Data;
-using Eventures.WebAPI.Models;
 
 namespace Eventures.WebAPI.Controllers
 {
@@ -59,7 +60,7 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="200">Returns "OK" with JWT token with expiration date.</response>
         /// <response code="401">Returns "Unauthorized" when username or password doesn't match.</response>    
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] ApiLoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var user = await userManager.FindByNameAsync(model.Username);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
@@ -110,7 +111,7 @@ namespace Eventures.WebAPI.Controllers
         /// <response code="200">Returns "OK" with "Success" status and "User created successfully! message".</response>
         /// <response code="400">Returns "Bad Request" when user already exists or user creation failed.</response>    
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] ApiRegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
@@ -157,12 +158,12 @@ namespace Eventures.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = new List<ApiUserListingModel>();
+            var users = new List<UserListingModel>();
 
             var dbUsers = dbContext.Users.ToList();
             foreach (var dbUser in dbUsers)
             {
-                var user = new ApiUserListingModel
+                var user = new UserListingModel
                 {
                     Id = dbUser.Id,
                     FirstName = dbUser.FirstName,
