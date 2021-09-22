@@ -68,6 +68,7 @@ namespace Eventures.DesktopApp
             this.textBoxName.PlaceholderText = "Enter event name ...";
             this.textBoxName.Size = new System.Drawing.Size(462, 30);
             this.textBoxName.TabIndex = 1;
+            this.textBoxName.MaxLength = 50;
             // 
             // buttonCreateConfirm
             // 
@@ -106,6 +107,7 @@ namespace Eventures.DesktopApp
             this.textBoxPlace.PlaceholderText = "Enter the event venue (place) ...";
             this.textBoxPlace.Size = new System.Drawing.Size(462, 30);
             this.textBoxPlace.TabIndex = 2;
+            this.textBoxPlace.MaxLength = 70;
             // 
             // labelPlace
             // 
@@ -121,7 +123,7 @@ namespace Eventures.DesktopApp
             this.dateTimePickerStart.AccessibleName = "start box";
             this.dateTimePickerStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dateTimePickerStart.CustomFormat = "dd/MM/yyyy hh:mm:ss";
+            this.dateTimePickerStart.CustomFormat = "dd/MM/yyyy HH:mm";
             this.dateTimePickerStart.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePickerStart.Location = new System.Drawing.Point(66, 109);
@@ -142,7 +144,7 @@ namespace Eventures.DesktopApp
             // 
             this.dateTimePickerEnd.AccessibleName = "end box";
             this.dateTimePickerEnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dateTimePickerEnd.CustomFormat = "dd/MM/yyyy hh:mm:ss";
+            this.dateTimePickerEnd.CustomFormat = "dd/MM/yyyy HH:mm";
             this.dateTimePickerEnd.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePickerEnd.Location = new System.Drawing.Point(325, 109);

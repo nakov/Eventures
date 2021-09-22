@@ -55,6 +55,7 @@
             this.textBoxUsername.PlaceholderText = "Your username here...";
             this.textBoxUsername.Size = new System.Drawing.Size(339, 30);
             this.textBoxUsername.TabIndex = 1;
+            this.textBoxUsername.MaxLength = 15;
             // 
             // labelUsername
             // 
@@ -77,6 +78,7 @@
             this.textBoxPassword.PlaceholderText = "Enter a password...";
             this.textBoxPassword.Size = new System.Drawing.Size(339, 30);
             this.textBoxPassword.TabIndex = 3;
+            this.textBoxPassword.MaxLength = 20;
             // 
             // labelPassword
             // 
@@ -98,6 +100,7 @@
             this.textBoxEmail.PlaceholderText = "Your email here...";
             this.textBoxEmail.Size = new System.Drawing.Size(339, 30);
             this.textBoxEmail.TabIndex = 2;
+            this.textBoxEmail.MaxLength = 30;
             // 
             // labelEmail
             // 
@@ -120,6 +123,7 @@
             this.textBoxConfirmPassword.PlaceholderText = "Repeat the password to confirm it ...";
             this.textBoxConfirmPassword.Size = new System.Drawing.Size(339, 30);
             this.textBoxConfirmPassword.TabIndex = 4;
+            this.textBoxConfirmPassword.MaxLength = 20;
             // 
             // labelConfirmPassword
             // 
@@ -167,6 +171,7 @@
             this.textBoxFirstName.PlaceholderText = "Enter first name...";
             this.textBoxFirstName.Size = new System.Drawing.Size(339, 30);
             this.textBoxFirstName.TabIndex = 5;
+            this.textBoxFirstName.MaxLength = 15;
             // 
             // labelFirstName
             // 
@@ -188,6 +193,7 @@
             this.textBoxLastName.PlaceholderText = "Enter last name...";
             this.textBoxLastName.Size = new System.Drawing.Size(339, 30);
             this.textBoxLastName.TabIndex = 6;
+            this.textBoxLastName.MaxLength = 15;
             // 
             // labelLast
             // 

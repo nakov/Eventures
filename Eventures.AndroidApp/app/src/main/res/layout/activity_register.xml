@@ -43,6 +43,7 @@
             android:inputType="text"
             android:textColorHint="#B6B0B0"
             android:textSize="20sp"
+            android:maxLength="15"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
@@ -61,6 +62,7 @@
             android:inputType="textEmailAddress"
             android:textColorHint="#B6B0B0"
             android:textSize="20sp"
+            android:maxLength="30"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
@@ -80,6 +82,7 @@
             android:inputType="textPassword"
             android:lines="5"
             android:textColorHint="#B6B0B0"
+            android:maxLength="20"
             tools:ignore="DuplicateSpeakableTextCheck"
             tools:textSize="20sp" />
 
@@ -100,6 +103,7 @@
             android:inputType="textPassword"
             android:lines="5"
             android:textColorHint="#B6B0B0"
+            android:maxLength="20"
             tools:ignore="DuplicateSpeakableTextCheck"
             tools:textSize="20sp" />
 
@@ -119,6 +123,7 @@
             android:inputType="text"
             android:textColorHint="#B6B0B0"
             android:textSize="20sp"
+            android:maxLength="15"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
@@ -138,6 +143,7 @@
             android:nextFocusForward="@+id/buttonConfirmRegister"
             android:textColorHint="#B6B0B0"
             android:textSize="20sp"
+            android:maxLength="15"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <LinearLayout

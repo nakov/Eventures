@@ -42,6 +42,7 @@
             android:inputType="text"
             android:textColorHint="#B6B0B0"
             android:textSize="18sp"
+            android:maxLength="50"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
@@ -62,6 +63,7 @@
             android:inputType="textMultiLine"
             android:lines="5"
             android:textColorHint="#B6B0B0"
+            android:maxLength="70"
             tools:ignore="DuplicateSpeakableTextCheck"
             tools:textSize="18sp" />
 
