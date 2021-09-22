@@ -48,7 +48,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             // Create a date picker dialog and display it
             DatePickerDialog.OnDateSetListener onDateSetListener = (view, selectedYear, selectedMonth, selectedDay) -> {
-                LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonth, selectedDay);
+                LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonth+1, selectedDay);
                 String selectedDateStr = selectedDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
                 ((EditText)v).setText(selectedDateStr);
             };
