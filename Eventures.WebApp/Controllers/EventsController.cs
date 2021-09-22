@@ -162,7 +162,7 @@ namespace Eventures.WebApp.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                return View(); 
+                return View(bindingModel); 
             }
 
             ev.Name = bindingModel.Name;
