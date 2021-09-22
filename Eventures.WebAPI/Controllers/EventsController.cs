@@ -9,6 +9,7 @@ using Eventures.WebAPI.Models.Event;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 
 namespace Eventures.WebAPI.Controllers
 {
@@ -251,6 +252,16 @@ namespace Eventures.WebAPI.Controllers
             ev.Place = String.IsNullOrEmpty(eventModel.Place) ? ev.Place : eventModel.Place;
             ev.Start = eventModel.Start == null ? ev.Start : eventModel.Start.Value;
             ev.End = eventModel.End == null ? ev.End : eventModel.End.Value;
+
+            if(ev.Start > ev.End)
+            {
+                return BadRequest(
+                    new ResponseMsg { Message = "End date must be after the start date." });
+            }
+
+            ev.Start = ev.Start.AddTicks(-(ev.Start.Ticks % TimeSpan.TicksPerSecond));
+            ev.End = ev.End.AddTicks(-(ev.End.Ticks % TimeSpan.TicksPerSecond));
+
             ev.TotalTickets = eventModel.TotalTickets == null ? ev.TotalTickets : eventModel.TotalTickets.Value;
             ev.PricePerTicket = eventModel.PricePerTicket == null ? ev.PricePerTicket : eventModel.PricePerTicket.Value;
             dbContext.SaveChanges();
