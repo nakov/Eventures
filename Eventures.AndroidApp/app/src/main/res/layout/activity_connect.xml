@@ -29,6 +29,7 @@
             android:inputType="textUri"
             android:text="@string/defaultUrl"
             android:textSize="20sp"
+            android:maxLength="40"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <Button

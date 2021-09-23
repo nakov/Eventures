@@ -44,6 +44,7 @@
                 android:minHeight="48dp"
                 android:textColorHint="#B6B0B0"
                 android:textSize="18sp"
+                android:maxLength="15"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
             <TextView
@@ -64,6 +65,7 @@
                 android:inputType="textPassword"
                 android:nextFocusForward="@+id/buttonLogin"
                 android:textColorHint="#B6B0B0"
+                android:maxLength="20"
                 tools:textSize="18sp" />
 
             <LinearLayout

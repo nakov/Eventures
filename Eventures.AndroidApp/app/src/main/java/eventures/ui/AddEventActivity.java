@@ -54,7 +54,7 @@ public class AddEventActivity extends AppCompatActivity {
             };
 
             final Calendar cldr = Calendar.getInstance();
-            int currentDay = cldr.get(Calendar.DAY_OF_MONTH);
+            int currentDay = cldr.get(Calendar.DAY_OF_MONTH) + 1;
             int currentMonth = cldr.get(Calendar.MONTH);
             int currentYear = cldr.get(Calendar.YEAR);
 

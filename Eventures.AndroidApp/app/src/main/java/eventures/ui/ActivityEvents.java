@@ -349,7 +349,7 @@ public class ActivityEvents extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<EventReponse> call, Response<EventReponse> response) {
                     if (response.code() != HttpURLConnection.HTTP_CREATED) {
-                        showErrorMsg(response.message());
+                        showErrorMsg("Could not create the new event. Try again.");
                         return;
                     }
                     getEvents();
