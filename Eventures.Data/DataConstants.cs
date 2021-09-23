@@ -6,7 +6,7 @@
         public const int MinEventName = 3;
 
         public const int MaxEventPlace = 70;
-        public const int MinEventPlace = 5;
+        public const int MinEventPlace = 3;
 
         public const int MaxEventTickets = 1000;
         public const double MaxEventPrice = 1000.00;
