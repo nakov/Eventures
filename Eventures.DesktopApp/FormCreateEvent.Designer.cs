@@ -65,11 +65,11 @@ namespace Eventures.DesktopApp
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxName.Location = new System.Drawing.Point(66, 16);
+            this.textBoxName.MaxLength = 50;
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.PlaceholderText = "Enter event name ...";
             this.textBoxName.Size = new System.Drawing.Size(462, 30);
             this.textBoxName.TabIndex = 1;
-            this.textBoxName.MaxLength = 50;
             // 
             // buttonCreateConfirm
             // 
@@ -104,11 +104,11 @@ namespace Eventures.DesktopApp
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPlace.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxPlace.Location = new System.Drawing.Point(66, 62);
+            this.textBoxPlace.MaxLength = 70;
             this.textBoxPlace.Name = "textBoxPlace";
             this.textBoxPlace.PlaceholderText = "Enter the event venue (place) ...";
             this.textBoxPlace.Size = new System.Drawing.Size(462, 30);
             this.textBoxPlace.TabIndex = 2;
-            this.textBoxPlace.MaxLength = 70;
             // 
             // labelPlace
             // 
@@ -131,7 +131,7 @@ namespace Eventures.DesktopApp
             this.dateTimePickerStart.Name = "dateTimePickerStart";
             this.dateTimePickerStart.Size = new System.Drawing.Size(188, 30);
             this.dateTimePickerStart.TabIndex = 3;
-            this.dateTimePickerStart.Text = DateTime.UtcNow.AddDays(1).ToString();
+            this.dateTimePickerStart.Value = new System.DateTime(2021, 9, 24, 9, 12, 7, 0);
             // 
             // labelStart
             // 
@@ -153,7 +153,7 @@ namespace Eventures.DesktopApp
             this.dateTimePickerEnd.Name = "dateTimePickerEnd";
             this.dateTimePickerEnd.Size = new System.Drawing.Size(203, 30);
             this.dateTimePickerEnd.TabIndex = 4;
-            this.dateTimePickerEnd.Text = DateTime.UtcNow.AddDays(2).ToString();
+            this.dateTimePickerEnd.Value = new System.DateTime(2021, 9, 25, 9, 12, 7, 0);
             // 
             // labelEnd
             // 
@@ -173,7 +173,7 @@ namespace Eventures.DesktopApp
             this.numboxTickets.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.numboxTickets.Location = new System.Drawing.Point(116, 154);
             this.numboxTickets.Maximum = new decimal(new int[] {
-            1000,
+            100000,
             0,
             0,
             0});
@@ -215,7 +215,7 @@ namespace Eventures.DesktopApp
             this.numboxPrice.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.numboxPrice.Location = new System.Drawing.Point(392, 154);
             this.numboxPrice.Maximum = new decimal(new int[] {
-            1000,
+            100000,
             0,
             0,
             0});
