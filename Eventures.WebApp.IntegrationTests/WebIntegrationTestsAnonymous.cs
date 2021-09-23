@@ -21,8 +21,8 @@ namespace Eventures.WebApp.IntegrationTests
             Assert.That(responseBody, Does.Contain("<h1>Register</h1>"));
 
             // Fill the registration form
-            string username = "user" + DateTime.Now.Ticks;
-            string password = "pass" + DateTime.Now.Ticks;
+            string username = "user" + DateTime.Now.Ticks.ToString().Substring(0, 10);
+            string password = "pass" + DateTime.Now.Ticks.ToString().Substring(0, 10);
             var antiForgeryToken = ExtractAntiForgeryToken(responseBody);
             var postContent = new FormUrlEncodedContent(
                 new Dictionary<string, string>
@@ -45,12 +45,6 @@ namespace Eventures.WebApp.IntegrationTests
             // Assert that the user was redirected to the "Home" page
             Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(postResponseBody, Does.Contain($"Welcome, {username}"));
-
-            //// Assert that the ASP.NET Identity cookie was set correctly by the server
-            //postResponse.Headers.TryGetValues("Set-Cookie", out var cookiesSetByRequest);
-            //var aspNetIdentityCookie = cookiesSetByRequest.FirstOrDefault(
-            //    c => c.Contains(".AspNetCore.Identity.Application"));
-            //Assert.NotNull(aspNetIdentityCookie);
         }
 
         [Test]

@@ -63,5 +63,18 @@ namespace Eventures.WebApp.UnitTests
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
         }
+
+        [Test]
+        public void Test_Error404()
+        {
+            // Arrange
+
+            // Act
+            var result = this.controller.Error404();
+
+            // Assert
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
+        }
     }
 }

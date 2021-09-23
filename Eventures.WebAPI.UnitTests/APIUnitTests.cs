@@ -235,7 +235,7 @@ namespace Eventures.WebAPI.UnitTests
         public void Test_Events_GetEventById()
         {
             // Arrange: get the id of the "Softuniada" event
-            int eventId = this.testDb.EventSoftuniada.Id;
+            int eventId = this.testDb.EventDevConf.Id;
 
             // Act
             var result = eventsController.GetEventById(eventId) as OkObjectResult;
@@ -244,7 +244,7 @@ namespace Eventures.WebAPI.UnitTests
             Assert.AreEqual((int)HttpStatusCode.OK, result.StatusCode);
 
             var resultValue = result.Value as EventListingModel;
-            Assert.AreEqual(this.testDb.EventSoftuniada.Id, resultValue.Id);
+            Assert.AreEqual(this.testDb.EventDevConf.Id, resultValue.Id);
         }
 
         [Test]

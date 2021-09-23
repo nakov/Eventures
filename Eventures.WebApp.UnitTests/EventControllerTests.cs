@@ -40,12 +40,13 @@ namespace Eventures.WebApp.UnitTests
             // Assert events count is correct
             var resultModel = viewResult.Model as List<EventViewModel>;
             Assert.IsNotNull(resultModel);
-            Assert.AreEqual(3, resultModel.Count);
+            Assert.AreEqual(4, resultModel.Count);
 
             // Assert events are correct
             Assert.AreEqual(this.testDb.EventSoftuniada.Name, resultModel[0].Name);
             Assert.AreEqual(this.testDb.EventOpenFest.Name, resultModel[1].Name);
             Assert.AreEqual(this.testDb.EventMSBuild.Name, resultModel[2].Name);
+            Assert.AreEqual(this.testDb.EventDevConf.Name, resultModel[3].Name);
         }
 
         [Test]
@@ -184,10 +185,8 @@ namespace Eventures.WebApp.UnitTests
             var result = controller.Delete(invalidId);
 
             // Assert the event was not deleted and returned
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult);
-            var resultModel = viewResult.Model as EventViewModel;
-            Assert.IsNull(resultModel);
+            var badRequestResult = result as BadRequestResult;
+            Assert.IsNotNull(badRequestResult);
 
             int eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
@@ -249,11 +248,8 @@ namespace Eventures.WebApp.UnitTests
             var result = controller.Delete(model);
 
             // Assert the deletion was not successful
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult);
-
-            var resultModel = viewResult.Model as EventViewModel;
-            Assert.IsNull(resultModel);
+            var badRequestResult = result as BadRequestResult;
+            Assert.IsNotNull(badRequestResult);
 
             int eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
@@ -294,7 +290,7 @@ namespace Eventures.WebApp.UnitTests
         public void Test_Edit_ValidId()
         {
             // Arrange: get the "Softuniada" event from the database for editing
-            var softuniadaEvent = this.testDb.EventSoftuniada;
+            var softuniadaEvent = this.testDb.EventDevConf;
             TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Act
@@ -326,11 +322,8 @@ namespace Eventures.WebApp.UnitTests
             var result = controller.Edit(invalidId);
 
             // Assert an event is not returned
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult);
-
-            var resultModel = viewResult.Model as EventCreateBindingModel;
-            Assert.IsNull(resultModel);
+            var badRequestResult = result as BadRequestResult;
+            Assert.IsNotNull(badRequestResult);
         }
 
         [Test]
@@ -380,7 +373,7 @@ namespace Eventures.WebApp.UnitTests
         public void Test_Edit_PostInvalidData()
         {
             // Arrange: get the "Softuniada" event from the database for editing
-            var softuniadaEvent = this.testDb.EventSoftuniada;
+            var softuniadaEvent = this.testDb.EventDevConf;
             TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             // Create an event binding model with invalid name: name == empty string

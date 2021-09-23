@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Eventures.Data;
 
@@ -10,18 +11,21 @@ namespace Eventures.Tests.Common
 {
     public class TestDb
     {
+        private ApplicationDbContext dbContext;
+        public EventuresUser GuestUser { get; private set; }
         public EventuresUser UserMaria { get; private set; }
-        public EventuresUser UserPeter { get; private set; }
+        public Event EventDevConf { get; private set; }
         public Event EventSoftuniada { get; private set; }
         public Event EventOpenFest { get; private set; }
-        public Event EventMSBuild { get; private set; }      
+        public Event EventMSBuild { get; private set; }
+        
         private string uniqueDbName;
 
         public ApplicationDbContext CreateDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseInMemoryDatabase(uniqueDbName);
-            var dbContext = new ApplicationDbContext(optionsBuilder.Options);
+            dbContext = new ApplicationDbContext(optionsBuilder.Options);
             return dbContext;
         }
 
@@ -49,55 +53,26 @@ namespace Eventures.Tests.Common
             };
             userManager.CreateAsync(this.UserMaria, this.UserMaria.UserName).Wait();
 
-            this.UserPeter = new EventuresUser()
+            // EventDevConf has owner UserMaria
+            this.EventDevConf = new Event()
             {
-                UserName = "peter",
-                Email = "peter@gmail.com",
-                FirstName = "Peter",
-                LastName = "Newton",
+                Name = "Dev Conference",
+                Place = "Varna",
+                Start = DateTime.Now.AddMonths(5),
+                End = DateTime.Now.AddMonths(5).AddDays(5),
+                TotalTickets = 350,
+                PricePerTicket = 20.00m,
+                OwnerId = this.UserMaria.Id
             };
-            userManager.CreateAsync(this.UserPeter, this.UserPeter.UserName).Wait();
-
-            // EventSoftuniada has owner UserMaria
-            this.EventSoftuniada = new Event()
-            {
-                Name = "Softuniada 2021",
-                Place = "Sofia",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 200,
-                PricePerTicket = 12.50m,
-                OwnerId = UserMaria.Id
-            };
-            dbContext.Add(this.EventSoftuniada);
-
-            // EventOpenFest has owner UserPeter
-            this.EventOpenFest = new Event()
-            {
-                Name = "OpenFest 2021",
-                Place = "Online",
-                Start = DateTime.Now.AddDays(200),
-                End = DateTime.Now.AddDays(201),
-                TotalTickets = 5000,
-                PricePerTicket = 10.00m,
-                OwnerId = UserPeter.Id
-            };
-            dbContext.Add(this.EventOpenFest);
-
-            // EventOpenFest has owner UserPeter
-            this.EventMSBuild = new Event()
-            {
-                Name = "Microsoft Build 2021",
-                Place = "Online",
-                Start = DateTime.Now.AddDays(300),
-                End = DateTime.Now.AddDays(302),
-                TotalTickets = 25000,
-                PricePerTicket = 0.00m,
-                OwnerId = UserPeter.Id
-            };
-            dbContext.Add(this.EventMSBuild);
+            dbContext.Add(this.EventDevConf);
 
             dbContext.SaveChanges();
+
+            this.GuestUser = this.dbContext.Users.FirstOrDefault();
+
+            this.EventSoftuniada = this.dbContext.Events.Find(1);
+            this.EventOpenFest = this.dbContext.Events.Find(2);
+            this.EventMSBuild = this.dbContext.Events.Find(3);
         }
     }
 }

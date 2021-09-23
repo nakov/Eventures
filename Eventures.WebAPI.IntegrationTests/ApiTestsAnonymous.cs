@@ -46,8 +46,8 @@ namespace Eventures.WebAPI.IntegrationTests
         public async Task Test_Users_Register_ValidData()
         {
             // Arrange: create a new register model
-            string username = "user" + DateTime.Now.Ticks;
-            string password = "pass" + DateTime.Now.Ticks;
+            string username = "user" + DateTime.Now.Ticks.ToString().Substring(0, 10);
+            string password = "pass" + DateTime.Now.Ticks.ToString().Substring(0, 10);
             var newUser = new RegisterModel()
             {
                 FirstName = "Test",

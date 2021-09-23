@@ -63,18 +63,18 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_GetEventById_ValidId()
         {
-            // Arrange: get the "Softuniada" event id
-            int eventId = this.testDb.EventSoftuniada.Id;
+            // Arrange: get the "Softuniada" event
+            var devConfEventId = this.testDb.EventDevConf.Id;
 
             // Act
-            var response = await this.httpClient.GetAsync($"/api/events/{eventId}");
+            var response = await this.httpClient.GetAsync($"/api/events/{devConfEventId}");
 
             // Assert the returned event is correct
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             var responseContent = response.Content
                 .ReadAsAsync<EventListingModel>().Result;
-            Assert.AreEqual(this.dbContext.Events.FirstOrDefault().Name, 
+            Assert.AreEqual(dbContext.Events.Find(devConfEventId).Name, 
                 responseContent.Name);
         }
 
@@ -104,10 +104,10 @@ namespace Eventures.WebAPI.IntegrationTests
             {
                 Name = eventName,
                 Place = eventPlace,
-                Start = DateTime.UtcNow,
-                End = DateTime.UtcNow.AddHours(3),
+                Start = DateTime.UtcNow.AddDays(1),
+                End = DateTime.UtcNow.AddDays(1).AddHours(3),
                 TotalTickets = 120,
-                PricePerTicket = 20
+                PricePerTicket = 20.00M
             };
             var eventsCountBefore = this.dbContext.Events.Count();
 
@@ -159,25 +159,25 @@ namespace Eventures.WebAPI.IntegrationTests
         public async Task Test_Events_EditEvent_ValidId()
         {
             // Arrange: get the "Softuniada 2021" event 
-            var softuniadaEvent = this.testDb.EventSoftuniada;
+            var devConfEvent = this.testDb.EventDevConf;
 
             // Create new event binding model, where only the event name is changed
-            var changedName = "Softuniada 2021 (New Edition)";
+            var changedName = "Dev Conference (New Edition) 2";
             var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
-                Place = "Sofia",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 200,
-                PricePerTicket = 12.00m
+                Place = devConfEvent.Place,
+                Start = devConfEvent.Start,
+                End = devConfEvent.End,
+                TotalTickets = devConfEvent.TotalTickets,
+                PricePerTicket = devConfEvent.PricePerTicket
             };
 
             var eventsCountBefore = this.dbContext.Events.Count();
 
             // Act: send PUT request with the changed event
             var putResponse = await this.httpClient.PutAsJsonAsync(
-                $"/api/events/{softuniadaEvent.Id}", changedEvent);
+                $"/api/events/{devConfEvent.Id}", changedEvent);
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NoContent, putResponse.StatusCode);
@@ -187,7 +187,7 @@ namespace Eventures.WebAPI.IntegrationTests
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
 
             var eventInDbAfter = this.dbContext.Events
-                .FirstOrDefault(x => x.Id == softuniadaEvent.Id);
+                .FirstOrDefault(x => x.Id == devConfEvent.Id);
             Assert.AreEqual(changedName, eventInDbAfter.Name);
         }
 
@@ -225,7 +225,7 @@ namespace Eventures.WebAPI.IntegrationTests
         public async Task Test_Events_EditEvent_InvalidData()
         {
             // Arrange: get the "Softuniada 2021" event 
-            var softuniadaEvent = this.testDb.EventSoftuniada;
+            var softuniadaEvent = this.testDb.EventDevConf;
 
             // Create new event binding model, where only the event name is changed
             // The name is invalid
@@ -233,11 +233,11 @@ namespace Eventures.WebAPI.IntegrationTests
             var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
-                Place = "Sofia",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 200,
-                PricePerTicket = 12.00m
+                Place = softuniadaEvent.Place,
+                Start = softuniadaEvent.Start,
+                End = softuniadaEvent.End,
+                TotalTickets = softuniadaEvent.TotalTickets,
+                PricePerTicket = softuniadaEvent.PricePerTicket
             };
 
             var eventsCountBefore = this.dbContext.Events.Count();
@@ -268,11 +268,11 @@ namespace Eventures.WebAPI.IntegrationTests
             var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
-                Place = "Online",
-                Start = DateTime.Now.AddDays(200),
-                End = DateTime.Now.AddDays(201),
-                TotalTickets = 5000,
-                PricePerTicket = 10.00m,
+                Place = openFestEvent.Place,
+                Start = openFestEvent.Start,
+                End = openFestEvent.End,
+                TotalTickets = openFestEvent.TotalTickets,
+                PricePerTicket = openFestEvent.PricePerTicket
             };
 
             // Act
@@ -297,11 +297,11 @@ namespace Eventures.WebAPI.IntegrationTests
         [Test]
         public async Task Test_Events_PartialEditEvent_ValidId()
         {
-            // Arrange: get the "Softuniada 2021" event 
-            var softuniadaEvent = this.testDb.EventSoftuniada;
+            // Arrange: get the "Dev Conference" event 
+            var devConfEvent = this.testDb.EventDevConf;
 
             // Create new event model, where only the event name is changed
-            var changedName = "Softuniada 2021 (New Edition)";
+            var changedName = "Dev Conference (New Edition)";
             var changedEvent = new PatchEventModel()
             {
                 Name = changedName
@@ -315,7 +315,7 @@ namespace Eventures.WebAPI.IntegrationTests
                 Encoding.UTF8, 
                 "application/json");
             var patchResponse = await this.httpClient.PatchAsync(
-                $"/api/events/{softuniadaEvent.Id}", requestContent);
+                $"/api/events/{devConfEvent.Id}", requestContent);
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NoContent, patchResponse.StatusCode);
@@ -325,9 +325,9 @@ namespace Eventures.WebAPI.IntegrationTests
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
 
             var eventInDbAfter = this.dbContext.Events
-                .FirstOrDefault(x => x.Id == softuniadaEvent.Id);
+                .Find(devConfEvent.Id);
             Assert.AreEqual(changedName, eventInDbAfter.Name);
-            Assert.AreEqual(softuniadaEvent.Place, eventInDbAfter.Place);
+            Assert.AreEqual(devConfEvent.Place, eventInDbAfter.Place);
         }
 
         [Test]
@@ -358,8 +358,8 @@ namespace Eventures.WebAPI.IntegrationTests
         public async Task Test_Events_PartialEditEvent_InvalidData()
         {
             // Arrange: get the "Softuniada 2021" event 
-            var softuniadaEvent = this.testDb.EventSoftuniada;
-            var eventInDbBefore = this.dbContext.Events.FirstOrDefault(x => x.Id == softuniadaEvent.Id);
+            var softuniadaEvent = this.testDb.EventDevConf;
+            var eventInDbBefore = this.dbContext.Events.Find(softuniadaEvent.Id);
 
             // Create an event model with changed name
             // The name is invalid
@@ -378,7 +378,7 @@ namespace Eventures.WebAPI.IntegrationTests
                 $"/api/events/{eventInDbBefore.Id}", requestContent);
 
             // Assert a "Bad Request" is returned
-            Assert.AreEqual(HttpStatusCode.NoContent, putResponse.StatusCode);
+            Assert.AreEqual(HttpStatusCode.BadRequest, putResponse.StatusCode);
 
             // Assert the event in not edited in the database
             this.dbContext = this.testDb.CreateDbContext();

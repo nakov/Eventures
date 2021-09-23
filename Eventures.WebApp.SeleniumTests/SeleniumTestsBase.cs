@@ -15,8 +15,8 @@ namespace Eventures.WebApp.SeleniumTests
         protected IWebDriver driver;
         protected TestEventuresApp<Startup> testEventuresApp;
         protected string baseUrl;
-        protected string username = "testuser" + DateTime.UtcNow.Ticks;
-        protected string password = "password" + DateTime.UtcNow.Ticks;
+        protected string username = "user" + DateTime.UtcNow.Ticks.ToString().Substring(0, 10);
+        protected string password = "pass" + DateTime.UtcNow.Ticks.ToString().Substring(0, 10);
 
         [OneTimeSetUp]
         public void OneTimeSetupBase()
@@ -29,7 +29,7 @@ namespace Eventures.WebApp.SeleniumTests
 
             // Setup the ChromeDriver
             var chromeOptions = new ChromeOptions();
-            if (! Debugger.IsAttached)
+            if (!Debugger.IsAttached)
                 chromeOptions.AddArguments("headless");
             chromeOptions.AddArguments("--start-maximized");
             this.driver = new ChromeDriver(chromeOptions);
