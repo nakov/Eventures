@@ -47,6 +47,7 @@
             this.textBoxUsername.PlaceholderText = "Your username here...";
             this.textBoxUsername.Size = new System.Drawing.Size(329, 30);
             this.textBoxUsername.TabIndex = 1;
+            this.textBoxUsername.MaxLength = 15;
             // 
             // labelUsername
             // 
@@ -69,6 +70,7 @@
             this.textBoxPassword.PlaceholderText = "Enter a password...";
             this.textBoxPassword.Size = new System.Drawing.Size(329, 30);
             this.textBoxPassword.TabIndex = 2;
+            this.textBoxUsername.MaxLength = 20;
             // 
             // labelPassword
             // 
