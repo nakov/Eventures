@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using Eventures.Data;
 using Eventures.WebApp.Models;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Eventures.WebApp.Controllers
 {
@@ -78,8 +78,8 @@ namespace Eventures.WebApp.Controllers
             Event ev = dbContext.Events.Find(id);
             if (ev == null)
             {
-                // Event with this id doesn't exist -> display "Event not found"
-                return View();
+                // When event with this id doesn't exist -> return "Bad Request"
+                return BadRequest();
             }
 
             string currentUserId = GetUserId();
@@ -98,8 +98,8 @@ namespace Eventures.WebApp.Controllers
             Event ev = dbContext.Events.Find(eventModel.Id);
             if (ev == null)
             {
-                return View();
-                
+                // When event with this id doesn't exist
+                return BadRequest();
             }
 
             string currentUserId = GetUserId();
@@ -120,8 +120,8 @@ namespace Eventures.WebApp.Controllers
             Event ev = dbContext.Events.Find(id);
             if (ev == null)
             {
-                // Event with this id doesn't exist -> display "Event not found"
-                return View();
+                // When event with this id doesn't exist
+                return BadRequest();
             }
 
             string currentUserId = GetUserId();
@@ -150,7 +150,8 @@ namespace Eventures.WebApp.Controllers
             Event ev = dbContext.Events.Find(id);
             if (ev == null)
             {
-                return View();
+                // When event with this id doesn't exist
+                return BadRequest();
             }
 
             string currentUserId = GetUserId();

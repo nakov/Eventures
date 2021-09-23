@@ -7,61 +7,53 @@
 <h1>@ViewData["Title"]</h1>
 <hr />
 
-@if (Model != null)
-{
-    <form asp-action="Edit">
-        <div class="row">
-            <div class="col-md-4">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" placeholder="Name..." />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Place" class="control-label"></label>
-                    <input asp-for="Place" class="form-control" placeholder="Place..." />
-                    <span asp-validation-for="Place" class="text-danger"></span>
-                </div>
+<form asp-action="Edit">
+    <div class="row">
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="Name..." />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label asp-for="Start" class="control-label"></label>
-                    <input asp-for="Start" class="form-control" />
-                    <span asp-validation-for="Start" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="End" class="control-label"></label>
-                    <input asp-for="End" class="form-control" />
-                    <span asp-validation-for="End" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label asp-for="TotalTickets" class="control-label"></label>
-                    <input asp-for="TotalTickets" class="form-control" placeholder="Total Tickets..." />
-                    <span asp-validation-for="TotalTickets" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PricePerTicket" class="control-label"></label>
-                    <input asp-for="PricePerTicket" class="form-control" placeholder="Price Per Ticket..." />
-                    <span asp-validation-for="PricePerTicket" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <input type="submit" value="Edit" class="btn btn-primary" />
-                    <a asp-action="All" class="btn btn-secondary">Back to List</a>
-                </div>
+            <div class="form-group">
+                <label asp-for="Place" class="control-label"></label>
+                <input asp-for="Place" class="form-control" placeholder="Place..." />
+                <span asp-validation-for="Place" class="text-danger"></span>
             </div>
         </div>
-    </form>
-}
-else
-{
-    <h2 class="text-danger">Event not found.</h2>
-    <a asp-action="All" class="btn btn-secondary">Back to List</a>
-}
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Start" class="control-label"></label>
+                <input asp-for="Start" class="form-control" />
+                <span asp-validation-for="Start" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="End" class="control-label"></label>
+                <input asp-for="End" class="form-control" />
+                <span asp-validation-for="End" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="TotalTickets" class="control-label"></label>
+                <input asp-for="TotalTickets" class="form-control" placeholder="Total Tickets..." />
+                <span asp-validation-for="TotalTickets" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PricePerTicket" class="control-label"></label>
+                <input asp-for="PricePerTicket" class="form-control" placeholder="Price Per Ticket..." />
+                <span asp-validation-for="PricePerTicket" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn btn-primary" />
+                <a asp-action="All" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
