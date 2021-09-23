@@ -44,7 +44,7 @@ namespace Eventures.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Logs a user in.
+        /// Logs a user in. (Default user credentials: guest / guest)
         /// </summary>
         /// <remarks>
         /// Sample request:
