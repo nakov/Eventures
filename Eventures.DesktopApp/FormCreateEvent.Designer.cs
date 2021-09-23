@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace Eventures.DesktopApp
 {
@@ -130,6 +131,7 @@ namespace Eventures.DesktopApp
             this.dateTimePickerStart.Name = "dateTimePickerStart";
             this.dateTimePickerStart.Size = new System.Drawing.Size(188, 30);
             this.dateTimePickerStart.TabIndex = 3;
+            this.dateTimePickerStart.Text = DateTime.UtcNow.AddDays(1).ToString();
             // 
             // labelStart
             // 
@@ -151,6 +153,7 @@ namespace Eventures.DesktopApp
             this.dateTimePickerEnd.Name = "dateTimePickerEnd";
             this.dateTimePickerEnd.Size = new System.Drawing.Size(203, 30);
             this.dateTimePickerEnd.TabIndex = 4;
+            this.dateTimePickerEnd.Text = DateTime.UtcNow.AddDays(2).ToString();
             // 
             // labelEnd
             // 
