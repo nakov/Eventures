@@ -8,7 +8,7 @@ namespace Eventures.Data
 
     public class Event
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         [Required]
         [MaxLength(MaxEventName)]
@@ -25,7 +25,7 @@ namespace Eventures.Data
         public decimal PricePerTicket { get; set; }
 
         [Required]
-        public string OwnerId { get; set; }
-        public EventuresUser Owner { get; set; }
+        public string OwnerId { get; init; }
+        public EventuresUser Owner { get; init; }
     }
 }
