@@ -21,26 +21,28 @@ namespace Eventures.WebApp.UnitTests
         public void OneTimeSetUp()
         {
             // Instantiate the controller class with the testing database
-            this.controller = new EventsController(
-                this.testDb.CreateDbContext());
+            this.controller = new EventsController(this.dbContext);
+
+            // Set UserMaria as current logged user
+            TestingUtils.AssignCurrentUserForController(this.controller, this.testDb.UserMaria);
         }
 
         [Test]
         public void Test_All()
         {
             // Arrange
-            
-            // Act
-            var result = controller.All();
 
-            // Assert
+            // Act: invoke the controller method
+            var result = this.controller.All();
+
+            // Assert a view is returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
 
             // Assert events count is correct
             var resultModel = viewResult.Model as List<EventViewModel>;
             Assert.IsNotNull(resultModel);
-            Assert.AreEqual(4, resultModel.Count);
+            Assert.AreEqual(this.dbContext.Events.Count(), resultModel.Count);
 
             // Assert events are correct
             Assert.AreEqual(this.testDb.EventSoftuniada.Name, resultModel[0].Name);
@@ -54,12 +56,14 @@ namespace Eventures.WebApp.UnitTests
         {
             // Arrange
 
-            // Act
-            var result = controller.Create();
+            // Act: invoke the controller method
+            var result = this.controller.Create();
 
-            // Assert an event model is returned
+            // Assert a view is returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
+
+            // Assert an event model is returned
             var resultModel = viewResult.Model as EventCreateBindingModel;
             Assert.IsNotNull(resultModel);
         }
@@ -67,7 +71,10 @@ namespace Eventures.WebApp.UnitTests
         [Test]
         public void Test_Create_PostValidData()
         {
-            // Arrange: create an event binding model
+            // Arrange: get the events count before the creation
+            int eventsCountBefore = this.dbContext.Events.Count();
+
+            // Create an event binding model
             var newEventData = new EventCreateBindingModel()
             {
                 Name = "New Event " + DateTime.Now.Ticks,
@@ -77,13 +84,9 @@ namespace Eventures.WebApp.UnitTests
                 TotalTickets = 500,
                 PricePerTicket = 20
             };
-            int eventsCountBefore = this.dbContext.Events.Count();
 
-            // Set UserMaria as current logged user
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
-
-            // Act
-            var result = controller.Create(newEventData);
+            // Act: invoke the controller method
+            var result = this.controller.Create(newEventData);
 
             // Assert the user is redirected to the "All Events" page
             var redirectResult = result as RedirectToActionResult;
@@ -107,7 +110,10 @@ namespace Eventures.WebApp.UnitTests
         [Test]
         public void Test_Create_PostInvalidData()
         {
-            // Arrange: create create an event binding model with invalid name: name == empty string
+            // Arrange: get the events count before the creation
+            int eventsCountBefore = this.dbContext.Events.Count();
+
+            // Create create an event binding model with invalid name: name == empty string
             string invalidName = string.Empty;
             var newEventData = new EventCreateBindingModel()
             {
@@ -119,25 +125,22 @@ namespace Eventures.WebApp.UnitTests
                 PricePerTicket = 20
             };
 
-            int eventsCountBefore = this.dbContext.Events.Count();
-
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
-
             // Add error to the controller for the invalid name
-            controller.ModelState.AddModelError("Name", "The Name field is required");
+            this.controller.ModelState.AddModelError("Name", "The Name field is required");
 
-            // Act
-            var result = controller.Create(newEventData);
+            // Act: invoke the controller method
+            var result = this.controller.Create(newEventData);
 
-            // Assert the new event is not created
+            // Assert a view is returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
 
+            // Assert the new event is not created
             int eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
 
             // Remove ModelState error for next tests
-            controller.ModelState.Remove("Name");
+            this.controller.ModelState.Remove("Name");
         }
 
         [Test]
@@ -157,15 +160,14 @@ namespace Eventures.WebApp.UnitTests
             this.dbContext.Add(newEvent);
             this.dbContext.SaveChanges();
 
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+            // Act: invoke the controller method
+            var result = this.controller.Delete(newEvent.Id);
 
-            // Act
-            var result = controller.Delete(newEvent.Id);
-
-            // Assert the event was deleted and returned
+            // Assert a view is returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
 
+            // Assert the event was deleted and returned
             var resultModel = viewResult.Model as EventViewModel;
             Assert.IsNotNull(resultModel);
             Assert.That(resultModel.Id == newEvent.Id);
@@ -176,18 +178,19 @@ namespace Eventures.WebApp.UnitTests
         [Test]
         public void Test_DeletePage_InvalidId()
         {
-            // Arrange
+            // Arrange: get the events count before the deletion
             int eventsCountBefore = this.dbContext.Events.Count();
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             var invalidId = -1;
-            // Act: send invalid id
-            var result = controller.Delete(invalidId);
 
-            // Assert the event was not deleted and returned
+            // Act: invoke the controller method with invalid id
+            var result = this.controller.Delete(invalidId);
+
+            // Assert a "Bad Request" result is returned
             var badRequestResult = result as BadRequestResult;
             Assert.IsNotNull(badRequestResult);
 
+            // Assert the event was not deleted
             int eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
         }
@@ -209,22 +212,23 @@ namespace Eventures.WebApp.UnitTests
             this.dbContext.Add(newEvent);
             this.dbContext.SaveChanges();
 
-            // Create a view model with the new event id as content
+            // Get the events count before the deletion
+            int eventsCountBefore = this.dbContext.Events.Count();
+
+            // Create a view model with the new event id
             EventViewModel model = new EventViewModel()
             {
                 Id = newEvent.Id
             };
 
-            int eventsCountBefore = this.dbContext.Events.Count();
+            // Act: invoke the controller method
+            var result = this.controller.Delete(model);
 
-            // Act
-            var result = controller.Delete(model);
-
-            // Assert the user is redirected to the "All Events" page
+            // Assert a "Redirect" result is returned
             var redirectResult = result as RedirectToActionResult;
             Assert.AreEqual("All", redirectResult.ActionName);
 
-            // Assert the event is deleted
+            // Assert the event is deleted from the db
             this.dbContext = this.testDb.CreateDbContext();
             int eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore - 1, eventsCountAfter);
@@ -236,21 +240,24 @@ namespace Eventures.WebApp.UnitTests
         [Test]
         public void Test_Delete_PostInvalidData()
         {
-            // Arrange: create a view model with invalid id
+            // Arrange: get the events count before the deletion
+            int eventsCountBefore = this.dbContext.Events.Count();
+
+            // Create a view model with invalid id
             var invalidId = -1;
             EventViewModel model = new EventViewModel()
             {
                 Id = invalidId
             };
-            int eventsCountBefore = this.dbContext.Events.Count();
 
-            // Act
-            var result = controller.Delete(model);
+            // Act: invoke the controller method
+            var result = this.controller.Delete(model);
 
-            // Assert the deletion was not successful
+            // Assert a "Bad Request" result is returned
             var badRequestResult = result as BadRequestResult;
             Assert.IsNotNull(badRequestResult);
 
+            // Assert the event is not deleted from the database
             int eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
         }
@@ -258,25 +265,23 @@ namespace Eventures.WebApp.UnitTests
         [Test]
         public void Test_Delete_UnauthorizedUser()
         {
-            // Arrange: get the "Open Fest" event with owner UserPeter
+            // Arrange: get the "OpenFest" event with owner GuestUser
             var openFestEvent = this.testDb.EventOpenFest;
 
-            //Create a view model with the new event id as content
+            // Arrange: get the events count before the deletion
+            int eventsCountBefore = this.dbContext.Events.Count();
+
+            //Create a view model with the new event id
             EventViewModel model = new EventViewModel()
             {
                 Id = openFestEvent.Id
             };
 
-            // Assign UserMaria to the controller
-            int eventsCountBefore = this.dbContext.Events.Count();
+            // Act: invoke the controller method
+            var result = this.controller.Delete(model);
 
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
-
-            // Act
-            var result = controller.Delete(model);
-
-            // Assert an "Unautorized" error message appears 
-            // because UserMaria is not the owner of the "Open Fest" event
+            // Assert an "Unauthorized" result is returned
+            // because UserMaria is not the owner of the "OpenFest" event
             var unauthorizedResult = result as UnauthorizedResult;
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, unauthorizedResult.StatusCode);
             Assert.IsNotNull(unauthorizedResult);
@@ -289,39 +294,37 @@ namespace Eventures.WebApp.UnitTests
         [Test]
         public void Test_Edit_ValidId()
         {
-            // Arrange: get the "Softuniada" event from the database for editing
-            var softuniadaEvent = this.testDb.EventDevConf;
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+            // Arrange: get the "Dev Conference" event from the database for editing
+            var devConfEvent = this.testDb.EventDevConf;
 
-            // Act
-            var result = controller.Edit(softuniadaEvent.Id);
+            // Act: invoke the controller method
+            var result = this.controller.Edit(devConfEvent.Id);
 
-            // Assert
+            // Assert a view is returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
 
             // Assert fields are filled with correct data
             var resultModel = viewResult.Model as EventCreateBindingModel;
             Assert.IsNotNull(resultModel);
-            Assert.AreEqual(resultModel.Name, softuniadaEvent.Name);
-            Assert.AreEqual(resultModel.Place, softuniadaEvent.Place);
-            Assert.AreEqual(resultModel.Start, softuniadaEvent.Start);
-            Assert.AreEqual(resultModel.End, softuniadaEvent.End);
-            Assert.AreEqual(resultModel.PricePerTicket, softuniadaEvent.PricePerTicket);
-            Assert.AreEqual(resultModel.TotalTickets, softuniadaEvent.TotalTickets);
+            Assert.AreEqual(resultModel.Name, devConfEvent.Name);
+            Assert.AreEqual(resultModel.Place, devConfEvent.Place);
+            Assert.AreEqual(resultModel.Start, devConfEvent.Start);
+            Assert.AreEqual(resultModel.End, devConfEvent.End);
+            Assert.AreEqual(resultModel.PricePerTicket, devConfEvent.PricePerTicket);
+            Assert.AreEqual(resultModel.TotalTickets, devConfEvent.TotalTickets);
         }
 
         [Test]
         public void Test_Edit_InvalidId()
         {
             // Arrange
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
 
             var invalidId = -1;
-            // Act: send invalid id
-            var result = controller.Edit(invalidId);
+            // Act: invoke the controller method with invalid id
+            var result = this.controller.Edit(invalidId);
 
-            // Assert an event is not returned
+            // Assert a "Bad Request" result is returned
             var badRequestResult = result as BadRequestResult;
             Assert.IsNotNull(badRequestResult);
         }
@@ -348,17 +351,17 @@ namespace Eventures.WebApp.UnitTests
             EventCreateBindingModel model = new EventCreateBindingModel()
             {
                 Name = changedName,
-                Place = "Ibiza",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 20,
-                PricePerTicket = 120.00m
+                Place = newEvent.Place,
+                Start = newEvent.Start,
+                End = newEvent.End,
+                TotalTickets = newEvent.TotalTickets,
+                PricePerTicket = newEvent.PricePerTicket
             };
 
-            // Act
-            var result = controller.Edit(newEvent.Id, model);
+            // Act: invoke the controller method
+            var result = this.controller.Edit(newEvent.Id, model);
 
-            // Assert the user is redirected to the "All Events" page
+            // Assert a "Redirect" result is returned
             var redirectResult = result as RedirectToActionResult;
             Assert.AreEqual("All", redirectResult.ActionName);
 
@@ -372,36 +375,35 @@ namespace Eventures.WebApp.UnitTests
         [Test]
         public void Test_Edit_PostInvalidData()
         {
-            // Arrange: get the "Softuniada" event from the database for editing
-            var softuniadaEvent = this.testDb.EventDevConf;
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+            // Arrange: get the "Dev Conference" event from the database for editing
+            var devConfEvent = this.testDb.EventDevConf;
 
             // Create an event binding model with invalid name: name == empty string
             var invalidName = string.Empty;
             EventCreateBindingModel model = new EventCreateBindingModel()
             {
                 Name = invalidName,
-                Place = "Sofia",
-                Start = DateTime.Now.AddMonths(3),
-                End = DateTime.Now.AddMonths(3),
-                TotalTickets = 200,
-                PricePerTicket = 12.00m
+                Place = devConfEvent.Place,
+                Start = devConfEvent.Start,
+                End = devConfEvent.End,
+                TotalTickets = devConfEvent.TotalTickets,
+                PricePerTicket = devConfEvent.PricePerTicket
             };
 
             // Add error to the controller
-            controller.ModelState.AddModelError("Name", "The Name field is required");
+            this.controller.ModelState.AddModelError("Name", "The Name field is required");
 
-            // Act
-            var result = controller.Edit(softuniadaEvent.Id, model);
+            // Act: invoke the controller method
+            var result = this.controller.Edit(devConfEvent.Id, model);
 
             // Assert the user is not redirected
             var redirectResult = result as RedirectToActionResult;
             Assert.IsNull(redirectResult);
 
             // Assert the event's name is not edited
-            var editedEvent = this.dbContext.Events.Find(softuniadaEvent.Id);
+            var editedEvent = this.dbContext.Events.Find(devConfEvent.Id);
             Assert.IsNotNull(editedEvent);
-            Assert.AreEqual(softuniadaEvent.Name, editedEvent.Name);
+            Assert.AreEqual(devConfEvent.Name, editedEvent.Name);
 
             // Remove ModelState error for next tests
             this.controller.ModelState.Remove("Name");
@@ -413,25 +415,22 @@ namespace Eventures.WebApp.UnitTests
             // Arrange: get the "Open Fest" event with owner UserPeter
             var openFestEvent = this.testDb.EventOpenFest;
 
-            // Assign UserMaria to the controller
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
-
             // Create event binding model with changed event name
             var changedName = "OpenFest 2021 (New Edition)";
             var changedEvent = new EventCreateBindingModel()
             {
                 Name = changedName,
-                Place = "Online",
-                Start = DateTime.Now.AddDays(200),
-                End = DateTime.Now.AddDays(201),
-                TotalTickets = 5000,
-                PricePerTicket = 10.00m,
+                Place = openFestEvent.Place,
+                Start = openFestEvent.Start,
+                End = openFestEvent.End,
+                TotalTickets = openFestEvent.TotalTickets,
+                PricePerTicket = openFestEvent.PricePerTicket
             };
 
-            // Act
-            var result = controller.Edit(openFestEvent.Id, changedEvent);
+            // Act: invoke the controller method
+            var result = this.controller.Edit(openFestEvent.Id, changedEvent);
 
-            // Assert "Unautorized" error message appears 
+            // Assert an "Unauthorized" result is returned
             // because UserMaria is not the owner of the "Open Fest" event
             var unauthorizedResult = result as UnauthorizedResult;
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, unauthorizedResult.StatusCode);

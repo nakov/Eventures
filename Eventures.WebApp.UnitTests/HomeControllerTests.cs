@@ -1,11 +1,11 @@
 using System.Linq;
 
+using Eventures.Tests.Common;
 using Eventures.WebApp.Models;
 using Eventures.WebApp.Controllers;
 
 using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
-using Eventures.Tests.Common;
 
 namespace Eventures.WebApp.UnitTests
 {
@@ -16,37 +16,39 @@ namespace Eventures.WebApp.UnitTests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            // Instantiate the controller class with the testing database
-            this.controller = new HomeController(
-                this.testDb.CreateDbContext());
+            // Instantiate the controller class with the db context
+            this.controller = new HomeController(this.dbContext);
         }
 
         [Test]
         public void Test_Index()
         {
             // Arrange: assign UserMaria to the controller
-            TestingUtils.AssignCurrentUserForController(controller, this.testDb.UserMaria);
+            TestingUtils.AssignCurrentUserForController(
+                this.controller, this.testDb.UserMaria);
 
-            // Act
+            // Act: invoke the controller method
             var result = this.controller.Index();
 
-            // Assert
+            // Assert a view is returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
 
+            // Assert the returned model is correct
             var resultModel = viewResult.Model as HomeViewModel;
-            Assert.AreEqual(this.dbContext.Events.Count(), resultModel.AllEventsCount);
+            Assert.AreEqual(this.dbContext.Events.Count(),
+                resultModel.AllEventsCount);
         }
 
         [Test]
         public void Test_Error()
         {
             // Arrange
-        
-            // Act
+
+            // Act: invoke the controller method
             var result = this.controller.Error();
 
-            // Assert
+            // Assert a view is returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
         }
@@ -55,11 +57,11 @@ namespace Eventures.WebApp.UnitTests
         public void Test_Error401()
         {
             // Arrange
-         
-            // Act
+
+            // Act: invoke the controller method
             var result = this.controller.Error401();
 
-            // Assert
+            // Assert a view is returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
         }
@@ -69,10 +71,10 @@ namespace Eventures.WebApp.UnitTests
         {
             // Arrange
 
-            // Act
+            // Act: invoke the controller method
             var result = this.controller.Error404();
 
-            // Assert
+            // Assert a view is returned
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
         }

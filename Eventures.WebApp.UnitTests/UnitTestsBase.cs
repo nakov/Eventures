@@ -13,8 +13,10 @@ namespace Eventures.WebApp.UnitTests
         [OneTimeSetUp]
         public void OneTimeSetupBase()
         {
-            testDb = new TestDb();
-            dbContext = testDb.CreateDbContext();
+            // Instantiate the testing db with a db context
+            this.testDb = new TestDb();
+            this.dbContext = testDb.CreateDbContext();
         }
     }
 }
+
