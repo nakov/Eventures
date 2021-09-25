@@ -25,7 +25,8 @@ namespace Eventures.WebApp.Controllers
 
         public IActionResult All()
         {
-            List<EventViewModel> events = dbContext.Events
+            List<EventViewModel> events = this.dbContext
+                .Events
                 .Include(e => e.Owner)
                 .Select(e => CreateEventViewModel(e))
                 .ToList();
@@ -51,31 +52,31 @@ namespace Eventures.WebApp.Controllers
         [HttpPost]
         public IActionResult Create(EventCreateBindingModel bindingModel)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                string currentUserId = GetUserId();
-                Event eventForDb = new Event
-                {
-                    Name = bindingModel.Name,
-                    Place = bindingModel.Place,
-                    Start = bindingModel.Start,
-                    End = bindingModel.End,
-                    TotalTickets = bindingModel.TotalTickets,
-                    PricePerTicket = bindingModel.PricePerTicket,
-                    OwnerId = currentUserId
-                };
-                dbContext.Events.Add(eventForDb);
-                dbContext.SaveChanges();
-
-                return RedirectToAction("All");
+                return View(bindingModel);   
             }
 
-            return View();
+            string currentUserId = GetUserId();
+            Event eventForDb = new Event
+            {
+                Name = bindingModel.Name,
+                Place = bindingModel.Place,
+                Start = bindingModel.Start,
+                End = bindingModel.End,
+                TotalTickets = bindingModel.TotalTickets,
+                PricePerTicket = bindingModel.PricePerTicket,
+                OwnerId = currentUserId
+            };
+            this.dbContext.Events.Add(eventForDb);
+            this.dbContext.SaveChanges();
+
+            return RedirectToAction("All");
         }
 
         public IActionResult Delete(int id)
         {
-            Event ev = dbContext.Events.Find(id);
+            Event ev = this.dbContext.Events.Find(id);
             if (ev == null)
             {
                 // When event with this id doesn't exist -> return "Bad Request"
@@ -95,7 +96,7 @@ namespace Eventures.WebApp.Controllers
         [HttpPost]
         public IActionResult Delete(EventViewModel eventModel)
         {
-            Event ev = dbContext.Events.Find(eventModel.Id);
+            Event ev = this.dbContext.Events.Find(eventModel.Id);
             if (ev == null)
             {
                 // When event with this id doesn't exist
@@ -109,15 +110,15 @@ namespace Eventures.WebApp.Controllers
                 return Unauthorized();
             }
 
-            dbContext.Events.Remove(ev);
-            dbContext.SaveChanges();
+            this.dbContext.Events.Remove(ev);
+            this.dbContext.SaveChanges();
 
             return RedirectToAction("All");
         }
 
         public IActionResult Edit(int id)
         {
-            Event ev = dbContext.Events.Find(id);
+            Event ev = this.dbContext.Events.Find(id);
             if (ev == null)
             {
                 // When event with this id doesn't exist
@@ -147,7 +148,7 @@ namespace Eventures.WebApp.Controllers
         [HttpPost]
         public IActionResult Edit(int id, EventCreateBindingModel bindingModel)
         {
-            Event ev = dbContext.Events.Find(id);
+            Event ev = this.dbContext.Events.Find(id);
             if (ev == null)
             {
                 // When event with this id doesn't exist
@@ -173,7 +174,7 @@ namespace Eventures.WebApp.Controllers
             ev.TotalTickets = bindingModel.TotalTickets;
             ev.PricePerTicket = bindingModel.PricePerTicket;
 
-            dbContext.SaveChanges();
+            this.dbContext.SaveChanges();
             return RedirectToAction("All");
         }
 
