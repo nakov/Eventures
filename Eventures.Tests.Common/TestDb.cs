@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Threading.Tasks;
 
 using Eventures.Data;
 
@@ -12,14 +12,21 @@ namespace Eventures.Tests.Common
     public class TestDb
     {
         private ApplicationDbContext dbContext;
+        private string uniqueDbName;
+
+        public TestDb()
+        {
+            this.uniqueDbName = "Eventures-TestDb-" + DateTime.Now.Ticks;
+            this.SeedDatabase().Wait();
+        }
+
         public EventuresUser GuestUser { get; private set; }
         public EventuresUser UserMaria { get; private set; }
         public Event EventDevConf { get; private set; }
         public Event EventSoftuniada { get; private set; }
         public Event EventOpenFest { get; private set; }
         public Event EventMSBuild { get; private set; }
-        
-        private string uniqueDbName;
+
 
         public ApplicationDbContext CreateDbContext()
         {
@@ -29,13 +36,7 @@ namespace Eventures.Tests.Common
             return dbContext;
         }
 
-        public TestDb()
-        {
-            this.uniqueDbName = "Eventures-TestDb-" + DateTime.Now.Ticks;
-            this.SeedDatabase();
-        }
-
-        private void SeedDatabase()
+        private async Task SeedDatabase()
         {
             var dbContext = this.CreateDbContext();
             var userStore = new UserStore<EventuresUser>(dbContext);
@@ -44,6 +45,7 @@ namespace Eventures.Tests.Common
             var userManager = new UserManager<EventuresUser>(
                 userStore, null, hasher, null, null, normalizer, null, null, null);
 
+            // Create UserMaria
             this.UserMaria = new EventuresUser()
             {
                 UserName = "maria",
@@ -68,11 +70,17 @@ namespace Eventures.Tests.Common
 
             dbContext.SaveChanges();
 
-            this.GuestUser = this.dbContext.Users.FirstOrDefault();
+            // Get GuestUser for the database
+            this.GuestUser = await this.dbContext.Users
+                .FirstOrDefaultAsync(u => u.UserName == "guest");
 
-            this.EventSoftuniada = this.dbContext.Events.Find(1);
-            this.EventOpenFest = this.dbContext.Events.Find(2);
-            this.EventMSBuild = this.dbContext.Events.Find(3);
+            // Get events for the database
+            this.EventSoftuniada = await this.dbContext.Events
+                .FirstOrDefaultAsync(e => e.Name.Contains("Softuniada"));
+            this.EventOpenFest = await this.dbContext.Events
+                .FirstOrDefaultAsync(e => e.Name.Contains("OpenFest")); ;
+            this.EventMSBuild = await this.dbContext.Events
+                .FirstOrDefaultAsync(e => e.Name.Contains("Microsoft"));
         }
     }
 }
