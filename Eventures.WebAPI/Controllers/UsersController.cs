@@ -158,21 +158,18 @@ namespace Eventures.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = new List<UserListingModel>();
-
-            var dbUsers = dbContext.Users.ToList();
-            foreach (var dbUser in dbUsers)
-            {
-                var user = new UserListingModel
+            var users = this.dbContext
+                .Users
+                .Select(u => new UserListingModel()
                 {
-                    Id = dbUser.Id,
-                    FirstName = dbUser.FirstName,
-                    LastName = dbUser.LastName,
-                    Username = dbUser.UserName,
-                    Email = dbUser.Email
-                };
-                users.Add(user);
-            }
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Username = u.UserName,
+                    Email = u.Email
+                })
+                .ToList();
+
             return Ok(users);
         }
     }

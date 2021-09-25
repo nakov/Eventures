@@ -9,7 +9,6 @@ using Eventures.WebAPI.Models.Event;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Globalization;
 
 namespace Eventures.WebAPI.Controllers
 {
@@ -193,7 +192,7 @@ namespace Eventures.WebAPI.Controllers
                     new ResponseMsg { Message = $"Event #{id} not found." });
             }
             
-            var ev = this.dbContext.Events.FirstOrDefault(e => e.Id == id);
+            var ev = this.dbContext.Events.Find(id);
 
             if (GetCurrentUserId() != ev.OwnerId)
             {
@@ -207,7 +206,7 @@ namespace Eventures.WebAPI.Controllers
             ev.End = eventModel.End;
             ev.TotalTickets = eventModel.TotalTickets;
             ev.PricePerTicket = eventModel.PricePerTicket;
-            dbContext.SaveChanges();
+            this.dbContext.SaveChanges();
 
             return NoContent();
         }
@@ -240,7 +239,7 @@ namespace Eventures.WebAPI.Controllers
                     new ResponseMsg { Message = $"Event #{id} not found." });
             }
 
-            var ev = this.dbContext.Events.FirstOrDefault(e => e.Id == id);
+            var ev = this.dbContext.Events.Find(id);
 
             if (GetCurrentUserId() != ev.OwnerId)
             {
@@ -264,7 +263,7 @@ namespace Eventures.WebAPI.Controllers
 
             ev.TotalTickets = eventModel.TotalTickets == null ? ev.TotalTickets : eventModel.TotalTickets.Value;
             ev.PricePerTicket = eventModel.PricePerTicket == null ? ev.PricePerTicket : eventModel.PricePerTicket.Value;
-            dbContext.SaveChanges();
+            this.dbContext.SaveChanges();
 
             return NoContent();
         }
@@ -296,7 +295,7 @@ namespace Eventures.WebAPI.Controllers
                     new ResponseMsg { Message = $"Event #{id} not found." });
             }
 
-            var ev = this.dbContext.Events.FirstOrDefault(e => e.Id == id);
+            var ev = this.dbContext.Events.Find(id);
 
             if (GetCurrentUserId() != ev.OwnerId)
             {
@@ -306,8 +305,8 @@ namespace Eventures.WebAPI.Controllers
 
             var eventModel = CreateEventListingModelById(ev.Id);
 
-            dbContext.Events.Remove(ev);
-            dbContext.SaveChanges();
+            this.dbContext.Events.Remove(ev);
+            this.dbContext.SaveChanges();
 
             return Ok(eventModel);
         }
