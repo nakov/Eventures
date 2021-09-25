@@ -117,7 +117,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var userMaria = this.testDb.UserMaria;
 
             // Act
-            var postResponse = await httpClient
+            var postResponse = await this.httpClient
                 .PostAsJsonAsync("/api/users/login", new LoginModel
                 {
                     Username = userMaria.UserName,
@@ -143,10 +143,10 @@ namespace Eventures.WebAPI.IntegrationTests
             // Act: send a POST request with invalid password
             var postResponse = await httpClient.PostAsJsonAsync("/api/users/login", 
                 new LoginModel
-            {
-                Username = userMaria.UserName,
-                Password = wrongPassword
-            });
+                {
+                    Username = userMaria.UserName,
+                    Password = wrongPassword
+                });
 
             // Assert the login is unsuccessful
             Assert.AreEqual(HttpStatusCode.Unauthorized, postResponse.StatusCode);
