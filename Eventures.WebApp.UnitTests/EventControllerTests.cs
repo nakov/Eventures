@@ -135,6 +135,10 @@ namespace Eventures.WebApp.UnitTests
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
 
+            // Assert an event model is returned
+            var resultModel = viewResult.Model as EventCreateBindingModel;
+            Assert.IsNotNull(resultModel);
+
             // Assert the new event is not created
             int eventsCountAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsCountBefore, eventsCountAfter);
@@ -167,7 +171,7 @@ namespace Eventures.WebApp.UnitTests
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
 
-            // Assert the event was deleted and returned
+            // Assert the correct event is returned
             var resultModel = viewResult.Model as EventViewModel;
             Assert.IsNotNull(resultModel);
             Assert.That(resultModel.Id == newEvent.Id);
@@ -178,9 +182,7 @@ namespace Eventures.WebApp.UnitTests
         [Test]
         public void Test_DeletePage_InvalidId()
         {
-            // Arrange: get the events count before the deletion
-            int eventsCountBefore = this.dbContext.Events.Count();
-
+            // Arrange
             var invalidId = -1;
 
             // Act: invoke the controller method with invalid id
@@ -189,10 +191,6 @@ namespace Eventures.WebApp.UnitTests
             // Assert a "Bad Request" result is returned
             var badRequestResult = result as BadRequestResult;
             Assert.IsNotNull(badRequestResult);
-
-            // Assert the event was not deleted
-            int eventsCountAfter = this.dbContext.Events.Count();
-            Assert.AreEqual(eventsCountBefore, eventsCountAfter);
         }
 
         [Test]

@@ -36,6 +36,8 @@ namespace Eventures.WebApp.UnitTests
 
             // Assert the returned model is correct
             var resultModel = viewResult.Model as HomeViewModel;
+
+            // Assert the returned events count is correct
             Assert.AreEqual(this.dbContext.Events.Count(),
                 resultModel.AllEventsCount);
         }

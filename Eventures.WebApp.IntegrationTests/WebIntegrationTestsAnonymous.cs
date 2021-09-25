@@ -21,8 +21,8 @@ namespace Eventures.WebApp.IntegrationTests
             Assert.That(responseBody, Does.Contain("<h1>Register</h1>"));
 
             // Fill the registration form
-            string username = "user" + DateTime.Now.Ticks.ToString().Substring(0, 10);
-            string password = "pass" + DateTime.Now.Ticks.ToString().Substring(0, 10);
+            string username = "user" + DateTime.Now.Ticks.ToString().Substring(10);
+            string password = "pass" + DateTime.Now.Ticks.ToString().Substring(10);
             var antiForgeryToken = ExtractAntiForgeryToken(responseBody);
             var postContent = new FormUrlEncodedContent(
                 new Dictionary<string, string>

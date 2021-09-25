@@ -7,8 +7,8 @@ namespace Eventures.DesktopApp.AppiumTests
 {
     public class AppiumTests : AppiumTestsBase
     {
-        private string username = "user" + DateTime.UtcNow.Ticks.ToString().Substring(0, 10);
-        private string password = "pass" + DateTime.UtcNow.Ticks.ToString().Substring(0, 10);
+        private string username = "user" + DateTime.UtcNow.Ticks.ToString().Substring(10);
+        private string password = "pass" + DateTime.UtcNow.Ticks.ToString().Substring(10);
         private const string EventBoardWindowName = "Event Board";
         private const string CreateEventWindowName = "Create a New Event";
 

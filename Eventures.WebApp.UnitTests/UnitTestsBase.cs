@@ -11,7 +11,7 @@ namespace Eventures.WebApp.UnitTests
         protected ApplicationDbContext dbContext;
 
         [OneTimeSetUp]
-        public void OneTimeSetupBase()
+        public void OneTimeSetUpBase()
         {
             // Instantiate the testing db with a db context
             this.testDb = new TestDb();
