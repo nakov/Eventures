@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace Eventures.DesktopApp
@@ -131,7 +132,7 @@ namespace Eventures.DesktopApp
             this.dateTimePickerStart.Name = "dateTimePickerStart";
             this.dateTimePickerStart.Size = new System.Drawing.Size(188, 30);
             this.dateTimePickerStart.TabIndex = 3;
-            this.dateTimePickerStart.Value = new System.DateTime(2021, 9, 24, 9, 12, 7, 0);
+            this.dateTimePickerStart.Text = DateTime.ParseExact(DateTime.UtcNow.AddDays(1).ToString("dd/MM/yyyy HH:mm"), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture).ToString();
             // 
             // labelStart
             // 
@@ -153,7 +154,7 @@ namespace Eventures.DesktopApp
             this.dateTimePickerEnd.Name = "dateTimePickerEnd";
             this.dateTimePickerEnd.Size = new System.Drawing.Size(203, 30);
             this.dateTimePickerEnd.TabIndex = 4;
-            this.dateTimePickerEnd.Value = new System.DateTime(2021, 9, 25, 9, 12, 7, 0);
+            this.dateTimePickerEnd.Text = DateTime.ParseExact(DateTime.UtcNow.AddDays(2).ToString("dd/MM/yyyy HH:mm"), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture).ToString();
             // 
             // labelEnd
             // 
