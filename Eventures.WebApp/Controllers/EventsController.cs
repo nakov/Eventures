@@ -36,7 +36,7 @@ namespace Eventures.WebApp.Controllers
 
         public IActionResult Create()
         {
-            EventCreateBindingModel model = new EventCreateBindingModel()
+            EventBindingModel model = new EventBindingModel()
             {
                 Name = "New Event",
                 Place = "Some Place",
@@ -50,7 +50,7 @@ namespace Eventures.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(EventCreateBindingModel bindingModel)
+        public IActionResult Create(EventBindingModel bindingModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -132,7 +132,7 @@ namespace Eventures.WebApp.Controllers
                 return Unauthorized();
             }
 
-            EventCreateBindingModel model = new EventCreateBindingModel()
+            EventBindingModel model = new EventBindingModel()
             {
                 Name = ev.Name,
                 Place = ev.Place,
@@ -146,7 +146,7 @@ namespace Eventures.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, EventCreateBindingModel bindingModel)
+        public IActionResult Edit(int id, EventBindingModel bindingModel)
         {
             Event ev = this.dbContext.Events.Find(id);
             if (ev == null)

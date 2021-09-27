@@ -64,7 +64,7 @@ namespace Eventures.WebApp.UnitTests
             Assert.IsNotNull(viewResult);
 
             // Assert an event model is returned
-            var resultModel = viewResult.Model as EventCreateBindingModel;
+            var resultModel = viewResult.Model as EventBindingModel;
             Assert.IsNotNull(resultModel);
         }
 
@@ -75,7 +75,7 @@ namespace Eventures.WebApp.UnitTests
             int eventsCountBefore = this.dbContext.Events.Count();
 
             // Create an event binding model
-            var newEventData = new EventCreateBindingModel()
+            var newEventData = new EventBindingModel()
             {
                 Name = "New Event " + DateTime.Now.Ticks,
                 Place = "Sofia",
@@ -115,7 +115,7 @@ namespace Eventures.WebApp.UnitTests
 
             // Create create an event binding model with invalid name: name == empty string
             string invalidName = string.Empty;
-            var newEventData = new EventCreateBindingModel()
+            var newEventData = new EventBindingModel()
             {
                 Name = invalidName,
                 Place = "Sofia",
@@ -136,7 +136,7 @@ namespace Eventures.WebApp.UnitTests
             Assert.IsNotNull(viewResult);
 
             // Assert an event model is returned
-            var resultModel = viewResult.Model as EventCreateBindingModel;
+            var resultModel = viewResult.Model as EventBindingModel;
             Assert.IsNotNull(resultModel);
 
             // Assert the new event is not created
@@ -303,7 +303,7 @@ namespace Eventures.WebApp.UnitTests
             Assert.IsNotNull(viewResult);
 
             // Assert fields are filled with correct data
-            var resultModel = viewResult.Model as EventCreateBindingModel;
+            var resultModel = viewResult.Model as EventBindingModel;
             Assert.IsNotNull(resultModel);
             Assert.AreEqual(resultModel.Name, devConfEvent.Name);
             Assert.AreEqual(resultModel.Place, devConfEvent.Place);
@@ -346,7 +346,7 @@ namespace Eventures.WebApp.UnitTests
 
             // Create an event binding model where only the name is changed
             var changedName = "Party" + DateTime.Now.Ticks;
-            EventCreateBindingModel model = new EventCreateBindingModel()
+            EventBindingModel model = new EventBindingModel()
             {
                 Name = changedName,
                 Place = newEvent.Place,
@@ -378,7 +378,7 @@ namespace Eventures.WebApp.UnitTests
 
             // Create an event binding model with invalid name: name == empty string
             var invalidName = string.Empty;
-            EventCreateBindingModel model = new EventCreateBindingModel()
+            EventBindingModel model = new EventBindingModel()
             {
                 Name = invalidName,
                 Place = devConfEvent.Place,
@@ -415,7 +415,7 @@ namespace Eventures.WebApp.UnitTests
 
             // Create event binding model with changed event name
             var changedName = "OpenFest 2021 (New Edition)";
-            var changedEvent = new EventCreateBindingModel()
+            var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
                 Place = openFestEvent.Place,

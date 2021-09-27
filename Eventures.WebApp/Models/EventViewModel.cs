@@ -4,17 +4,17 @@ namespace Eventures.WebApp.Models
 {
     public class EventViewModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Start { get; set; }
-        public string End { get; set; }
-        public string Place { get; set; }
+        public int Id { get; init; }
+        public string Name { get; init; }
+        public string Start { get; init; }
+        public string End { get; init; }
+        public string Place { get; init; }
 
         [Display(Name = "Total Tickets")]
-        public int TotalTickets { get; set; }
+        public int TotalTickets { get; init; }
 
         [Display(Name = "Price Per Ticket")]
-        public decimal PricePerTicket { get; set; }
-        public string Owner { get; set; }
+        public decimal PricePerTicket { get; init; }
+        public string Owner { get; init; }
     }
 }
