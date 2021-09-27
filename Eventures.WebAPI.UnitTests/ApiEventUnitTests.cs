@@ -117,6 +117,7 @@ namespace Eventures.WebAPI.UnitTests
 
             var resultValue = result.Value as EventListingModel;
             Assert.IsTrue(resultValue.Id > 0);
+            Assert.AreEqual(newEventData.Name, resultValue.Name);
             Assert.AreEqual(newEventData.Place, resultValue.Place);
             Assert.AreEqual(newEventData.Start.ToString("dd/MM/yyyy HH:mm"), resultValue.Start);
             Assert.AreEqual(newEventData.End.ToString("dd/MM/yyyy HH:mm"), resultValue.End);
