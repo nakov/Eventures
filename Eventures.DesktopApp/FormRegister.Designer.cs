@@ -51,11 +51,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxUsername.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxUsername.Location = new System.Drawing.Point(151, 13);
+            this.textBoxUsername.MaxLength = 15;
             this.textBoxUsername.Name = "textBoxUsername";
             this.textBoxUsername.PlaceholderText = "Your username here...";
             this.textBoxUsername.Size = new System.Drawing.Size(339, 30);
             this.textBoxUsername.TabIndex = 1;
-            this.textBoxUsername.MaxLength = 15;
             // 
             // labelUsername
             // 
@@ -73,12 +73,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPassword.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxPassword.Location = new System.Drawing.Point(151, 86);
+            this.textBoxPassword.MaxLength = 20;
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.PasswordChar = '*';
             this.textBoxPassword.PlaceholderText = "Enter a password...";
             this.textBoxPassword.Size = new System.Drawing.Size(339, 30);
             this.textBoxPassword.TabIndex = 3;
-            this.textBoxPassword.MaxLength = 20;
             // 
             // labelPassword
             // 
@@ -96,11 +96,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxEmail.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxEmail.Location = new System.Drawing.Point(151, 49);
+            this.textBoxEmail.MaxLength = 30;
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.PlaceholderText = "Your email here...";
             this.textBoxEmail.Size = new System.Drawing.Size(339, 30);
             this.textBoxEmail.TabIndex = 2;
-            this.textBoxEmail.MaxLength = 30;
             // 
             // labelEmail
             // 
@@ -118,12 +118,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxConfirmPassword.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxConfirmPassword.Location = new System.Drawing.Point(151, 123);
+            this.textBoxConfirmPassword.MaxLength = 20;
             this.textBoxConfirmPassword.Name = "textBoxConfirmPassword";
             this.textBoxConfirmPassword.PasswordChar = '*';
             this.textBoxConfirmPassword.PlaceholderText = "Repeat the password to confirm it ...";
             this.textBoxConfirmPassword.Size = new System.Drawing.Size(339, 30);
             this.textBoxConfirmPassword.TabIndex = 4;
-            this.textBoxConfirmPassword.MaxLength = 20;
             // 
             // labelConfirmPassword
             // 
@@ -151,7 +151,6 @@
             // 
             this.buttonRegisterConfirm.AccessibleName = "confirm register button";
             this.buttonRegisterConfirm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRegisterConfirm.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonRegisterConfirm.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonRegisterConfirm.Location = new System.Drawing.Point(274, 249);
             this.buttonRegisterConfirm.Name = "buttonRegisterConfirm";
@@ -159,6 +158,7 @@
             this.buttonRegisterConfirm.TabIndex = 7;
             this.buttonRegisterConfirm.Text = "✓ Register";
             this.buttonRegisterConfirm.UseVisualStyleBackColor = true;
+            this.buttonRegisterConfirm.Click += new System.EventHandler(this.buttonRegisterConfirm_Click);
             // 
             // textBoxFirstName
             // 
@@ -167,11 +167,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxFirstName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxFirstName.Location = new System.Drawing.Point(151, 160);
+            this.textBoxFirstName.MaxLength = 15;
             this.textBoxFirstName.Name = "textBoxFirstName";
             this.textBoxFirstName.PlaceholderText = "Enter first name...";
             this.textBoxFirstName.Size = new System.Drawing.Size(339, 30);
             this.textBoxFirstName.TabIndex = 5;
-            this.textBoxFirstName.MaxLength = 15;
             // 
             // labelFirstName
             // 
@@ -189,11 +189,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxLastName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxLastName.Location = new System.Drawing.Point(151, 198);
+            this.textBoxLastName.MaxLength = 15;
             this.textBoxLastName.Name = "textBoxLastName";
             this.textBoxLastName.PlaceholderText = "Enter last name...";
             this.textBoxLastName.Size = new System.Drawing.Size(339, 30);
             this.textBoxLastName.TabIndex = 6;
-            this.textBoxLastName.MaxLength = 15;
             // 
             // labelLast
             // 

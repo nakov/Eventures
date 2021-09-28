@@ -15,5 +15,7 @@
         public const int MaxUserEmail = 30;
         public const int MaxUserFirstName = 15;
         public const int MaxUserLastName = 15;
+        public const int MinPassword = 6;
+        public const int MaxPassword = 20;
     }
 }
