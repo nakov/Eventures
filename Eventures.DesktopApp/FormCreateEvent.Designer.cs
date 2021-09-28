@@ -76,7 +76,6 @@ namespace Eventures.DesktopApp
             // 
             this.buttonCreateConfirm.AccessibleName = "confirm create button";
             this.buttonCreateConfirm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCreateConfirm.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonCreateConfirm.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonCreateConfirm.Location = new System.Drawing.Point(310, 203);
             this.buttonCreateConfirm.Name = "buttonCreateConfirm";
@@ -84,6 +83,7 @@ namespace Eventures.DesktopApp
             this.buttonCreateConfirm.TabIndex = 7;
             this.buttonCreateConfirm.Text = "✓ Create";
             this.buttonCreateConfirm.UseVisualStyleBackColor = true;
+            this.buttonCreateConfirm.Click += new System.EventHandler(this.buttonCreateConfirm_Click);
             // 
             // buttonCancel
             // 
@@ -132,7 +132,6 @@ namespace Eventures.DesktopApp
             this.dateTimePickerStart.Name = "dateTimePickerStart";
             this.dateTimePickerStart.Size = new System.Drawing.Size(188, 30);
             this.dateTimePickerStart.TabIndex = 3;
-            this.dateTimePickerStart.Text = DateTime.ParseExact(DateTime.UtcNow.AddDays(1).ToString("dd/MM/yyyy HH:mm"), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture).ToString();
             // 
             // labelStart
             // 
@@ -154,7 +153,6 @@ namespace Eventures.DesktopApp
             this.dateTimePickerEnd.Name = "dateTimePickerEnd";
             this.dateTimePickerEnd.Size = new System.Drawing.Size(203, 30);
             this.dateTimePickerEnd.TabIndex = 4;
-            this.dateTimePickerEnd.Text = DateTime.ParseExact(DateTime.UtcNow.AddDays(2).ToString("dd/MM/yyyy HH:mm"), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture).ToString();
             // 
             // labelEnd
             // 
@@ -178,6 +176,11 @@ namespace Eventures.DesktopApp
             0,
             0,
             0});
+            this.numboxTickets.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
             this.numboxTickets.Name = "numboxTickets";
             this.numboxTickets.Size = new System.Drawing.Size(138, 30);
             this.numboxTickets.TabIndex = 5;
@@ -220,6 +223,11 @@ namespace Eventures.DesktopApp
             0,
             0,
             0});
+            this.numboxPrice.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
             this.numboxPrice.Name = "numboxPrice";
             this.numboxPrice.Size = new System.Drawing.Size(136, 30);
             this.numboxPrice.TabIndex = 6;
