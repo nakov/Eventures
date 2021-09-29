@@ -226,7 +226,7 @@ namespace Eventures.AndroidApp.AppiumTests
         }
 
         [Test]
-        public void Test_CreateEvent_WithValidData()
+        public void Test_CreateEvent()
         {
             // Get the current events count in the db
             var eventsInDbBefore = this.dbContext.Events.Count();
@@ -236,30 +236,35 @@ namespace Eventures.AndroidApp.AppiumTests
             Assert.That(addBtn.Enabled == true);
             addBtn.Click();
 
-            // Locate fields and fill them in with valid event data
+            // Locate fields
+            // Fill in a valid event name
             var nameField = driver.FindElementById("editTextName");
             nameField.Clear();
             nameField.SendKeys("Fun Event" + DateTime.Now.Ticks);
 
+            // Fill in an invalid event place 
             var placeField = driver.FindElementById("editTextPlace");
             placeField.Clear();
-            placeField.SendKeys("Beach");
+            placeField.SendKeys(string.Empty);
 
-            // Locate and click on the "Start Date" field
+            // Locate and click on the start date field
             var startDateField = driver.FindElementById("editTextStartDate");
             startDateField.Click();
 
-            // On the datepicker window, locate and click on the [Ok] button
+            // Click on the [OK] button in the datepicker
             var okBtnXPath = "//android.widget.ScrollView/android.widget.LinearLayout/android.widget.Button[2]";
             var okBtn = driver.FindElementByXPath(okBtnXPath);
             okBtn.Click();
 
+            // Locate and click on the start time field
             var startTimeField = driver.FindElementById("editTextStartTime");
             startTimeField.Click();
+
+            // Click on the [OK] button in the timepicker
             okBtn = driver.FindElementByXPath(okBtnXPath);
             okBtn.Click();
 
-            // Locate and click on the "End Date" field
+            // Locate and click on the end date field
             var endDateField = driver.FindElementById("editTextEndDate");
             endDateField.Click();
 
@@ -267,25 +272,49 @@ namespace Eventures.AndroidApp.AppiumTests
             var nextMonthBtn = driver.FindElementByXPath("//android.widget.NumberPicker[1]/android.widget.Button[2]");
             nextMonthBtn.Click();
 
-            // Locate and click on the [Ok] button
+            // Locate and click on the [Ok] button in the datepicker
             okBtn = driver.FindElementByXPath(okBtnXPath);
             okBtn.Click();
 
+            // Locate and click on the end time field
             var endTimeField = driver.FindElementById("editTextEndTime");
             endTimeField.Click();
+
+            // Click on the [OK] button in the timepicker
             okBtn = driver.FindElementByXPath(okBtnXPath);
             okBtn.Click();
 
+            // Fill in valid event tickets
             var ticketsField = driver.FindElementById("editTextTickets");
             ticketsField.Clear();
             ticketsField.SendKeys("50");
 
+            // Fill in a valid event price
             var priceField = driver.FindElementById("editTextPrice");
             priceField.Clear();
             priceField.SendKeys("10.50");
 
             // Locate and click on the [Create] button under the "Create" form
             var createBtn = driver.FindElementById("buttonCreate");
+            createBtn.Click();
+
+            // Switch to alert window
+            driver.SwitchTo().Alert();
+
+            // Assert an error appears
+            var errorMsgAppered = this.wait
+                    .Until(s => driver.PageSource)
+                    .Contains("Place field is required.");
+            Assert.IsTrue(errorMsgAppered);
+
+            // Click on the [Ok] button to close the alert
+            var okBtnErrorWindow = driver.FindElementByClassName("android.widget.Button");
+            okBtnErrorWindow.Click();
+
+            // Fill in a valid event place
+            placeField.SendKeys("Beach");
+
+            // Click on the [Create] button again
             createBtn.Click();
 
             // Locate the status box
@@ -301,71 +330,6 @@ namespace Eventures.AndroidApp.AppiumTests
             // Assert the events count is the db is increased
             var eventsInDbAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsInDbBefore + 1, eventsInDbAfter);
-        }
-
-        [Test]
-        public void Test_CreateEvent_WithInvalidData()
-        {
-            // Get the current events count in the db
-            var eventsInDbBefore = this.dbContext.Events.Count();
-
-            // Locate and click on the [Add] button
-            var addBtn = driver.FindElementById(ButtonAddId);
-            Assert.That(addBtn.Enabled == true);
-            addBtn.Click();
-
-            // Locate fields and fill them in with valid event data
-            // but leave the "End Date" field empty
-            // (thus, the whole event will be invalid)
-            var nameField = driver.FindElementById("editTextName");
-            nameField.Clear();
-            nameField.SendKeys("Fun Event" + DateTime.Now.Ticks);
-
-            var placeField = driver.FindElementById("editTextPlace");
-            placeField.Clear();
-            placeField.SendKeys("Beach");
-
-            var startDateField = driver.FindElementById("editTextStartDate");
-            startDateField.Click();
-            var okBtnXPath = "//android.widget.ScrollView/android.widget.LinearLayout/android.widget.Button[2]";
-            var okBtn = driver.FindElementByXPath(okBtnXPath);
-            okBtn.Click();
-
-            var startTimeField = driver.FindElementById("editTextStartTime");
-            startTimeField.Click();
-            okBtn = driver.FindElementByXPath(okBtnXPath);
-            okBtn.Click();
-
-            var endTimeField = driver.FindElementById("editTextEndTime");
-            endTimeField.Click();
-            okBtn = driver.FindElementByXPath(okBtnXPath);
-            okBtn.Click();
-
-            var ticketsField = driver.FindElementById("editTextTickets");
-            ticketsField.Clear();
-            ticketsField.SendKeys("50");
-
-            var priceField = driver.FindElementById("editTextPrice");
-            priceField.Clear();
-            priceField.SendKeys("10.50");
-
-            // Locate and click on the [Create] button under the "Create" form
-            var createBtn = driver.FindElementById("buttonCreate");
-            createBtn.Click();
-
-            // Locate the status box
-            var statusTextBox = driver.FindElementById(StatusTextBoxId);
-
-            // Wait until the server finishes trying to create the event
-            // and assert that an error message is displayed
-            var messageAppears = this.wait
-                .Until(s => statusTextBox.Text.Equals("Could not create the new event. Try again."));
-
-            Assert.IsTrue(messageAppears);
-
-            // Assert the events count is the db is not changed
-            var eventsInDbAfter = this.dbContext.Events.Count();
-            Assert.AreEqual(eventsInDbBefore, eventsInDbAfter);
         }
     }
 }
