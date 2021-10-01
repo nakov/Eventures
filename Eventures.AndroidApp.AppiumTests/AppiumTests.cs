@@ -2,6 +2,7 @@
 using System.Linq;
 
 using NUnit.Framework;
+using SeleniumExtras.WaitHelpers;
 
 namespace Eventures.AndroidApp.AppiumTests
 {
@@ -299,6 +300,7 @@ namespace Eventures.AndroidApp.AppiumTests
             createBtn.Click();
 
             // Switch to alert window
+            wait.Until(ExpectedConditions.AlertIsPresent());
             driver.SwitchTo().Alert();
 
             // Assert an error appears
