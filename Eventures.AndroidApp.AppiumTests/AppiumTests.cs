@@ -316,6 +316,8 @@ namespace Eventures.AndroidApp.AppiumTests
             okBtnErrorWindow.Click();
 
             // Fill in a valid event place
+            this.wait
+                .Until(s => driver.FindElementById("editTextPlace"));
             placeField.SendKeys("Beach");
 
             // Click on the [Create] button again
