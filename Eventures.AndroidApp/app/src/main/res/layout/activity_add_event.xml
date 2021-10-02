@@ -42,7 +42,7 @@
             android:inputType="text"
             android:textColorHint="#B6B0B0"
             android:textSize="18sp"
-            android:maxLength="50"
+            android:maxLength="@string/maxNameLength"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
@@ -63,7 +63,7 @@
             android:inputType="textMultiLine"
             android:lines="5"
             android:textColorHint="#B6B0B0"
-            android:maxLength="70"
+            android:maxLength="@string/maxPlaceLength"
             tools:ignore="DuplicateSpeakableTextCheck"
             tools:textSize="18sp" />
 
@@ -164,6 +164,7 @@
             android:hint="@string/ticketsHint"
             android:inputType="number"
             android:textColorHint="#B6B0B0"
+            android:maxLength="@string/maxTicketsLength"
             tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
 
         <Space
@@ -187,6 +188,7 @@
             android:inputType="numberDecimal"
             android:nextFocusForward="@+id/buttonCreate"
             android:textColorHint="#B6B0B0"
+            android:maxLength="@string/maxPriceLength"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <LinearLayout
@@ -206,7 +208,6 @@
                 android:layout_weight="1"
                 android:text="@string/buttonCancel"
                 android:textSize="18sp" />
-
 
             <Space
                 android:layout_width="10dp"

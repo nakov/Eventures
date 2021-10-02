@@ -1,5 +1,7 @@
 package eventures.ui;
 
+import static eventures.data.Constants.MinPasswordLength;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -112,10 +114,9 @@ public class RegisterActivity extends AppCompatActivity {
             errors.append("Password field is required.");
         }
 
-        int minPassLength = 6;
-        if (password.length() > 0 && password.length() < minPassLength) {
+        if (password.length() > 0 && password.length() < MinPasswordLength) {
             errors.append(System.lineSeparator());
-            errors.append("Password must be at least " + minPassLength + " characters long.");
+            errors.append("Password must be at least " + MinPasswordLength + " characters long.");
         }
 
         String confirmPassword = editTextConfirmPassword.getText().toString();

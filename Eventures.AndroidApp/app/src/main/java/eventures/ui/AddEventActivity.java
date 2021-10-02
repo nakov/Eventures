@@ -1,5 +1,7 @@
 package eventures.ui;
 
+import static eventures.data.Constants.*;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -151,10 +153,10 @@ public class AddEventActivity extends AppCompatActivity {
         if (name.length() == 0) {
             errors.append("Name field is required.");
         }
-        int minNameLength = 3;
-        if (name.length() > 0 && name.length() < minNameLength) {
+
+        if (name.length() > 0 && name.length() < MinNameLength) {
             errors.append(System.lineSeparator());
-            errors.append("Name must be at least " + minNameLength + " characters long.");
+            errors.append("Name must be at least " + MinNameLength + " characters long.");
         }
 
         // Place checks
@@ -163,10 +165,10 @@ public class AddEventActivity extends AppCompatActivity {
             errors.append(System.lineSeparator());
             errors.append("Place field is required.");
         }
-        int minPlaceLength = 3;
-        if (place.length() > 0 && place.length() < minPlaceLength) {
+
+        if (place.length() > 0 && place.length() < MinPlaceLength) {
             errors.append(System.lineSeparator());
-            errors.append("Place must be at least " + minPlaceLength + " characters long.");
+            errors.append("Place must be at least " + MinPlaceLength + " characters long.");
         }
 
         // Start date and time checks
@@ -196,7 +198,7 @@ public class AddEventActivity extends AppCompatActivity {
                 errors.append(System.lineSeparator());
                 errors.append("Start Date must be in the future.");
             }
-            else if(startDateTime.after(sdf.parse("2100-01-01T00:00:00.000"))) {
+            else if(startDateTime.after(sdf.parse(MaxDate))) {
                 errors.append(System.lineSeparator());
                 errors.append("Start Date must be before the 2100 year.");
             }
@@ -251,10 +253,9 @@ public class AddEventActivity extends AppCompatActivity {
                 errors.append(System.lineSeparator());
                 errors.append("Tickets must be a positive number.");
             }
-            int maxTickets = 1000;
-            if (tickets > maxTickets) {
+            if (tickets > MaxTickets) {
                 errors.append(System.lineSeparator());
-                errors.append("Tickets must be less than " + maxTickets + ".");
+                errors.append("Tickets must be less than " + MaxTickets + ".");
             }
         }
 
@@ -270,10 +271,10 @@ public class AddEventActivity extends AppCompatActivity {
                 errors.append(System.lineSeparator());
                 errors.append("Price must be a positive number.");
             }
-            int maxPrice = 1000;
-            if (price > maxPrice) {
+
+            if (price > MaxPrice) {
                 errors.append(System.lineSeparator());
-                errors.append("Price must be less than " + maxPrice + ".");
+                errors.append("Price must be less than " + MaxPrice + ".");
             }
         }
 
