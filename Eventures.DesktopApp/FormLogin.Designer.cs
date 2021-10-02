@@ -28,13 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxUsername = new System.Windows.Forms.TextBox();
             this.labelUsername = new System.Windows.Forms.Label();
-            this.textBoxPassword = new System.Windows.Forms.TextBox();
+            this.textBoxUsername = new System.Windows.Forms.TextBox();
             this.labelPassword = new System.Windows.Forms.Label();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonLoginConfirm = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // labelUsername
+            // 
+            this.labelUsername.AutoSize = true;
+            this.labelUsername.Location = new System.Drawing.Point(17, 17);
+            this.labelUsername.Name = "labelUsername";
+            this.labelUsername.Size = new System.Drawing.Size(78, 20);
+            this.labelUsername.TabIndex = 1;
+            this.labelUsername.Text = "Username:";
             // 
             // textBoxUsername
             // 
@@ -49,14 +58,14 @@
             this.textBoxUsername.TabIndex = 1;
             this.textBoxUsername.MaxLength = 15;
             // 
-            // labelUsername
+            // labelPassword
             // 
-            this.labelUsername.AutoSize = true;
-            this.labelUsername.Location = new System.Drawing.Point(17, 17);
-            this.labelUsername.Name = "labelUsername";
-            this.labelUsername.Size = new System.Drawing.Size(78, 20);
-            this.labelUsername.TabIndex = 1;
-            this.labelUsername.Text = "Username:";
+            this.labelPassword.AutoSize = true;
+            this.labelPassword.Location = new System.Drawing.Point(17, 63);
+            this.labelPassword.Name = "labelPassword";
+            this.labelPassword.Size = new System.Drawing.Size(73, 20);
+            this.labelPassword.TabIndex = 3;
+            this.labelPassword.Text = "Password:";
             // 
             // textBoxPassword
             // 
@@ -71,15 +80,6 @@
             this.textBoxPassword.Size = new System.Drawing.Size(329, 30);
             this.textBoxPassword.TabIndex = 2;
             this.textBoxUsername.MaxLength = 20;
-            // 
-            // labelPassword
-            // 
-            this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(17, 63);
-            this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(73, 20);
-            this.labelPassword.TabIndex = 3;
-            this.labelPassword.Text = "Password:";
             // 
             // buttonCancel
             // 
@@ -135,10 +135,10 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox textBoxUsername;
         private System.Windows.Forms.Label labelUsername;
-        private System.Windows.Forms.TextBox textBoxPassword;
+        private System.Windows.Forms.TextBox textBoxUsername;
         private System.Windows.Forms.Label labelPassword;
+        private System.Windows.Forms.TextBox textBoxPassword;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonLoginConfirm;
     }

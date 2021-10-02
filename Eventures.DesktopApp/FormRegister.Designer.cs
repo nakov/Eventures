@@ -28,21 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxUsername = new System.Windows.Forms.TextBox();
             this.labelUsername = new System.Windows.Forms.Label();
-            this.textBoxPassword = new System.Windows.Forms.TextBox();
+            this.textBoxUsername = new System.Windows.Forms.TextBox();
             this.labelPassword = new System.Windows.Forms.Label();
-            this.textBoxEmail = new System.Windows.Forms.TextBox();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.labelEmail = new System.Windows.Forms.Label();
-            this.textBoxConfirmPassword = new System.Windows.Forms.TextBox();
+            this.textBoxEmail = new System.Windows.Forms.TextBox();
             this.labelConfirmPassword = new System.Windows.Forms.Label();
+            this.textBoxConfirmPassword = new System.Windows.Forms.TextBox();
+            this.labelFirstName = new System.Windows.Forms.Label();
+            this.textBoxFirstName = new System.Windows.Forms.TextBox();
+            this.labelLastName = new System.Windows.Forms.Label();
+            this.textBoxLastName = new System.Windows.Forms.TextBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonRegisterConfirm = new System.Windows.Forms.Button();
-            this.textBoxFirstName = new System.Windows.Forms.TextBox();
-            this.labelFirstName = new System.Windows.Forms.Label();
-            this.textBoxLastName = new System.Windows.Forms.TextBox();
-            this.labelLast = new System.Windows.Forms.Label();
             this.SuspendLayout();
+            // 
+            // labelUsername
+            // 
+            this.labelUsername.AutoSize = true;
+            this.labelUsername.Location = new System.Drawing.Point(17, 17);
+            this.labelUsername.Name = "labelUsername";
+            this.labelUsername.Size = new System.Drawing.Size(78, 20);
+            this.labelUsername.TabIndex = 1;
+            this.labelUsername.Text = "Username:";
             // 
             // textBoxUsername
             // 
@@ -57,14 +66,14 @@
             this.textBoxUsername.Size = new System.Drawing.Size(339, 30);
             this.textBoxUsername.TabIndex = 1;
             // 
-            // labelUsername
+            // labelPassword
             // 
-            this.labelUsername.AutoSize = true;
-            this.labelUsername.Location = new System.Drawing.Point(17, 17);
-            this.labelUsername.Name = "labelUsername";
-            this.labelUsername.Size = new System.Drawing.Size(78, 20);
-            this.labelUsername.TabIndex = 1;
-            this.labelUsername.Text = "Username:";
+            this.labelPassword.AutoSize = true;
+            this.labelPassword.Location = new System.Drawing.Point(17, 91);
+            this.labelPassword.Name = "labelPassword";
+            this.labelPassword.Size = new System.Drawing.Size(73, 20);
+            this.labelPassword.TabIndex = 3;
+            this.labelPassword.Text = "Password:";
             // 
             // textBoxPassword
             // 
@@ -80,14 +89,14 @@
             this.textBoxPassword.Size = new System.Drawing.Size(339, 30);
             this.textBoxPassword.TabIndex = 3;
             // 
-            // labelPassword
+            // labelEmail
             // 
-            this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(17, 91);
-            this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(73, 20);
-            this.labelPassword.TabIndex = 3;
-            this.labelPassword.Text = "Password:";
+            this.labelEmail.AutoSize = true;
+            this.labelEmail.Location = new System.Drawing.Point(17, 54);
+            this.labelEmail.Name = "labelEmail";
+            this.labelEmail.Size = new System.Drawing.Size(49, 20);
+            this.labelEmail.TabIndex = 2;
+            this.labelEmail.Text = "Email:";
             // 
             // textBoxEmail
             // 
@@ -102,14 +111,14 @@
             this.textBoxEmail.Size = new System.Drawing.Size(339, 30);
             this.textBoxEmail.TabIndex = 2;
             // 
-            // labelEmail
+            // labelConfirmPassword
             // 
-            this.labelEmail.AutoSize = true;
-            this.labelEmail.Location = new System.Drawing.Point(17, 54);
-            this.labelEmail.Name = "labelEmail";
-            this.labelEmail.Size = new System.Drawing.Size(49, 20);
-            this.labelEmail.TabIndex = 2;
-            this.labelEmail.Text = "Email:";
+            this.labelConfirmPassword.AutoSize = true;
+            this.labelConfirmPassword.Location = new System.Drawing.Point(18, 128);
+            this.labelConfirmPassword.Name = "labelConfirmPassword";
+            this.labelConfirmPassword.Size = new System.Drawing.Size(130, 20);
+            this.labelConfirmPassword.TabIndex = 4;
+            this.labelConfirmPassword.Text = "Confirm Password:";
             // 
             // textBoxConfirmPassword
             // 
@@ -125,14 +134,49 @@
             this.textBoxConfirmPassword.Size = new System.Drawing.Size(339, 30);
             this.textBoxConfirmPassword.TabIndex = 4;
             // 
-            // labelConfirmPassword
+            // labelFirstName
             // 
-            this.labelConfirmPassword.AutoSize = true;
-            this.labelConfirmPassword.Location = new System.Drawing.Point(18, 128);
-            this.labelConfirmPassword.Name = "labelConfirmPassword";
-            this.labelConfirmPassword.Size = new System.Drawing.Size(130, 20);
-            this.labelConfirmPassword.TabIndex = 4;
-            this.labelConfirmPassword.Text = "Confirm Password:";
+            this.labelFirstName.AutoSize = true;
+            this.labelFirstName.Location = new System.Drawing.Point(18, 165);
+            this.labelFirstName.Name = "labelFirstName";
+            this.labelFirstName.Size = new System.Drawing.Size(83, 20);
+            this.labelFirstName.TabIndex = 5;
+            this.labelFirstName.Text = "First Name:";
+            // 
+            // textBoxFirstName
+            // 
+            this.textBoxFirstName.AccessibleName = "first name textbox";
+            this.textBoxFirstName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxFirstName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBoxFirstName.Location = new System.Drawing.Point(151, 160);
+            this.textBoxFirstName.MaxLength = 15;
+            this.textBoxFirstName.Name = "textBoxFirstName";
+            this.textBoxFirstName.PlaceholderText = "Enter first name...";
+            this.textBoxFirstName.Size = new System.Drawing.Size(339, 30);
+            this.textBoxFirstName.TabIndex = 5;
+            // 
+            // labelLast
+            // 
+            this.labelLastName.AutoSize = true;
+            this.labelLastName.Location = new System.Drawing.Point(18, 203);
+            this.labelLastName.Name = "labelLast";
+            this.labelLastName.Size = new System.Drawing.Size(82, 20);
+            this.labelLastName.TabIndex = 6;
+            this.labelLastName.Text = "Last Name:";
+            // 
+            // textBoxLastName
+            // 
+            this.textBoxLastName.AccessibleName = "last name textbox";
+            this.textBoxLastName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxLastName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBoxLastName.Location = new System.Drawing.Point(151, 198);
+            this.textBoxLastName.MaxLength = 15;
+            this.textBoxLastName.Name = "textBoxLastName";
+            this.textBoxLastName.PlaceholderText = "Enter last name...";
+            this.textBoxLastName.Size = new System.Drawing.Size(339, 30);
+            this.textBoxLastName.TabIndex = 6;
             // 
             // buttonCancel
             // 
@@ -160,50 +204,6 @@
             this.buttonRegisterConfirm.UseVisualStyleBackColor = true;
             this.buttonRegisterConfirm.Click += new System.EventHandler(this.buttonRegisterConfirm_Click);
             // 
-            // textBoxFirstName
-            // 
-            this.textBoxFirstName.AccessibleName = "first name textbox";
-            this.textBoxFirstName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxFirstName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBoxFirstName.Location = new System.Drawing.Point(151, 160);
-            this.textBoxFirstName.MaxLength = 15;
-            this.textBoxFirstName.Name = "textBoxFirstName";
-            this.textBoxFirstName.PlaceholderText = "Enter first name...";
-            this.textBoxFirstName.Size = new System.Drawing.Size(339, 30);
-            this.textBoxFirstName.TabIndex = 5;
-            // 
-            // labelFirstName
-            // 
-            this.labelFirstName.AutoSize = true;
-            this.labelFirstName.Location = new System.Drawing.Point(18, 165);
-            this.labelFirstName.Name = "labelFirstName";
-            this.labelFirstName.Size = new System.Drawing.Size(83, 20);
-            this.labelFirstName.TabIndex = 5;
-            this.labelFirstName.Text = "First Name:";
-            // 
-            // textBoxLastName
-            // 
-            this.textBoxLastName.AccessibleName = "last name textbox";
-            this.textBoxLastName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxLastName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBoxLastName.Location = new System.Drawing.Point(151, 198);
-            this.textBoxLastName.MaxLength = 15;
-            this.textBoxLastName.Name = "textBoxLastName";
-            this.textBoxLastName.PlaceholderText = "Enter last name...";
-            this.textBoxLastName.Size = new System.Drawing.Size(339, 30);
-            this.textBoxLastName.TabIndex = 6;
-            // 
-            // labelLast
-            // 
-            this.labelLast.AutoSize = true;
-            this.labelLast.Location = new System.Drawing.Point(18, 203);
-            this.labelLast.Name = "labelLast";
-            this.labelLast.Size = new System.Drawing.Size(82, 20);
-            this.labelLast.TabIndex = 6;
-            this.labelLast.Text = "Last Name:";
-            // 
             // FormRegister
             // 
             this.AcceptButton = this.buttonRegisterConfirm;
@@ -211,7 +211,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(502, 313);
             this.Controls.Add(this.textBoxLastName);
-            this.Controls.Add(this.labelLast);
+            this.Controls.Add(this.labelLastName);
             this.Controls.Add(this.textBoxFirstName);
             this.Controls.Add(this.labelFirstName);
             this.Controls.Add(this.buttonCancel);
@@ -240,20 +240,20 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox textBoxUsername;
         private System.Windows.Forms.Label labelUsername;
-        private System.Windows.Forms.TextBox textBoxPassword;
+        private System.Windows.Forms.TextBox textBoxUsername;
         private System.Windows.Forms.Label labelPassword;
-        private System.Windows.Forms.TextBox textBoxEmail;
+        private System.Windows.Forms.TextBox textBoxPassword;
         private System.Windows.Forms.Label labelEmail;
-        private System.Windows.Forms.TextBox textBoxConfirmPassword;
+        private System.Windows.Forms.TextBox textBoxEmail;
         private System.Windows.Forms.Label labelConfirmPassword;
+        private System.Windows.Forms.TextBox textBoxConfirmPassword;
+        private System.Windows.Forms.Label labelFirstName;
+        private System.Windows.Forms.TextBox textBoxFirstName;
+        private System.Windows.Forms.Label labelLastName;
+        private System.Windows.Forms.TextBox textBoxLastName;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonRegisterConfirm;
-        private System.Windows.Forms.TextBox textBoxFirstName;
-        private System.Windows.Forms.Label labelFirstName;
-        private System.Windows.Forms.TextBox textBoxLastName;
-        private System.Windows.Forms.Label labelLast;
     }
 }
 

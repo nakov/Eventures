@@ -90,13 +90,12 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormConnect_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
 
-        private System.Windows.Forms.Label labelApiUrl;
         private System.Windows.Forms.TextBox textBoxApiUrl;
+        private System.Windows.Forms.Label labelApiUrl;
         private System.Windows.Forms.Button buttonConnect;
     }
 }

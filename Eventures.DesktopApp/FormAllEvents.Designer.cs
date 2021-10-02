@@ -28,77 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listViewEvents = new System.Windows.Forms.ListView();
-            this.buttonReload = new System.Windows.Forms.Button();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.buttonCreate = new System.Windows.Forms.Button();
             this.buttonLogin = new System.Windows.Forms.Button();
             this.buttonRegister = new System.Windows.Forms.Button();
+            this.buttonCreate = new System.Windows.Forms.Button();
+            this.buttonReload = new System.Windows.Forms.Button();
+            this.listViewEvents = new System.Windows.Forms.ListView();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // listViewEvents
-            // 
-            this.listViewEvents.AccessibleName = "events list box";
-            this.listViewEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewEvents.FullRowSelect = true;
-            this.listViewEvents.HideSelection = false;
-            this.listViewEvents.LabelWrap = false;
-            this.listViewEvents.Location = new System.Drawing.Point(0, 53);
-            this.listViewEvents.MultiSelect = false;
-            this.listViewEvents.Name = "listViewEvents";
-            this.listViewEvents.Size = new System.Drawing.Size(908, 507);
-            this.listViewEvents.TabIndex = 4;
-            this.listViewEvents.UseCompatibleStateImageBehavior = false;
-            this.listViewEvents.View = System.Windows.Forms.View.Details;
-            // 
-            // buttonReload
-            // 
-            this.buttonReload.AccessibleName = "reload button";
-            this.buttonReload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonReload.Location = new System.Drawing.Point(802, 12);
-            this.buttonReload.Name = "buttonReload";
-            this.buttonReload.Size = new System.Drawing.Size(94, 29);
-            this.buttonReload.TabIndex = 3;
-            this.buttonReload.Text = "⟳ Reload";
-            this.buttonReload.UseVisualStyleBackColor = true;
-            this.buttonReload.Click += new System.EventHandler(this.buttonReload_Click);
-            this.buttonReload.Enabled = false;
-            // 
-            // statusStrip
-            // 
-            this.statusStrip.AccessibleName = "statusStrip";
-            this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel});
-            this.statusStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.statusStrip.Location = new System.Drawing.Point(0, 559);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(908, 26);
-            this.statusStrip.TabIndex = 7;
-            // 
-            // toolStripStatusLabel
-            // 
-            this.toolStripStatusLabel.AccessibleName = "statusBox";
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(97, 20);
-            this.toolStripStatusLabel.Text = "Connecting ...";
-            // 
-            // buttonCreate
-            // 
-            this.buttonCreate.AccessibleName = "create button";
-            this.buttonCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCreate.Location = new System.Drawing.Point(708, 12);
-            this.buttonCreate.Name = "buttonCreate";
-            this.buttonCreate.Size = new System.Drawing.Size(79, 29);
-            this.buttonCreate.TabIndex = 8;
-            this.buttonCreate.Text = "✚ Create";
-            this.buttonCreate.UseVisualStyleBackColor = true;
-            this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
-            this.buttonCreate.Enabled = false;
             // 
             // buttonLogin
             // 
@@ -124,6 +62,68 @@
             this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
             this.buttonRegister.Enabled = false;
             // 
+            // buttonCreate
+            // 
+            this.buttonCreate.AccessibleName = "create button";
+            this.buttonCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCreate.Location = new System.Drawing.Point(708, 12);
+            this.buttonCreate.Name = "buttonCreate";
+            this.buttonCreate.Size = new System.Drawing.Size(79, 29);
+            this.buttonCreate.TabIndex = 8;
+            this.buttonCreate.Text = "✚ Create";
+            this.buttonCreate.UseVisualStyleBackColor = true;
+            this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
+            this.buttonCreate.Enabled = false;
+            // 
+            // buttonReload
+            // 
+            this.buttonReload.AccessibleName = "reload button";
+            this.buttonReload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonReload.Location = new System.Drawing.Point(802, 12);
+            this.buttonReload.Name = "buttonReload";
+            this.buttonReload.Size = new System.Drawing.Size(94, 29);
+            this.buttonReload.TabIndex = 3;
+            this.buttonReload.Text = "⟳ Reload";
+            this.buttonReload.UseVisualStyleBackColor = true;
+            this.buttonReload.Click += new System.EventHandler(this.buttonReload_Click);
+            this.buttonReload.Enabled = false;
+            // 
+            // listViewEvents
+            // 
+            this.listViewEvents.AccessibleName = "events list box";
+            this.listViewEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewEvents.FullRowSelect = true;
+            this.listViewEvents.HideSelection = false;
+            this.listViewEvents.LabelWrap = false;
+            this.listViewEvents.Location = new System.Drawing.Point(0, 53);
+            this.listViewEvents.MultiSelect = false;
+            this.listViewEvents.Name = "listViewEvents";
+            this.listViewEvents.Size = new System.Drawing.Size(908, 507);
+            this.listViewEvents.TabIndex = 4;
+            this.listViewEvents.UseCompatibleStateImageBehavior = false;
+            this.listViewEvents.View = System.Windows.Forms.View.Details;
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.AccessibleName = "statusStrip";
+            this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
+            this.statusStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.statusStrip.Location = new System.Drawing.Point(0, 559);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(908, 26);
+            this.statusStrip.TabIndex = 7;
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.AccessibleName = "statusBox";
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(97, 20);
+            this.toolStripStatusLabel.Text = "Connecting ...";
+            // 
             // FormAllEvents
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -144,16 +144,15 @@
             this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
-        private System.Windows.Forms.ListView listViewEvents;
-        private System.Windows.Forms.Button buttonReload;
-        private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
-        private System.Windows.Forms.Button buttonCreate;
         private System.Windows.Forms.Button buttonLogin;
         private System.Windows.Forms.Button buttonRegister;
+        private System.Windows.Forms.Button buttonCreate;
+        private System.Windows.Forms.Button buttonReload;
+        private System.Windows.Forms.ListView listViewEvents;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
     }
 }
