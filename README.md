@@ -3,6 +3,8 @@
 Sample apps for demonstrating how to implement **continuous integration** and build a CI/CD pipeline with **GitHub Actions**.
   - Target platform: .NET 5
   - CI system: GitHub Actions
+  - Seeded database with one user and three events
+  - Default user credentials: **guest** / **guest**
 
 ## Eventures Web App
 
@@ -45,10 +47,10 @@ Android mobile app client for the Eventures RESTful API.
 
 ### Eventures Web App
 
-<kbd>![image](https://user-images.githubusercontent.com/69080997/133249350-f4fe7260-d0b6-46bf-8b86-fd47ff1ba491.png)</kbd>
-<kbd>![image](https://user-images.githubusercontent.com/69080997/133249452-06ca31b9-18eb-4a5b-9c33-2ef868cd25ad.png)</kbd>
-<kbd>![image](https://user-images.githubusercontent.com/69080997/133249530-83f99741-d09e-46e6-84b1-cc6ae45efd66.png)</kbd>
-<kbd>![image](https://user-images.githubusercontent.com/69080997/133249601-e6b459da-fd6e-4258-a44e-2a4e140967b7.png)</kbd>
+<kbd>![image](https://user-images.githubusercontent.com/69080997/135711976-d201d880-33c3-48ca-8105-f5686865242b.png)</kbd>
+<kbd>![image](https://user-images.githubusercontent.com/69080997/135712009-b53b097a-6965-4633-b773-a3beccf54c69.png)</kbd>
+<kbd>![image](https://user-images.githubusercontent.com/69080997/135712052-e0f6e38c-d3c9-4aa3-8bf1-df0677f7859b.png)</kbd>
+<kbd>![image](https://user-images.githubusercontent.com/69080997/135712155-068322fa-7144-450b-86da-63cf4e2d0383.png)</kbd>
 
 ### Eventures RESTful API
 
@@ -59,9 +61,9 @@ Android mobile app client for the Eventures RESTful API.
 ### Desktop Client
 
 <kbd>![Screenshot_39](https://user-images.githubusercontent.com/69080997/133249837-e5e3b55f-8668-47bd-90ba-800987d88af1.png)</kbd>
-<kbd>![Screenshot_40](https://user-images.githubusercontent.com/69080997/133249854-238fd94f-7c3a-4405-ab65-d67db4525d64.png)</kbd>
 <kbd>![Screenshot_41](https://user-images.githubusercontent.com/69080997/133249861-5609ebcc-1d98-4a3c-84b4-75dc165d0167.png)</kbd>
-<kbd>![Screenshot_42](https://user-images.githubusercontent.com/69080997/133249867-a8020dd3-7e3a-49ef-83be-00dcefdf9718.png)</kbd>
+<kbd>![Screenshot_40](https://user-images.githubusercontent.com/69080997/133249854-238fd94f-7c3a-4405-ab65-d67db4525d64.png)</kbd>
+<kbd>![image](https://user-images.githubusercontent.com/69080997/135712288-2b281f60-74f0-4269-b8f2-db0aa02bd777.png)</kbd>
 <kbd>![Screenshot_43](https://user-images.githubusercontent.com/69080997/133249884-505f52c5-a8ba-4764-a012-ec64f56baf05.png)</kbd>
 
 ### Android Client
@@ -69,8 +71,9 @@ Android mobile app client for the Eventures RESTful API.
 ![Screenshot_25](https://user-images.githubusercontent.com/69080997/133249110-02744bb1-8936-4854-9f3a-512034d79edd.png)
 ![Screenshot_26](https://user-images.githubusercontent.com/69080997/133249129-c7a27786-5331-498a-ae98-af4763603578.png)
 ![Screenshot_27](https://user-images.githubusercontent.com/69080997/133249144-b14f7967-3ffe-4434-acbc-7fa00581eb39.png)
+![image](https://user-images.githubusercontent.com/69080997/135712372-ea0c6099-7f59-41ab-ae3d-75bf97733b7e.png)
 ![Screenshot_31](https://user-images.githubusercontent.com/69080997/133249220-c1ec76ae-10aa-4790-986f-ab4dcc4368b4.png)
-![Screenshot_30](https://user-images.githubusercontent.com/69080997/133249201-93dc9b63-a728-4e67-8495-5d206c986218.png)
+
 
 
 
