@@ -7,8 +7,8 @@ namespace Eventures.DesktopApp.AppiumTests
 {
     public class AppiumTests : AppiumTestsBase
     {
-        private string username = "newUser" + DateTime.UtcNow.Ticks;
-        private string password = "newPassword12";
+        private string username = "user" + DateTime.UtcNow.Ticks.ToString().Substring(10);
+        private string password = "pass" + DateTime.UtcNow.Ticks.ToString().Substring(10);
         private const string EventBoardWindowName = "Event Board";
         private const string CreateEventWindowName = "Create a New Event";
 
@@ -26,10 +26,14 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert the "Connect to Eventures API" window appeared again
             Assert.That(driver.PageSource.Contains("Connect to Eventures API"));
 
-            // Assert an error message is displayed in the status box
+            // Wait until the driver loads the message
+            // and assert an error message is displayed in the status box
             var statusTextBox = driver
                 .FindElementByXPath("/Window/StatusBar/Text");
-            Assert.That(statusTextBox.Text.Contains("Error: Value cannot be null."));
+
+            var messageAppears = this.wait
+                .Until(s => statusTextBox.Text.Contains("Error: Value cannot be null."));
+            Assert.IsTrue(messageAppears);
         }
 
         [Test, Order(2)]
@@ -135,7 +139,6 @@ namespace Eventures.DesktopApp.AppiumTests
 
             var messageAppears = this.wait
                 .Until(s => statusTextBox.Text.Contains("Load successful"));
-
             Assert.IsTrue(messageAppears);
 
             // Get the events count from the database
@@ -177,7 +180,6 @@ namespace Eventures.DesktopApp.AppiumTests
 
             var messageAppears = this.wait
                 .Until(s => statusTextBox.Text.Contains("Load successful"));
-
             Assert.IsTrue(messageAppears);
 
             // Get the events count from the database
@@ -216,7 +218,7 @@ namespace Eventures.DesktopApp.AppiumTests
         }
 
         [Test]
-        public void Test_CreateEvent_ValidData()
+        public void Test_CreateEvent()
         {
             // Get the events count before
             var eventsCountBefore = this.dbContext.Events.Count();
@@ -228,16 +230,17 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert the "Create a New Event" windows appears
             Assert.That(driver.PageSource.Contains(AppiumTests.CreateEventWindowName));
 
-            // Fill in valid event data in the fields
+            // Fill in valid event name
             var eventName = "Fun Event" + DateTime.Now.Ticks;
             var nameField = driver.FindElementByAccessibilityId("textBoxName");
             nameField.Clear();
             nameField.SendKeys(eventName);
 
-            var eventPlace = "Beach";
+            // Fill in invalid event place, e.g. empty string
+            var invalidPlace = string.Empty;
             var placeField = driver.FindElementByAccessibilityId("textBoxPlace");
             placeField.Clear();
-            placeField.SendKeys(eventPlace);
+            placeField.SendKeys(invalidPlace);
 
             // Locate the up arrow buttons
             var upBtns = driver.FindElementsByName("Up");
@@ -252,7 +255,25 @@ namespace Eventures.DesktopApp.AppiumTests
             priceUpBtn.Click();
 
             // Click on the [Create] button under the "Create" form
-            var createConfirmationBtn = driver.FindElementByAccessibilityId("buttonCreateConfirm");
+            var createConfirmationBtn = driver
+                .FindElementByAccessibilityId("buttonCreateConfirm");
+            createConfirmationBtn.Click();
+
+            // Assert an error window appears
+            var errorMsgAppered = this.wait
+                    .Until(s => driver.PageSource)
+                    .Contains("Place field is required.");
+            Assert.IsTrue(errorMsgAppered);
+
+            // Click on the [Ok] button to close the window
+            var okBtn = driver.FindElementByName("OK");
+            okBtn.Click();
+
+            // Fill in a valid event place
+            var eventPlace = "Beach";
+            placeField.SendKeys(eventPlace);
+
+            // Click on the [Create] button again
             createConfirmationBtn.Click();
 
             // Wait until in the database the events count is increased by 1
@@ -276,57 +297,6 @@ namespace Eventures.DesktopApp.AppiumTests
             Assert.That(pageSource.Contains(eventName));
             Assert.That(pageSource.Contains(eventPlace));
             Assert.That(pageSource.Contains(this.username));
-        }
-
-        [Test]
-        public void Test_CreateEvent_InvalidData()
-        {
-            // Get the events count before
-            var eventsCountBefore = this.dbContext.Events.Count();
-
-            // Locate and click on the [Create] button
-            var createBtn = driver.FindElementByAccessibilityId("buttonCreate");
-            createBtn.Click();
-
-            // Assert the "Create a New Event" windows appears
-            Assert.That(driver.PageSource.Contains(AppiumTests.CreateEventWindowName));
-
-            // Fill in valid event name
-            var eventName = "Fun Event" + DateTime.Now.Ticks;
-            var nameField = driver
-                .FindElementByAccessibilityId("textBoxName");
-            nameField.Clear();
-            nameField.SendKeys(eventName);
-
-            // Fill in invalid event place, e.g. empty string
-            var invalidPlace = string.Empty;
-            var placeField = driver.FindElementByAccessibilityId("textBoxPlace");
-            placeField.Clear();
-            placeField.SendKeys(invalidPlace);
-
-            // Click on the [Create] button under the "Create" form
-            var createConfirmationBtn = driver
-                .FindElementByAccessibilityId("buttonCreateConfirm");
-            createConfirmationBtn.Click();
-
-            // Assert an error message is displayed in the status bar
-            var statusTextBox = driver.FindElementByXPath("/Window/StatusBar/Text");
-            var errorMessageAppears = this.wait.Until(
-                s => statusTextBox.Text.Contains("Error"));
-            Assert.IsTrue(errorMessageAppears);
-
-            // Assert the "Create a New Event" windows disappears
-            Assert.That(!driver.PageSource.Contains(AppiumTests.CreateEventWindowName));
-
-            // Assert the "Event Board" windows appears
-            Assert.That(driver.PageSource.Contains(AppiumTests.EventBoardWindowName));
-
-            // Assert the page doesn't contain the new event
-            Assert.That(!driver.PageSource.Contains(eventName));
-
-            // Assert the events count is not increased
-            var eventsCountAfter = this.dbContext.Events.Count();
-            Assert.AreEqual(eventsCountBefore, eventsCountAfter);
         }
     }
 }

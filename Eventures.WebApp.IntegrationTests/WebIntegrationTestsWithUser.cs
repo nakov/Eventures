@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -101,15 +102,15 @@ namespace Eventures.WebApp.IntegrationTests
             Assert.That(responseBody.Contains("<h1>Create New Event</h1>"));
 
             // Prepare content for creating a new event
-            var eventName = "Party";
+            var eventName = "Party" + DateTime.Now.Ticks;
             var eventPlace = "Beach";
             var postContent = new FormUrlEncodedContent(
                 new Dictionary<string, string>
                 {
                     { "Name", eventName },
                     { "Place", eventPlace },
-                    { "Start", DateTime.UtcNow.ToString("r")},
-                    { "End", DateTime.UtcNow.AddHours(3).ToString("r")},
+                    { "Start", DateTime.UtcNow.AddDays(1).ToString("r")},
+                    { "End", DateTime.UtcNow.AddDays(1).AddHours(3).ToString("r")},
                     { "TotalTickets", "120"},
                     { "PricePerTicket", "20"}
                 });
@@ -173,7 +174,7 @@ namespace Eventures.WebApp.IntegrationTests
         [Test]
         public async Task Test_DeletePage_DeleteEventOfAnotherUser_ShouldBeUnsuccessful()
         {
-            // Arrange: get the "EventOpenFest" event with owner UserPeter
+            // Arrange: get the "EventOpenFest" event with owner GuestUser
             var openFestEvent = this.testDb.EventOpenFest;
 
             // Go to "All Events" page and assert the event exists
@@ -272,35 +273,36 @@ namespace Eventures.WebApp.IntegrationTests
         [Test]
         public async Task Test_EventsPage_EditEvent_ValidData()
         {
-            // Arrange: get the "Softuniada 2021" event
-            var softuniadaEvent = this.testDb.EventSoftuniada;
+            // Arrange: get the "Dev Conference" event
+            var devConfEvent = this.testDb.EventDevConf;
 
             // Go to "All Events" page and assert the event exists
             var allResponse = await this.httpClient.GetAsync("/Events/All");
             var allResponseBody = await allResponse.Content.ReadAsStringAsync();
-            Assert.That(allResponseBody.Contains(softuniadaEvent.Name));
+            Assert.That(allResponseBody.Contains(devConfEvent.Name));
 
             // Go to the "Edit Event" page with the new event id
             var editResponse = await this.httpClient.GetAsync(
-               $"/Events/Edit/{softuniadaEvent.Id}");
+               $"/Events/Edit/{devConfEvent.Id}");
             Assert.AreEqual(HttpStatusCode.OK, editResponse.StatusCode);
 
             // Prepare request content with changed event name
-            var editedEventName = "Softuniada 2021 (New Edition)";
+            var editedEventName = "Dev Conference (New Edition)";
             var postContent = new FormUrlEncodedContent(
                 new Dictionary<string, string>
                 {
                     { "Name", editedEventName },
-                    { "Place", softuniadaEvent.Place },
-                    { "Start", softuniadaEvent.Start.ToString("r")},
-                    { "End", softuniadaEvent.End.ToString("r")},
-                    { "TotalTickets", softuniadaEvent.TotalTickets.ToString()},
-                    { "PricePerTicket", softuniadaEvent.PricePerTicket.ToString()}
+                    { "Place", devConfEvent.Place },
+                    { "Start", devConfEvent.Start.ToString("r")},
+                    { "End", devConfEvent.End.ToString("r")},
+                    { "TotalTickets", devConfEvent.TotalTickets.ToString()},
+                    { "PricePerTicket", devConfEvent.PricePerTicket
+                        .ToString(CultureInfo.GetCultureInfo("en-GB"))}
                 });
 
             // Act: send a POST request with the new event data
             var postResponse = await this.httpClient.PostAsync(
-                $"/Events/Edit/{softuniadaEvent.Id}", postContent);
+                $"/Events/Edit/{devConfEvent.Id}", postContent);
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
 
             // Assert the user is redirected to the "All Events" page
@@ -311,7 +313,7 @@ namespace Eventures.WebApp.IntegrationTests
             Assert.That(postResponseBody, Does.Contain(editedEventName));
 
             // Assert the event is also edited in the database
-            var eventInDb = this.testDb.CreateDbContext().Events.FirstOrDefault(x => x.Id == softuniadaEvent.Id);
+            var eventInDb = this.testDb.CreateDbContext().Events.FirstOrDefault(x => x.Id == devConfEvent.Id);
             Assert.AreEqual(eventInDb.Name, editedEventName);
         }
 
@@ -319,7 +321,7 @@ namespace Eventures.WebApp.IntegrationTests
         public async Task Test_EventsPage_EditEvent_InvalidData()
         {
             // Arrange: get the "Softuniada 2021" event
-            var softuniadaEvent = this.testDb.EventSoftuniada;
+            var softuniadaEvent = this.testDb.EventDevConf;
 
             // Go to the "All Events" page and assert the event exists
             var allResponse = await this.httpClient.GetAsync("/Events/All");

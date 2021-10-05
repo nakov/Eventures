@@ -2,13 +2,14 @@
 using System.Linq;
 
 using NUnit.Framework;
+using SeleniumExtras.WaitHelpers;
 
 namespace Eventures.AndroidApp.AppiumTests
 {
     public class AppiumTests : AppiumTestsBase
     {
-        private string username = "newUser" + DateTime.UtcNow.Ticks;
-        private string password = "newPassword12";
+        private string username = "user" + DateTime.UtcNow.Ticks.ToString().Substring(10);
+        private string password = "pass" + DateTime.UtcNow.Ticks.ToString().Substring(10);
         private const string ButtonConnectId = "buttonConnect";
         private const string ButtonLoginId = "buttonLogin";
         private const string ButtonRegisterId = "buttonRegister";
@@ -21,10 +22,10 @@ namespace Eventures.AndroidApp.AppiumTests
         {
             // Assert that [Login] and [Register] buttons are disabled
             var loginBtn = driver.FindElementById(ButtonLoginId);
-            Assert.That(loginBtn.Enabled == false);
+            Assert.IsFalse(loginBtn.Enabled);
 
             var registerBtn = driver.FindElementById(ButtonRegisterId);
-            Assert.That(registerBtn.Enabled == false);
+            Assert.IsFalse(registerBtn.Enabled);
 
             // Locate and click on the [Connect] button
             var connectBtn = driver.FindElementById(ButtonConnectId);
@@ -53,8 +54,8 @@ namespace Eventures.AndroidApp.AppiumTests
             Assert.IsTrue(messageAppears);
 
             // Assert the [Login] and [Register] buttons are still disabled
-            Assert.That(loginBtn.Enabled == false);
-            Assert.That(registerBtn.Enabled == false);
+            Assert.IsFalse(loginBtn.Enabled);
+            Assert.IsFalse(registerBtn.Enabled);
         }
 
         [Test, Order(2)]
@@ -62,10 +63,10 @@ namespace Eventures.AndroidApp.AppiumTests
         {
             // Assert that [Login] and [Register] buttons are disabled
             var loginBtn = driver.FindElementById(ButtonLoginId);
-            Assert.That(loginBtn.Enabled == false);
+            Assert.IsFalse(loginBtn.Enabled);
 
             var registerBtn = driver.FindElementById(ButtonRegisterId);
-            Assert.That(registerBtn.Enabled == false);
+            Assert.IsFalse(registerBtn.Enabled);
 
             // Locate and click on the [Connect] button
             var connectBtn = driver.FindElementById(ButtonConnectId);
@@ -91,8 +92,8 @@ namespace Eventures.AndroidApp.AppiumTests
             Assert.IsTrue(messageAppears);
 
             // Assert the [Login] and [Register] buttons are enabled
-            Assert.That(loginBtn.Enabled == true);
-            Assert.That(registerBtn.Enabled == true);
+            Assert.IsTrue(loginBtn.Enabled);
+            Assert.IsTrue(registerBtn.Enabled);
         }
 
         [Test, Order(3)]
@@ -100,14 +101,14 @@ namespace Eventures.AndroidApp.AppiumTests
         {
             // Assert the [Add] and [Reload] buttons are disabled
             var addBtn = driver.FindElementById(ButtonAddId);
-            Assert.That(addBtn.Enabled == false);
+            Assert.IsFalse(addBtn.Enabled);
 
             var reloadBtn = driver.FindElementById(ButtonReloadId);
-            Assert.That(reloadBtn.Enabled == false);
+            Assert.IsFalse(reloadBtn.Enabled);
 
             // Locate and click on the [Register] button
             var registerBtn = driver.FindElementById(ButtonRegisterId);
-            Assert.That(registerBtn.Enabled == true);
+            Assert.IsTrue(registerBtn.Enabled);
             registerBtn.Click();
 
             // Locate fields and fill them in with valid user data
@@ -155,8 +156,8 @@ namespace Eventures.AndroidApp.AppiumTests
             Assert.AreEqual($"Events found: {eventsInDb}", statusTextBox.Text);
 
             // Assert the [Add] and [Reload] buttons are enabled
-            Assert.That(addBtn.Enabled == true);
-            Assert.That(reloadBtn.Enabled == true);
+            Assert.IsTrue(addBtn.Enabled);
+            Assert.IsTrue(reloadBtn.Enabled);
         }
 
         [Test]
@@ -164,7 +165,7 @@ namespace Eventures.AndroidApp.AppiumTests
         {
             // Locate and click on the [Login] button
             var loginBtn = driver.FindElementById(ButtonLoginId);
-            Assert.That(loginBtn.Enabled == true);
+            Assert.IsTrue(loginBtn.Enabled);
             loginBtn.Click();
 
             // Locate fields and fill them in with valid user data
@@ -196,10 +197,10 @@ namespace Eventures.AndroidApp.AppiumTests
 
             // Assert the [Add] and [Reload] buttons are enabled
             var addBtn = driver.FindElementById(ButtonAddId);
-            Assert.That(addBtn.Enabled == true);
+            Assert.IsTrue(addBtn.Enabled);
 
             var reloadBtn = driver.FindElementById(ButtonReloadId);
-            Assert.That(reloadBtn.Enabled == true);
+            Assert.IsTrue(reloadBtn.Enabled);
         }
 
         [Test]
@@ -207,7 +208,7 @@ namespace Eventures.AndroidApp.AppiumTests
         {
             // Locate and click on the [Reload] button
             var reloadBtn = driver.FindElementById(ButtonReloadId);
-            Assert.That(reloadBtn.Enabled == true);
+            Assert.IsTrue(reloadBtn.Enabled);
             reloadBtn.Click();
 
             // Locate the status box
@@ -226,66 +227,100 @@ namespace Eventures.AndroidApp.AppiumTests
         }
 
         [Test]
-        public void Test_CreateEvent_WithValidData()
+        public void Test_CreateEvent()
         {
             // Get the current events count in the db
             var eventsInDbBefore = this.dbContext.Events.Count();
 
             // Locate and click on the [Add] button
             var addBtn = driver.FindElementById(ButtonAddId);
-            Assert.That(addBtn.Enabled == true);
+            Assert.IsTrue(addBtn.Enabled);
             addBtn.Click();
 
-            // Locate fields and fill them in with valid event data
+            // Locate fields
+            // Fill in a valid event name
             var nameField = driver.FindElementById("editTextName");
             nameField.Clear();
             nameField.SendKeys("Fun Event" + DateTime.Now.Ticks);
 
+            // Fill in an invalid event place 
             var placeField = driver.FindElementById("editTextPlace");
             placeField.Clear();
-            placeField.SendKeys("Beach");
+            placeField.SendKeys(string.Empty);
 
-            // Locate and click on the "Start Date" field
+            // Locate and click on the start date field
             var startDateField = driver.FindElementById("editTextStartDate");
             startDateField.Click();
 
-            // On the datepicker window, locate and click on the [Ok] button
-            var okBtnXPath = "//android.widget.ScrollView/android.widget.LinearLayout/android.widget.Button[2]";
+            // Click on the [OK] button in the datepicker
+            var okBtnXPath = "//android.widget.ScrollView/" +
+                "android.widget.LinearLayout/android.widget.Button[2]";
             var okBtn = driver.FindElementByXPath(okBtnXPath);
             okBtn.Click();
 
+            // Locate and click on the start time field
             var startTimeField = driver.FindElementById("editTextStartTime");
             startTimeField.Click();
+
+            // Click on the [OK] button in the timepicker
             okBtn = driver.FindElementByXPath(okBtnXPath);
             okBtn.Click();
 
-            // Locate and click on the "End Date" field
+            // Locate and click on the end date field
             var endDateField = driver.FindElementById("editTextEndDate");
             endDateField.Click();
 
             // Locate and click on the next month's button
-            var nextMonthBtn = driver.FindElementByXPath("//android.widget.NumberPicker[1]/android.widget.Button[2]");
+            var nextMonthBtn = driver.FindElementByXPath("//android.widget.NumberPicker[1]" +
+                "/android.widget.Button[2]");
             nextMonthBtn.Click();
 
-            // Locate and click on the [Ok] button
+            // Locate and click on the [Ok] button in the datepicker
             okBtn = driver.FindElementByXPath(okBtnXPath);
             okBtn.Click();
 
+            // Locate and click on the end time field
             var endTimeField = driver.FindElementById("editTextEndTime");
             endTimeField.Click();
+
+            // Click on the [OK] button in the timepicker
             okBtn = driver.FindElementByXPath(okBtnXPath);
             okBtn.Click();
 
+            // Fill in valid event tickets
             var ticketsField = driver.FindElementById("editTextTickets");
             ticketsField.Clear();
             ticketsField.SendKeys("50");
 
+            // Fill in a valid event price
             var priceField = driver.FindElementById("editTextPrice");
             priceField.Clear();
             priceField.SendKeys("10.50");
 
             // Locate and click on the [Create] button under the "Create" form
             var createBtn = driver.FindElementById("buttonCreate");
+            createBtn.Click();
+
+            // Switch to alert window
+            wait.Until(ExpectedConditions.AlertIsPresent());
+            driver.SwitchTo().Alert();
+
+            // Assert an error appears
+            var errorMsgAppered = this.wait
+                    .Until(s => driver.PageSource)
+                    .Contains("Place field is required.");
+            Assert.IsTrue(errorMsgAppered);
+
+            // Click on the [Ok] button to close the alert
+            var okBtnErrorWindow = driver.FindElementByClassName("android.widget.Button");
+            okBtnErrorWindow.Click();
+
+            // Fill in a valid event place
+            this.wait
+                .Until(s => driver.FindElementById("editTextPlace"));
+            placeField.SendKeys("Beach");
+
+            // Click on the [Create] button again
             createBtn.Click();
 
             // Locate the status box
@@ -301,71 +336,6 @@ namespace Eventures.AndroidApp.AppiumTests
             // Assert the events count is the db is increased
             var eventsInDbAfter = this.dbContext.Events.Count();
             Assert.AreEqual(eventsInDbBefore + 1, eventsInDbAfter);
-        }
-
-        [Test]
-        public void Test_CreateEvent_WithInvalidData()
-        {
-            // Get the current events count in the db
-            var eventsInDbBefore = this.dbContext.Events.Count();
-
-            // Locate and click on the [Add] button
-            var addBtn = driver.FindElementById(ButtonAddId);
-            Assert.That(addBtn.Enabled == true);
-            addBtn.Click();
-
-            // Locate fields and fill them in with valid event data
-            // but leave the "End Date" field empty
-            // (thus, the whole event will be invalid)
-            var nameField = driver.FindElementById("editTextName");
-            nameField.Clear();
-            nameField.SendKeys("Fun Event" + DateTime.Now.Ticks);
-
-            var placeField = driver.FindElementById("editTextPlace");
-            placeField.Clear();
-            placeField.SendKeys("Beach");
-
-            var startDateField = driver.FindElementById("editTextStartDate");
-            startDateField.Click();
-            var okBtnXPath = "//android.widget.ScrollView/android.widget.LinearLayout/android.widget.Button[2]";
-            var okBtn = driver.FindElementByXPath(okBtnXPath);
-            okBtn.Click();
-
-            var startTimeField = driver.FindElementById("editTextStartTime");
-            startTimeField.Click();
-            okBtn = driver.FindElementByXPath(okBtnXPath);
-            okBtn.Click();
-
-            var endTimeField = driver.FindElementById("editTextEndTime");
-            endTimeField.Click();
-            okBtn = driver.FindElementByXPath(okBtnXPath);
-            okBtn.Click();
-
-            var ticketsField = driver.FindElementById("editTextTickets");
-            ticketsField.Clear();
-            ticketsField.SendKeys("50");
-
-            var priceField = driver.FindElementById("editTextPrice");
-            priceField.Clear();
-            priceField.SendKeys("10.50");
-
-            // Locate and click on the [Create] button under the "Create" form
-            var createBtn = driver.FindElementById("buttonCreate");
-            createBtn.Click();
-
-            // Locate the status box
-            var statusTextBox = driver.FindElementById(StatusTextBoxId);
-
-            // Wait until the server finishes trying to create the event
-            // and assert that an error message is displayed
-            var messageAppears = this.wait
-                .Until(s => statusTextBox.Text.Equals("Could not create the new event. Try again."));
-
-            Assert.IsTrue(messageAppears);
-
-            // Assert the events count is the db is not changed
-            var eventsInDbAfter = this.dbContext.Events.Count();
-            Assert.AreEqual(eventsInDbBefore, eventsInDbAfter);
         }
     }
 }

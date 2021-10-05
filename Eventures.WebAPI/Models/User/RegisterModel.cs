@@ -1,30 +1,36 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Eventures.Data;
+
 namespace Eventures.WebAPI.Models.User
 {
+    using static DataConstants;
     public class RegisterModel
     {
         [Required]
+        [StringLength(MaxUserUsername)]
         public string Username { get; init; }
 
         [Required]
-        [EmailAddress(ErrorMessage = "Email address is not valid!")]
+        [EmailAddress]
+        [StringLength(MaxUserEmail)]
         public string Email { get; init; }
 
         [Required]
-        [StringLength(100, ErrorMessage =
-            "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(20, MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; init; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password")]
         public string ConfirmPassword { get; init; }
 
         [Required]
+        [StringLength(MaxUserFirstName)]
         public string FirstName { get; init; }
 
         [Required]
+        [StringLength(MaxUserFirstName)]
         public string LastName { get; init; }
     }
 }

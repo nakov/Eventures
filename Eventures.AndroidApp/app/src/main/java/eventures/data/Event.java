@@ -48,18 +48,8 @@ public class Event {
         return start;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public LocalDateTime getStartAsLocalDateTime() {
-        return LocalDateTime.parse(this.start, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-    }
-
     public void setStart(String start) {
         this.start = start;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setStart(LocalDateTime startDateTime) {
-        this.start = startDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
 
@@ -67,19 +57,10 @@ public class Event {
         return end;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public LocalDateTime getEndAsLocalDateTime() {
-        return LocalDateTime.parse(this.end, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-    }
-
     public void setEnd(String end) {
         this.end = end;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setEnd(LocalDateTime endDateTime) {
-        this.end = endDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-    }
 
     public String getTotalTickets() {
         return totalTickets;

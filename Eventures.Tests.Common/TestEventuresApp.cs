@@ -6,17 +6,15 @@ using Eventures.Data;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Hosting.Server;
 
 namespace Eventures.Tests.Common
 {
     public class TestEventuresApp<TStartup> : IDisposable where TStartup : class
     {
         private IHost host;
-        public TestDb TestDb { get; set; }
-        public string ServerUri { get; private set; }
 
         public TestEventuresApp(TestDb testDb, string appContentRoot)
         {
@@ -45,6 +43,9 @@ namespace Eventures.Tests.Common
             this.ServerUri = serverAddresses.Where(a => a.Contains("http://")).FirstOrDefault();
             Debug.WriteLine($"Testing server started: {this.ServerUri}");
         }
+
+        public TestDb TestDb { get; set; }
+        public string ServerUri { get; private set; }
 
         public void Dispose()
         {

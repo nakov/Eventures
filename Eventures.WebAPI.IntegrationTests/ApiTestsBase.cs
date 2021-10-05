@@ -16,7 +16,7 @@ namespace Eventures.WebAPI.IntegrationTests
     {
         protected TestDb testDb;
         protected ApplicationDbContext dbContext;
-        protected TestEventuresApp<Startup> testEventuresApp;
+        protected TestEventuresApp<Startup> testEventuresApi;
         protected HttpClient httpClient;
 
         [OneTimeSetUp]
@@ -24,11 +24,11 @@ namespace Eventures.WebAPI.IntegrationTests
         {
             this.testDb = new TestDb();
             this.dbContext = testDb.CreateDbContext();
-            this.testEventuresApp = new TestEventuresApp<Startup>(
+            this.testEventuresApi = new TestEventuresApp<Startup>(
                 testDb, "../../../../Eventures.WebAPI");
             this.httpClient = new HttpClient()
             {
-                BaseAddress = new Uri(this.testEventuresApp.ServerUri)
+                BaseAddress = new Uri(this.testEventuresApi.ServerUri)
             };
         }
 
@@ -57,7 +57,7 @@ namespace Eventures.WebAPI.IntegrationTests
         public void OneTimeTearDownBase()
         {
             // Stop and dispose the local Web API server
-            this.testEventuresApp.Dispose();
+            this.testEventuresApi.Dispose();
         }
     }
 }

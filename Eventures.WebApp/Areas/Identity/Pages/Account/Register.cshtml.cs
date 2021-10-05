@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Eventures.WebApp.Areas.Identity.Pages.Account
 {
+    using static DataConstants;
+
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
@@ -38,15 +40,17 @@ namespace Eventures.WebApp.Areas.Identity.Pages.Account
         {
             [Required]
             [Display(Name = "Username")]
+            [MaxLength(MaxUserUsername)]
             public string Username { get; set; }
 
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
+            [MaxLength(MaxUserEmail)]
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage =
+            [StringLength(20, ErrorMessage =
                 "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -59,10 +63,12 @@ namespace Eventures.WebApp.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "First Name")]
+            [MaxLength(MaxUserFirstName)]
             public string FirstName { get; set; }
 
             [Required]
             [Display(Name = "Last Name")]
+            [MaxLength(MaxUserLastName)]
             public string LastName { get; set; }
         }
 

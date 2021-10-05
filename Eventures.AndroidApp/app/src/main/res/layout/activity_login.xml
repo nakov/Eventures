@@ -44,6 +44,7 @@
                 android:minHeight="48dp"
                 android:textColorHint="#B6B0B0"
                 android:textSize="18sp"
+                android:maxLength="@string/maxUsernameLength"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
             <TextView
@@ -64,6 +65,7 @@
                 android:inputType="textPassword"
                 android:nextFocusForward="@+id/buttonLogin"
                 android:textColorHint="#B6B0B0"
+                android:maxLength="@string/maxPasswordLength"
                 tools:textSize="18sp" />
 
             <LinearLayout
@@ -83,7 +85,6 @@
                     android:layout_weight="1"
                     android:text="@string/buttonCancel"
                     android:textSize="18sp" />
-
 
                 <Space
                     android:layout_width="10dp"

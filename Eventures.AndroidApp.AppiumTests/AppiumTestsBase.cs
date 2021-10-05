@@ -44,14 +44,14 @@ namespace Eventures.AndroidApp.AppiumTests
             appiumOptions.AddAdditionalCapability("app", fullPathName);
 
             // Initialize the Windows driver with Appium local service and options
-            driver = new AndroidDriver<AndroidElement>(
+            this.driver = new AndroidDriver<AndroidElement>(
                 appiumLocalService, appiumOptions);
 
             // Set an implicit wait for the UI interaction
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            this.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
             // Set an explicit wait for the UI interaction
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            this.wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
         }
 
         [OneTimeTearDown]

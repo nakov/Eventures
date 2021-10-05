@@ -4,12 +4,16 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Eventures.Data
 {
+    using static DataConstants;
+
     public class EventuresUser : IdentityUser
     {
         [Required]
-        public string FirstName { get; set; }
+        [MaxLength(MaxUserFirstName)]
+        public string FirstName { get; init; }
 
         [Required]
-        public string LastName { get; set; }
+        [MaxLength(MaxUserLastName)]
+        public string LastName { get; init; }
     }
 }

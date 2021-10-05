@@ -192,7 +192,7 @@ namespace Eventures.WebAPI.Controllers
                     new ResponseMsg { Message = $"Event #{id} not found." });
             }
             
-            var ev = this.dbContext.Events.FirstOrDefault(e => e.Id == id);
+            var ev = this.dbContext.Events.Find(id);
 
             if (GetCurrentUserId() != ev.OwnerId)
             {
@@ -206,7 +206,7 @@ namespace Eventures.WebAPI.Controllers
             ev.End = eventModel.End;
             ev.TotalTickets = eventModel.TotalTickets;
             ev.PricePerTicket = eventModel.PricePerTicket;
-            dbContext.SaveChanges();
+            this.dbContext.SaveChanges();
 
             return NoContent();
         }
@@ -239,7 +239,7 @@ namespace Eventures.WebAPI.Controllers
                     new ResponseMsg { Message = $"Event #{id} not found." });
             }
 
-            var ev = this.dbContext.Events.FirstOrDefault(e => e.Id == id);
+            var ev = this.dbContext.Events.Find(id);
 
             if (GetCurrentUserId() != ev.OwnerId)
             {
@@ -251,9 +251,19 @@ namespace Eventures.WebAPI.Controllers
             ev.Place = String.IsNullOrEmpty(eventModel.Place) ? ev.Place : eventModel.Place;
             ev.Start = eventModel.Start == null ? ev.Start : eventModel.Start.Value;
             ev.End = eventModel.End == null ? ev.End : eventModel.End.Value;
+
+            if(ev.Start > ev.End)
+            {
+                return BadRequest(
+                    new ResponseMsg { Message = "End date must be after the start date." });
+            }
+
+            ev.Start = ev.Start.AddTicks(-(ev.Start.Ticks % TimeSpan.TicksPerSecond));
+            ev.End = ev.End.AddTicks(-(ev.End.Ticks % TimeSpan.TicksPerSecond));
+
             ev.TotalTickets = eventModel.TotalTickets == null ? ev.TotalTickets : eventModel.TotalTickets.Value;
             ev.PricePerTicket = eventModel.PricePerTicket == null ? ev.PricePerTicket : eventModel.PricePerTicket.Value;
-            dbContext.SaveChanges();
+            this.dbContext.SaveChanges();
 
             return NoContent();
         }
@@ -285,7 +295,7 @@ namespace Eventures.WebAPI.Controllers
                     new ResponseMsg { Message = $"Event #{id} not found." });
             }
 
-            var ev = this.dbContext.Events.FirstOrDefault(e => e.Id == id);
+            var ev = this.dbContext.Events.Find(id);
 
             if (GetCurrentUserId() != ev.OwnerId)
             {
@@ -295,8 +305,8 @@ namespace Eventures.WebAPI.Controllers
 
             var eventModel = CreateEventListingModelById(ev.Id);
 
-            dbContext.Events.Remove(ev);
-            dbContext.SaveChanges();
+            this.dbContext.Events.Remove(ev);
+            this.dbContext.SaveChanges();
 
             return Ok(eventModel);
         }

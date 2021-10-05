@@ -144,7 +144,7 @@ public class ActivityEvents extends AppCompatActivity {
                         if (response.code() != HttpURLConnection.HTTP_UNAUTHORIZED) {
                             changeUserButtonsAccessibility(false);
                             changeEventButtonsAccessibility(false);
-                            showErrorMsg("Cannot connect. Try again.");
+                            showErrorMsg("Could not connect. Try again.");
                             return;
                         }
 

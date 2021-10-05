@@ -41,5 +41,8 @@ namespace Eventures.WebApp.Controllers
 
         public IActionResult Error401()
             => View();
+
+        public IActionResult Error404()
+            => View();
     }
 }

@@ -3,9 +3,9 @@ using Eventures.Tests.Common;
 
 using NUnit.Framework;
 
-namespace Eventures.WebApp.UnitTests
+namespace Eventures.WebAPI.UnitTests
 {
-    public class UnitTestsBase
+    public class ApiUnitTestsBase
     {
         protected TestDb testDb;
         protected ApplicationDbContext dbContext;
@@ -19,4 +19,3 @@ namespace Eventures.WebApp.UnitTests
         }
     }
 }
-

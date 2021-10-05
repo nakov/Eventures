@@ -4,14 +4,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Eventures.Data
 {
+    using static DataConstants;
+
     public class Event
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         [Required]
+        [MaxLength(MaxEventName)]
         public string Name { get; set; }
 
         [Required]
+        [MaxLength(MaxEventPlace)]
         public string Place { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
@@ -21,7 +25,7 @@ namespace Eventures.Data
         public decimal PricePerTicket { get; set; }
 
         [Required]
-        public string OwnerId { get; set; }
-        public EventuresUser Owner { get; set; }
+        public string OwnerId { get; init; }
+        public EventuresUser Owner { get; init; }
     }
 }
