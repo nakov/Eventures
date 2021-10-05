@@ -44,7 +44,7 @@ jobs:
         run: ./gradlew assembleDebug
         working-directory: ./Eventures.AndroidApp
         env:
-          JAVA_HOME: ${{ env.JAVA_HOME_14_X64 }}
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
       - run: npm install -g appium
       - run: dotnet restore Eventures.AndroidApp.AppiumTests
       - run: dotnet build Eventures.AndroidApp.AppiumTests --no-restore
