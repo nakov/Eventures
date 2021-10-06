@@ -30,9 +30,9 @@ namespace Eventures.Data
                     Id = 1,
                     Name = "Softuniada 2022",
                     Place = "Sofia",
-                    Start = DateTime.ParseExact(DateTime.UtcNow.AddDays(200)
+                    Start = DateTime.ParseExact(DateTime.Now.AddDays(200)
                         .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                    End = DateTime.ParseExact(DateTime.UtcNow.AddDays(201)
+                    End = DateTime.ParseExact(DateTime.Now.AddDays(201)
                         .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                     TotalTickets = 200,
                     PricePerTicket = 12.50M,
@@ -43,9 +43,9 @@ namespace Eventures.Data
                     Id = 2,
                     Name = "OpenFest 2022",
                     Place = "Online",
-                    Start = DateTime.ParseExact(DateTime.UtcNow.AddDays(500)
+                    Start = DateTime.ParseExact(DateTime.Now.AddDays(500)
                         .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                    End = DateTime.ParseExact(DateTime.UtcNow.AddDays(500).AddHours(8)
+                    End = DateTime.ParseExact(DateTime.Now.AddDays(500).AddHours(8)
                         .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                     TotalTickets = 500,
                     PricePerTicket = 10.00M,
@@ -56,9 +56,9 @@ namespace Eventures.Data
                     Id = 3,
                     Name = "Microsoft Build 2022",
                     Place = "Online",
-                    Start = DateTime.ParseExact(DateTime.UtcNow.AddDays(300)
+                    Start = DateTime.ParseExact(DateTime.Now.AddDays(300)
                         .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                    End = DateTime.ParseExact(DateTime.UtcNow.AddDays(300).AddHours(12)
+                    End = DateTime.ParseExact(DateTime.Now.AddDays(300).AddHours(12)
                     .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                     TotalTickets = 1000,
                     PricePerTicket = 0.00m,

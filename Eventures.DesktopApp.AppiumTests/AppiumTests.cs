@@ -7,8 +7,8 @@ namespace Eventures.DesktopApp.AppiumTests
 {
     public class AppiumTests : AppiumTestsBase
     {
-        private string username = "user" + DateTime.UtcNow.Ticks.ToString().Substring(10);
-        private string password = "pass" + DateTime.UtcNow.Ticks.ToString().Substring(10);
+        private string username = "user" + DateTime.Now.Ticks.ToString().Substring(10);
+        private string password = "pass" + DateTime.Now.Ticks.ToString().Substring(10);
         private const string EventBoardWindowName = "Event Board";
         private const string CreateEventWindowName = "Create a New Event";
 
@@ -23,8 +23,10 @@ namespace Eventures.DesktopApp.AppiumTests
             var connectBtn = driver.FindElementByAccessibilityId("buttonConnect");
             connectBtn.Click();
 
-            // Assert the "Connect to Eventures API" window appeared again
-            Assert.That(driver.PageSource.Contains("Connect to Eventures API"));
+            // Wait and assert the "Connect to Eventures API" window appeared again
+            var windowAppears = this.wait
+                .Until(s => driver.PageSource.Contains("Connect to Eventures API"));
+            Assert.IsTrue(windowAppears);
 
             // Wait until the driver loads the message
             // and assert an error message is displayed in the status box
@@ -51,7 +53,9 @@ namespace Eventures.DesktopApp.AppiumTests
             connectBtn.Click();
 
             // Assert the "Connect to Eventures API" window appeared again
-            Assert.That(driver.PageSource.Contains("Connect to Eventures API"));
+            var windowAppears = this.wait
+                .Until(s => driver.PageSource.Contains("Connect to Eventures API"));
+            Assert.IsTrue(windowAppears);
 
             // Assert an error message is displayed in the status box
             var statusTextBox = driver

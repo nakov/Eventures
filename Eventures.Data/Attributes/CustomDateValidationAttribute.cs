@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.ComponentModel.DataAnnotations;
 
 namespace Eventures.Data.Attributes
@@ -14,7 +15,7 @@ namespace Eventures.Data.Attributes
 
             var dateTime = (DateTime)value;
 
-            if (dateTime >= DateTime.UtcNow && dateTime < DateTime.Parse("01/01/2100"))
+            if (dateTime >= DateTime.Now && dateTime < DateTime.Parse("01/01/2100", CultureInfo.InvariantCulture))
             {
                 return ValidationResult.Success;
             }

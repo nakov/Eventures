@@ -15,8 +15,8 @@ namespace Eventures.WebApp.SeleniumTests
         protected IWebDriver driver;
         protected TestEventuresApp<Startup> testEventuresApp;
         protected string baseUrl;
-        protected string username = "user" + DateTime.UtcNow.Ticks.ToString().Substring(10);
-        protected string password = "pass" + DateTime.UtcNow.Ticks.ToString().Substring(10);
+        protected string username = "user" + DateTime.Now.Ticks.ToString().Substring(10);
+        protected string password = "pass" + DateTime.Now.Ticks.ToString().Substring(10);
 
         [OneTimeSetUp]
         public void OneTimeSetupBase()

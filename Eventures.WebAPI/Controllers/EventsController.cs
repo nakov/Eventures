@@ -128,8 +128,8 @@ namespace Eventures.WebAPI.Controllers
         ///     {
         ///             "name": "Party",
         ///             "place": "Online",
-        ///             "start": "2012-04-23T18:25:43.511Z",
-        ///             "end": "2012-04-23T18:25:43.511Z",
+        ///             "start": "2022-04-23T18:25:43.511Z",
+        ///             "end": "2022-04-23T18:25:43.511Z",
         ///             "totalTickets": "155",
         ///             "pricePerTicket": "30.00"
         ///     }
@@ -172,8 +172,8 @@ namespace Eventures.WebAPI.Controllers
         ///     {
         ///             "name": "Changed Name",
         ///             "place": "Online",
-        ///             "start": "2012-04-23T18:25:43.511Z",
-        ///             "end": "2012-04-23T18:25:43.511Z",
+        ///             "start": "2022-04-23T18:25:43.511Z",
+        ///             "end": "2022-04-23T18:25:43.511Z",
         ///             "totalTickets": "155",
         ///             "pricePerTicket": "30.00"
         ///     }
@@ -202,8 +202,8 @@ namespace Eventures.WebAPI.Controllers
 
             ev.Name = eventModel.Name;
             ev.Place = eventModel.Place;
-            ev.Start = eventModel.Start;
-            ev.End = eventModel.End;
+            ev.Start = eventModel.Start.AddTicks(-(eventModel.Start.Ticks % TimeSpan.TicksPerSecond));
+            ev.End = eventModel.End.AddTicks(-(eventModel.End.Ticks % TimeSpan.TicksPerSecond));
             ev.TotalTickets = eventModel.TotalTickets;
             ev.PricePerTicket = eventModel.PricePerTicket;
             this.dbContext.SaveChanges();
