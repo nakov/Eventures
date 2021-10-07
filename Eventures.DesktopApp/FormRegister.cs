@@ -31,7 +31,7 @@ namespace Eventures.DesktopApp
                 + PasswordIsValid()
                 + ConfirmPasswordIsValid();
 
-            // If there are no erros - return
+            // If there are no errors - return
             if (this.buttonRegisterConfirm.DialogResult == DialogResult.OK)
             {
                 return;
@@ -43,7 +43,7 @@ namespace Eventures.DesktopApp
             }
             else
             {
-                MessageBox.Show(result.Trim());
+                MessageBox.Show(result.Trim(), "Errors");
             }
         }
 

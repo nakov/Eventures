@@ -37,7 +37,7 @@ namespace Eventures.DesktopApp
                 + TicketsIsValid()
                 + PriceIsValid();
 
-            // If there are no erros - return
+            // If there are no errors - return
             if (this.buttonCreateConfirm.DialogResult == DialogResult.OK)
             {
                 return;
@@ -49,7 +49,7 @@ namespace Eventures.DesktopApp
             }
             else
             {
-                MessageBox.Show(result.Trim());
+                MessageBox.Show(result.Trim(), "Errors");
             }
         }
 
