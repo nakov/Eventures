@@ -27,7 +27,7 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
             // The page URL of the "Login" page is different
             // when the user is redirected because they are unauthorized
             var pageUrl = baseUrl + "/Identity/Account/LogIn?ReturnUrl=%2FEvents%2FAll";
-            return driver.Url == pageUrl;
+            return this.driver.Url == pageUrl;
         }
     }
 }

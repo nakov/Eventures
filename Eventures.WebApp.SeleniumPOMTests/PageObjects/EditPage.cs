@@ -16,7 +16,7 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
 
         public override bool IsOpen(string baseUrl)
         {
-            return driver.Url.Contains(baseUrl + this.PageUrl);
+            return base.driver.Url.Contains(baseUrl + this.PageUrl);
         }
 
         public void EditEventName(string name)
