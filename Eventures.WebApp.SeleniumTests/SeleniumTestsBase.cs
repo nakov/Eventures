@@ -31,7 +31,6 @@ namespace Eventures.WebApp.SeleniumTests
             var chromeOptions = new ChromeOptions();
             if (!Debugger.IsAttached)
                 chromeOptions.AddArguments("headless");
-            chromeOptions.AddArguments("--start-maximized");
             this.driver = new ChromeDriver(chromeOptions);
 
             // Set an implicit wait for the UI interaction
