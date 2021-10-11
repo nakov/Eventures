@@ -186,7 +186,7 @@ namespace Eventures.WebApp.SeleniumTests
 
             // Assert that an error message appears on the page
             var errorSpan = driver.FindElement(By.Id("Name-error"));
-            Assert.AreEqual(errorSpan.Text, "The Name field is required.");
+            Assert.AreEqual("The Name field is required.", errorSpan.Text);
         }
 
         [Test]
@@ -311,7 +311,7 @@ namespace Eventures.WebApp.SeleniumTests
 
             // Assert an error message appears on the page
             var errorSpan = driver.FindElement(By.Id("Name-error"));
-            Assert.AreEqual(errorSpan.Text, "The Name field is required.");
+            Assert.AreEqual("The Name field is required.", errorSpan.Text);
         }
 
         private void RegisterUserForTesting()
