@@ -6,15 +6,17 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
 {
     public class AllEventsPage : BasePage
     {
-        protected override string PageUrl => "/Events/All";
-
         private IWebElement lastRow => driver.FindElements(By.TagName("tr")).Last();
-        private IWebElement lastDeleteButton => driver.FindElements(By.XPath("//a[contains(.,'Delete')]")).Last();
-        private IWebElement lastEditButton => driver.FindElements(By.XPath("//a[contains(.,'Edit')]")).Last();
+        private IWebElement lastDeleteButton => 
+            driver.FindElements(By.XPath("//a[contains(.,'Delete')]")).Last();
+        private IWebElement lastEditButton =>
+            driver.FindElements(By.XPath("//a[contains(.,'Edit')]")).Last();
 
         public AllEventsPage(IWebDriver driver) : base(driver)
         {
         }
+
+        protected override string PageUrl => "/Events/All";
 
         public string GetLastEventRow()
         {

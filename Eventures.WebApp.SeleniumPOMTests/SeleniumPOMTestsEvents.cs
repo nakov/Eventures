@@ -35,11 +35,11 @@ namespace Eventures.WebApp.SeleniumPOMTests
         [Test]
         public void Test_CreateEventPage_CreateEvent_ValidData()
         {
-            // Arrange: go to the "Create Event" page
+            // Arrange: open the "Create Event" page
             var createEventPage = new CreateEventPage(driver);
             createEventPage.Open(baseUrl);
 
-            // Create a new event
+            // act: create a new event
             var eventName = "Party" + DateTime.Now.Ticks;
             var eventPlace = "Beach";
             createEventPage.CreateEvent(eventName, eventPlace, "100", "10.00");
@@ -79,11 +79,11 @@ namespace Eventures.WebApp.SeleniumPOMTests
         [Test]
         public void Test_DeleteEvent()
         {
-            // Create an event for deleting
+            // Arrange: create an event for deleting
             string eventName = "Best Show" + DateTime.Now.Ticks;
             this.CreateEvent(eventName);
 
-            // Assert user is redirected to the "All Events" page
+            // Assert the user is redirected to the "All Events" page
             var allEventsPage = new AllEventsPage(driver);
             Assert.IsTrue(allEventsPage.IsOpen(baseUrl));
 
@@ -102,7 +102,7 @@ namespace Eventures.WebApp.SeleniumPOMTests
             Assert.AreEqual("Delete Existing Event", deletePage.GetPageHeadingText());
             Assert.IsTrue(deletePage.Contains(eventName));
 
-            // Click on the "Delete" button to confirm deletion
+            // Act: click on the "Delete" button to confirm deletion
             deletePage.PressConfirmDeleteButton();
 
             // Assert the user is redirected to the "All Events" page
@@ -192,7 +192,8 @@ namespace Eventures.WebApp.SeleniumPOMTests
             // Register a user through the "Register" page
             var registerPage = new RegisterPage(driver);
             registerPage.Open(baseUrl);
-            registerPage.RegisterUser(username, username + "@mail.com", password, password, "Pesho", "Peshov");
+            registerPage.RegisterUser(username, username + "@mail.com", password, 
+                password, "Pesho", "Peshov");
 
             // Assert the user is redirected to the "Home" page and is logged in
             var homePage = new HomePage(driver);
@@ -206,11 +207,6 @@ namespace Eventures.WebApp.SeleniumPOMTests
             var createPage = new CreateEventPage(driver);
             createPage.Open(baseUrl);
             createPage.CreateEvent(eventName, "Beach", "100", "10");
-
-            // Assert the user is redirected to the "All Events" page
-            var allEventsPage = new AllEventsPage(driver);
-            Assert.IsTrue(allEventsPage.IsOpen(baseUrl));
-            Assert.IsTrue(allEventsPage.Contains(eventName));
         }
     }
 }

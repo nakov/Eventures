@@ -4,13 +4,14 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
 {
     public class DeletePage : BasePage
     {
-        protected override string PageUrl => "/Events/Delete/";
-
-        private IWebElement confirmDeleteButton => driver.FindElement(By.XPath("//input[contains(@value,'Delete')]"));
+        private IWebElement confirmDeleteButton => 
+            driver.FindElement(By.XPath("//input[contains(@value,'Delete')]"));
 
         public DeletePage(IWebDriver driver) : base(driver)
         {
         }
+
+        protected override string PageUrl => "/Events/Delete/";
 
         public override bool IsOpen(string baseUrl)
         {

@@ -4,8 +4,6 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
 {
     public class EditPage : BasePage
     {
-        protected override string PageUrl => "/Events/Edit/";
-
         private IWebElement nameField => driver.FindElement(By.Id("Name"));
         private IWebElement confirmEditButton => driver.FindElement(By.XPath("//input[contains(@value,'Edit')]"));
         private IWebElement nameError => driver.FindElement(By.Id("Name-error"));
@@ -13,6 +11,8 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
         public EditPage(IWebDriver driver) : base(driver)
         {
         }
+
+        protected override string PageUrl => "/Events/Edit/";
 
         public override bool IsOpen(string baseUrl)
         {

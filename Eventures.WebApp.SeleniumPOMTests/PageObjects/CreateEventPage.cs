@@ -4,8 +4,6 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
 {
     public class CreateEventPage : BasePage
     {
-        protected override string PageUrl => "/Events/Create";
-
         private IWebElement nameField => driver.FindElement(By.Id("Name"));
         private IWebElement placeField => driver.FindElement(By.Id("Place"));
         private IWebElement ticketsField => driver.FindElement(By.Id("TotalTickets"));
@@ -16,6 +14,9 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
         public CreateEventPage(IWebDriver driver) : base(driver)
         {
         }
+
+        protected override string PageUrl => "/Events/Create";
+
 
         public void CreateEvent(string name, string place, string tickets, string price)
         {

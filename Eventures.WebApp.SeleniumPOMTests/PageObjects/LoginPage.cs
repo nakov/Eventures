@@ -4,15 +4,16 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
 {
     public class LoginPage : BasePage
     {
-        protected override string PageUrl => "/Identity/Account/Login";
-
         private IWebElement usernameField => driver.FindElement(By.Id("Input_Username"));
         private IWebElement passwordField => driver.FindElement(By.Id("Input_Password"));
-        private IWebElement loginButton => driver.FindElement(By.XPath("//button[@type='submit'][contains(.,'Log in')]"));
+        private IWebElement loginButton => 
+            driver.FindElement(By.XPath("//button[@type='submit'][contains(.,'Log in')]"));
 
         public LoginPage(IWebDriver driver) : base(driver)
         {
         }
+
+        protected override string PageUrl => "/Identity/Account/Login";
 
         public void LogInUser(string username, string password)
         {

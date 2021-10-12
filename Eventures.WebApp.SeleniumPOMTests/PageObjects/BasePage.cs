@@ -5,12 +5,13 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
     public class BasePage
     {
         protected readonly IWebDriver driver;
-        protected virtual string PageUrl { get; }
 
         public BasePage(IWebDriver driver)
         {
             this.driver = driver;
         }
+
+        protected virtual string PageUrl { get; }
 
         public IWebElement AllEventsPageLink =>
            this.driver.FindElement(By.XPath("//a[@href='/Events/All'][contains(.,'all events')]"));
