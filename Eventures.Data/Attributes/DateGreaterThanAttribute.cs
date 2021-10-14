@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.ComponentModel.DataAnnotations;
 
 namespace Eventures.Data.Attributes
@@ -27,7 +28,7 @@ namespace Eventures.Data.Attributes
 
             if (earlierDateField == null)
             {
-                if (laterDate >= DateTime.UtcNow && laterDate < DateTime.Parse("01/01/2100"))
+                if (laterDate >= DateTime.Now && laterDate < DateTime.Parse("01/01/2100", CultureInfo.InvariantCulture))
                 {
                     return ValidationResult.Success;
                 }

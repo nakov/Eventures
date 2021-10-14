@@ -104,8 +104,8 @@ namespace Eventures.WebAPI.IntegrationTests
             {
                 Name = eventName,
                 Place = eventPlace,
-                Start = DateTime.UtcNow.AddDays(1),
-                End = DateTime.UtcNow.AddDays(2),
+                Start = DateTime.Now.AddDays(1),
+                End = DateTime.Now.AddDays(2),
                 TotalTickets = 120,
                 PricePerTicket = 20.00M
             };
@@ -134,8 +134,8 @@ namespace Eventures.WebAPI.IntegrationTests
             {
                 Name = invalidEventName,
                 Place = "Beach",
-                Start = DateTime.UtcNow.AddDays(1),
-                End = DateTime.UtcNow.AddDays(2),
+                Start = DateTime.Now.AddDays(1),
+                End = DateTime.Now.AddDays(2),
                 TotalTickets = 120,
                 PricePerTicket = 20
             };
@@ -406,8 +406,8 @@ namespace Eventures.WebAPI.IntegrationTests
             {
                 Name = "Party",
                 Place = "Beach",
-                Start = DateTime.UtcNow.AddDays(1),
-                End = DateTime.UtcNow.AddDays(2),
+                Start = DateTime.Now.AddDays(1),
+                End = DateTime.Now.AddDays(2),
                 TotalTickets = 120,
                 PricePerTicket = 20,
                 OwnerId = this.testDb.UserMaria.Id

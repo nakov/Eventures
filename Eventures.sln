@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.DesktopApp", "Eve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.DesktopApp.AppiumTests", "Eventures.DesktopApp.AppiumTests\Eventures.DesktopApp.AppiumTests.csproj", "{9DC205F8-4648-4C37-A6A5-2DBD6E73BEBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.WebApp.SeleniumPOMTests", "Eventures.WebApp.SeleniumPOMTests\Eventures.WebApp.SeleniumPOMTests.csproj", "{88737466-F4A5-4F5D-AE3D-CDCCCF66272B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{9DC205F8-4648-4C37-A6A5-2DBD6E73BEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DC205F8-4648-4C37-A6A5-2DBD6E73BEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DC205F8-4648-4C37-A6A5-2DBD6E73BEBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88737466-F4A5-4F5D-AE3D-CDCCCF66272B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88737466-F4A5-4F5D-AE3D-CDCCCF66272B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88737466-F4A5-4F5D-AE3D-CDCCCF66272B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88737466-F4A5-4F5D-AE3D-CDCCCF66272B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

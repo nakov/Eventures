@@ -109,8 +109,8 @@ namespace Eventures.WebApp.IntegrationTests
                 {
                     { "Name", eventName },
                     { "Place", eventPlace },
-                    { "Start", DateTime.UtcNow.AddDays(1).ToString("r")},
-                    { "End", DateTime.UtcNow.AddDays(1).AddHours(3).ToString("r")},
+                    { "Start", DateTime.Now.AddDays(1).ToString()},
+                    { "End", DateTime.Now.AddDays(1).AddHours(3).ToString()},
                     { "TotalTickets", "120"},
                     { "PricePerTicket", "20"}
                 });
@@ -150,8 +150,8 @@ namespace Eventures.WebApp.IntegrationTests
                 {
                     { "Name", invalidName },
                     { "Place", "Beach" },
-                    { "Start", DateTime.UtcNow.ToString("r")},
-                    { "End", DateTime.UtcNow.AddHours(3).ToString("r")},
+                    { "Start", DateTime.Now.ToString()},
+                    { "End", DateTime.Now.AddHours(3).ToString()},
                     { "TotalTickets", "120"},
                     { "PricePerTicket", "20"}
                 });
@@ -293,11 +293,11 @@ namespace Eventures.WebApp.IntegrationTests
                 {
                     { "Name", editedEventName },
                     { "Place", devConfEvent.Place },
-                    { "Start", devConfEvent.Start.ToString("r")},
-                    { "End", devConfEvent.End.ToString("r")},
+                    { "Start", devConfEvent.Start.ToString()},
+                    { "End", devConfEvent.End.ToString()},
                     { "TotalTickets", devConfEvent.TotalTickets.ToString()},
                     { "PricePerTicket", devConfEvent.PricePerTicket
-                        .ToString(CultureInfo.GetCultureInfo("en-GB"))}
+                        .ToString(CultureInfo.GetCultureInfo("en-US"))}
                 });
 
             // Act: send a POST request with the new event data
@@ -340,8 +340,8 @@ namespace Eventures.WebApp.IntegrationTests
                 {
                     { "Name", invalidEventName },
                     { "Place", softuniadaEvent.Place },
-                    { "Start", softuniadaEvent.Start.ToString("r")},
-                    { "End", softuniadaEvent.End.ToString("r")},
+                    { "Start", softuniadaEvent.Start.ToString()},
+                    { "End", softuniadaEvent.End.ToString()},
                     { "TotalTickets", softuniadaEvent.TotalTickets.ToString()},
                     { "PricePerTicket", softuniadaEvent.PricePerTicket.ToString()}
                 });

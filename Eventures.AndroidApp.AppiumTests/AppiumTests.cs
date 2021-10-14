@@ -8,8 +8,8 @@ namespace Eventures.AndroidApp.AppiumTests
 {
     public class AppiumTests : AppiumTestsBase
     {
-        private string username = "user" + DateTime.UtcNow.Ticks.ToString().Substring(10);
-        private string password = "pass" + DateTime.UtcNow.Ticks.ToString().Substring(10);
+        private string username = "user" + DateTime.Now.Ticks.ToString().Substring(10);
+        private string password = "pass" + DateTime.Now.Ticks.ToString().Substring(10);
         private const string ButtonConnectId = "buttonConnect";
         private const string ButtonLoginId = "buttonLogin";
         private const string ButtonRegisterId = "buttonRegister";

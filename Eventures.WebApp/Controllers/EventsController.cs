@@ -36,12 +36,15 @@ namespace Eventures.WebApp.Controllers
 
         public IActionResult Create()
         {
+            var currentDate = DateTime.Now;
+            var startDate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, currentDate.AddHours(1).Hour, currentDate.Minute, 0);
+            var endDate = new DateTime(currentDate.Year, currentDate.Month, currentDate.AddDays(1).Day, currentDate.AddHours(6).Hour, currentDate.Minute, 0);
             EventBindingModel model = new EventBindingModel()
             {
                 Name = "New Event",
                 Place = "Some Place",
-                Start = DateTime.Now.Date.AddDays(7).AddHours(10),
-                End = DateTime.Now.Date.AddDays(7).AddHours(18),
+                Start = startDate,
+                End = endDate,
                 PricePerTicket = 10.00M,
                 TotalTickets = 100
             };

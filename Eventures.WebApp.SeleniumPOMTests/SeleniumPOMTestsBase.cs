@@ -7,9 +7,9 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
-namespace Eventures.WebApp.SeleniumTests
+namespace Eventures.WebApp.SeleniumPOMTests
 {
-    public abstract class SeleniumTestsBase
+    public abstract class SeleniumPOMTestsBase
     {
         protected TestDb testDb;
         protected IWebDriver driver;

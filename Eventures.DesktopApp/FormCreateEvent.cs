@@ -10,16 +10,16 @@ namespace Eventures.DesktopApp
     {
         public string EvName { get => this.textBoxName.Text; }
         public string Place { get => this.textBoxPlace.Text; }
-        public DateTime Start { get => DateTime.ParseExact(this.dateTimePickerStart.Text, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture); }
-        public DateTime End { get => DateTime.ParseExact(this.dateTimePickerEnd.Text, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture); }
+        public DateTime Start { get => DateTime.SpecifyKind(DateTime.Parse(this.dateTimePickerStart.Text), DateTimeKind.Utc); }
+        public DateTime End { get => DateTime.SpecifyKind(DateTime.Parse(this.dateTimePickerEnd.Text), DateTimeKind.Utc); }
         public int TotalTickets { get => int.Parse(this.numboxTickets.Text); }
         public decimal PricePerTicket { get => decimal.Parse(this.numboxPrice.Text); }
 
         public FormCreateEvent()
         {
             InitializeComponent();
-            this.dateTimePickerStart.Value = DateTime.UtcNow.AddDays(1);
-            this.dateTimePickerEnd.Value = DateTime.UtcNow.AddDays(2);
+            this.dateTimePickerStart.Value = DateTime.Now.AddDays(1);
+            this.dateTimePickerEnd.Value = DateTime.Now.AddDays(2);
         }
 
         private void FormCreateEvent_KeyDown(object sender, KeyEventArgs e)
@@ -37,7 +37,7 @@ namespace Eventures.DesktopApp
                 + TicketsIsValid()
                 + PriceIsValid();
 
-            // If there are no erros - return
+            // If there are no errors - return
             if (this.buttonCreateConfirm.DialogResult == DialogResult.OK)
             {
                 return;
@@ -49,7 +49,7 @@ namespace Eventures.DesktopApp
             }
             else
             {
-                MessageBox.Show(result.Trim());
+                MessageBox.Show(result.Trim(), "Errors");
             }
         }
 

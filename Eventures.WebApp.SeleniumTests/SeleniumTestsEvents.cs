@@ -119,7 +119,7 @@ namespace Eventures.WebApp.SeleniumTests
             Assert.That(driver.Title.Contains("Create Event"));
 
             // Locate fields and fill them in with event data
-            var eventName = "Party" + DateTime.UtcNow.Ticks;
+            var eventName = "Party" + DateTime.Now.Ticks;
             var nameField = driver.FindElement(By.Id("Name"));
             nameField.Clear();
             nameField.SendKeys(eventName);
@@ -186,7 +186,7 @@ namespace Eventures.WebApp.SeleniumTests
 
             // Assert that an error message appears on the page
             var errorSpan = driver.FindElement(By.Id("Name-error"));
-            Assert.AreEqual(errorSpan.Text, "The Name field is required.");
+            Assert.AreEqual("The Name field is required.", errorSpan.Text);
         }
 
         [Test]
@@ -255,7 +255,7 @@ namespace Eventures.WebApp.SeleniumTests
 
             // Change the name of the event
             var editNameField = driver.FindElement(By.Id("Name"));
-            var changedName = "Best Best Show" + DateTime.UtcNow.Ticks;
+            var changedName = "Best Best Show" + DateTime.Now.Ticks;
             editNameField.Clear();
             editNameField.SendKeys(changedName);
 
@@ -311,7 +311,7 @@ namespace Eventures.WebApp.SeleniumTests
 
             // Assert an error message appears on the page
             var errorSpan = driver.FindElement(By.Id("Name-error"));
-            Assert.AreEqual(errorSpan.Text, "The Name field is required.");
+            Assert.AreEqual("The Name field is required.", errorSpan.Text);
         }
 
         private void RegisterUserForTesting()
@@ -338,7 +338,7 @@ namespace Eventures.WebApp.SeleniumTests
             driver.Navigate().GoToUrl(this.baseUrl + "/Events/Create");
             Assert.That(driver.Title.Contains("Create Event"));
 
-            var eventName = "Best Show" + DateTime.UtcNow.Ticks;
+            var eventName = "Best Show" + DateTime.Now.Ticks;
             var nameField = driver.FindElement(By.Id("Name"));
             nameField.Clear();
             nameField.SendKeys(eventName);
