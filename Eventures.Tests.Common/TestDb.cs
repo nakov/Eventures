@@ -10,7 +10,6 @@ namespace Eventures.Tests.Common
 {
     public class TestDb
     {
-        private ApplicationDbContext dbContext;
         private string uniqueDbName;
 
         public TestDb()
@@ -29,8 +28,7 @@ namespace Eventures.Tests.Common
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseInMemoryDatabase(uniqueDbName);
-            dbContext = new ApplicationDbContext(optionsBuilder.Options, false);
-            return dbContext;
+            return new ApplicationDbContext(optionsBuilder.Options, false);
         }
 
         private void SeedDatabase()
