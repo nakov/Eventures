@@ -45,10 +45,8 @@ namespace Eventures.WebApp.UnitTests
             Assert.AreEqual(this.dbContext.Events.Count(), resultModel.Count);
 
             // Assert events are correct
-            Assert.AreEqual(this.testDb.EventSoftuniada.Name, resultModel[0].Name);
-            Assert.AreEqual(this.testDb.EventOpenFest.Name, resultModel[1].Name);
-            Assert.AreEqual(this.testDb.EventMSBuild.Name, resultModel[2].Name);
-            Assert.AreEqual(this.testDb.EventDevConf.Name, resultModel[3].Name);
+            Assert.AreEqual(this.testDb.EventOpenFest.Name, resultModel[0].Name);
+            Assert.AreEqual(this.testDb.EventDevConf.Name, resultModel[1].Name);
         }
 
         [Test]

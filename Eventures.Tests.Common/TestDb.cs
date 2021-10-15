@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 using Eventures.Data;
 
@@ -17,26 +16,24 @@ namespace Eventures.Tests.Common
         public TestDb()
         {
             this.uniqueDbName = "Eventures-TestDb-" + DateTime.Now.Ticks;
-            this.SeedDatabase().Wait();
+            this.SeedDatabase();
         }
 
         public EventuresUser GuestUser { get; private set; }
         public EventuresUser UserMaria { get; private set; }
-        public Event EventDevConf { get; private set; }
-        public Event EventSoftuniada { get; private set; }
         public Event EventOpenFest { get; private set; }
-        public Event EventMSBuild { get; private set; }
+        public Event EventDevConf { get; private set; }
 
 
         public ApplicationDbContext CreateDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseInMemoryDatabase(uniqueDbName);
-            dbContext = new ApplicationDbContext(optionsBuilder.Options);
+            dbContext = new ApplicationDbContext(optionsBuilder.Options, false);
             return dbContext;
         }
 
-        private async Task SeedDatabase()
+        private void SeedDatabase()
         {
             var dbContext = this.CreateDbContext();
             var userStore = new UserStore<EventuresUser>(dbContext);
@@ -44,6 +41,32 @@ namespace Eventures.Tests.Common
             var normalizer = new UpperInvariantLookupNormalizer();
             var userManager = new UserManager<EventuresUser>(
                 userStore, null, hasher, null, null, normalizer, null, null, null);
+
+            // Create GuestUser
+            this.GuestUser = new EventuresUser()
+            {
+                UserName = "guest",
+                NormalizedUserName = "guest",
+                Email = "guest@mail.com",
+                NormalizedEmail = "guest@mail.com",
+                FirstName = "Guest",
+                LastName = "User",
+            };
+            userManager.CreateAsync(this.GuestUser, this.GuestUser.UserName).Wait();
+
+            // EventOpenFest has owner GuestUser
+            this.EventOpenFest = new Event()
+            {
+                Name = "OpenFest",
+                Place = "Online",
+                Start = DateTime.Now.AddDays(500),
+                End = DateTime.Now.AddDays(500).AddHours(8),
+                TotalTickets = 500,
+                PricePerTicket = 10.00M,
+                OwnerId = this.GuestUser.Id
+            };
+
+            dbContext.Add(this.EventOpenFest);
 
             // Create UserMaria
             this.UserMaria = new EventuresUser()
@@ -69,18 +92,6 @@ namespace Eventures.Tests.Common
             dbContext.Add(this.EventDevConf);
 
             dbContext.SaveChanges();
-
-            // Get GuestUser for the database
-            this.GuestUser = await this.dbContext.Users
-                .FirstOrDefaultAsync(u => u.UserName == "guest");
-
-            // Get events for the database
-            this.EventSoftuniada = await this.dbContext.Events
-                .FirstOrDefaultAsync(e => e.Name.Contains("Softuniada"));
-            this.EventOpenFest = await this.dbContext.Events
-                .FirstOrDefaultAsync(e => e.Name.Contains("OpenFest")); ;
-            this.EventMSBuild = await this.dbContext.Events
-                .FirstOrDefaultAsync(e => e.Name.Contains("Microsoft"));
         }
     }
 }
