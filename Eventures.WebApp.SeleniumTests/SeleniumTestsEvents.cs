@@ -154,11 +154,13 @@ namespace Eventures.WebApp.SeleniumTests
             Assert.That(driver.PageSource.Contains(eventPlace));
             Assert.That(driver.PageSource.Contains(username));
 
-            // Assert the last row is the new event and it has "Delete" and "Edit" buttons
-            var lastRow = driver.FindElements(By.TagName("tr")).Last();
-            Assert.That(lastRow.Text.Contains(eventName));
-            Assert.That(lastRow.Text.Contains("Delete"));
-            Assert.That(lastRow.Text.Contains("Edit"));
+            // Assert the new event appears and it has "Delete" and "Edit" buttons
+            var eventRow = driver.FindElements(By.TagName("tr"))
+               .FirstOrDefault(e => e.Text.Contains(eventName));
+            Assert.IsNotNull(eventRow);
+            Assert.That(eventRow.Text.Contains(eventPlace));
+            Assert.That(eventRow.Text.Contains("Delete"));
+            Assert.That(eventRow.Text.Contains("Edit"));
         }
 
         [Test]
@@ -200,14 +202,15 @@ namespace Eventures.WebApp.SeleniumTests
             Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.PageSource.Contains(eventName));
 
-            // Get the last row with the new event and 
-            var lastRow = driver.FindElements(By.TagName("tr")).Last();
-            Assert.That(lastRow.Text.Contains(eventName));
+            // Get the row with the new event
+            var eventRow = driver.FindElements(By.TagName("tr"))
+               .FirstOrDefault(e => e.Text.Contains(eventName));
+            Assert.IsNotNull(eventRow);
 
             // Locate the "Delete" button of the event
             var deleteBtn = driver
-                .FindElements(By.XPath("//a[contains(.,'Delete')]"))
-                .Last();
+                .FindElement(By.XPath($"//tr//td[contains(text(), '{eventName}')]" +
+                $"/..//a[contains(.,'Delete')]"));
 
             // Click on the "Delete" button
             deleteBtn.Click();
@@ -239,12 +242,15 @@ namespace Eventures.WebApp.SeleniumTests
             Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.PageSource.Contains(eventName));
 
-            // Get the last row with the event and locate the "Edit" button of the event
-            var lastRow = driver.FindElements(By.TagName("tr")).Last();
-            Assert.That(lastRow.Text.Contains(eventName));
-            var editButton = driver
-                .FindElements(By.XPath("//a[contains(.,'Edit')]"))
-                .Last();
+            // Get the row with the new event
+            var eventRow = driver.FindElements(By.TagName("tr"))
+               .FirstOrDefault(e => e.Text.Contains(eventName));
+            Assert.IsNotNull(eventRow);
+
+            // Locate the "Edit" button of the event
+            var editButton = eventRow
+                .FindElement(By.XPath($"//tr//td[contains(text(), '{eventName}')]" +
+                $"/..//a[contains(.,'Edit')]"));
 
             // Click on the "Edit" button
             editButton.Click();
@@ -283,10 +289,13 @@ namespace Eventures.WebApp.SeleniumTests
             Assert.AreEqual(this.baseUrl + "/Events/All", driver.Url);
             Assert.That(driver.PageSource.Contains(eventName));
 
-            // Get the last row with the new event and locate the "Edit" button of the event
-            var lastRow = driver.FindElements(By.TagName("tr")).Last();
-            Assert.That(lastRow.Text.Contains(eventName));
-            var editButton = driver.FindElements(By.XPath("//a[contains(.,'Edit')]")).Last();
+            // Get the row with the new event
+            var eventRow = driver.FindElements(By.TagName("tr"))
+               .FirstOrDefault(e => e.Text.Contains(eventName));
+            Assert.IsNotNull(eventRow);
+
+            // Locate the "Edit" button of the event
+            var editButton = driver.FindElement(By.XPath($"//tr//td[contains(text(), '{eventName}')]/..//a[contains(.,'Edit')]"));
 
             // Click on the "Edit" button
             editButton.Click();

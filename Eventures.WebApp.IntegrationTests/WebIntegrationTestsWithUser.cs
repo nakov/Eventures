@@ -129,9 +129,7 @@ namespace Eventures.WebApp.IntegrationTests
             Assert.That(postResponseBody, Does.Contain(eventPlace));
 
             // Assert the event is also created in the database
-            var lastEvent = this.testDb.CreateDbContext().Events.Last();
-            Assert.AreEqual(lastEvent.Name, eventName);
-            Assert.AreEqual(lastEvent.Place, eventPlace);
+            Assert.IsTrue(this.testDb.CreateDbContext().Events.Any(e => e.Name == eventName));
         }
 
         [Test]

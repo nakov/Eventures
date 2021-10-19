@@ -48,13 +48,13 @@ namespace Eventures.WebApp.SeleniumPOMTests
             var allEventsPage = new AllEventsPage(driver);
             Assert.IsTrue(allEventsPage.IsOpen(baseUrl));
 
-            // Assert the new event appears on the last row
-            var lastRowText = allEventsPage.GetLastEventRow();
-            Assert.That(lastRowText.Contains(eventName));
-            Assert.That(lastRowText.Contains(eventPlace));
-            Assert.That(lastRowText.Contains(username));
-            Assert.That(lastRowText.Contains("Delete"));
-            Assert.That(lastRowText.Contains("Edit"));
+            // Assert the new event appears
+            var eventRowText = allEventsPage.GetEventRow(eventName);
+            Assert.That(eventRowText.Contains(eventName));
+            Assert.That(eventRowText.Contains(eventPlace));
+            Assert.That(eventRowText.Contains(username));
+            Assert.That(eventRowText.Contains("Delete"));
+            Assert.That(eventRowText.Contains("Edit"));
         }
 
         [Test]
@@ -87,13 +87,12 @@ namespace Eventures.WebApp.SeleniumPOMTests
             var allEventsPage = new AllEventsPage(driver);
             Assert.IsTrue(allEventsPage.IsOpen(baseUrl));
 
-            // Get the last row with the new event
-            var lastRowText = allEventsPage.GetLastEventRow();
-            Assert.That(lastRowText.Contains(eventName));
-            Assert.That(lastRowText.Contains("Delete"));
+            // Get the row with the new event
+            var eventRowText = allEventsPage.GetEventRow(eventName);
+            Assert.That(eventRowText.Contains(eventName));
 
-            // Click on the "Delete" button of the new event
-            allEventsPage.PressLastDeleteButton();
+            // Click on the "Edit" button of the new event
+            allEventsPage.PressEventDeleteButton(eventName);
 
             // Assert the user is redirected to the "Delete Event" page
             var deletePage = new DeletePage(driver);
@@ -123,13 +122,12 @@ namespace Eventures.WebApp.SeleniumPOMTests
             var allEventsPage = new AllEventsPage(driver);
             Assert.IsTrue(allEventsPage.IsOpen(baseUrl));
 
-            // Get the last row with the new event
-            var lastRowText = allEventsPage.GetLastEventRow();
-            Assert.That(lastRowText.Contains(eventName));
-            Assert.That(lastRowText.Contains("Edit"));
+            // Get the row with the new event
+            var eventRowText = allEventsPage.GetEventRow(eventName);
+            Assert.That(eventRowText.Contains(eventName));
 
             // Click on the "Edit" button of the new event
-            allEventsPage.PressLastEditButton();
+            allEventsPage.PressEventEditButton(eventName);
 
             // Assert the user is redirected to the "Edit Event" page
             var editPage = new EditPage(driver);
@@ -161,13 +159,12 @@ namespace Eventures.WebApp.SeleniumPOMTests
             var allEventsPage = new AllEventsPage(driver);
             Assert.IsTrue(allEventsPage.IsOpen(baseUrl));
 
-            // Get the last row with the new event
-            var lastRowText = allEventsPage.GetLastEventRow();
-            Assert.That(lastRowText.Contains(eventName));
-            Assert.That(lastRowText.Contains("Edit"));
+            // Get the row with the new event
+            var eventRowText = allEventsPage.GetEventRow(eventName);
+            Assert.That(eventRowText.Contains("Edit"));
 
             // Click on the "Edit" button of the new event
-            allEventsPage.PressLastEditButton();
+            allEventsPage.PressEventEditButton(eventName);
 
             // Assert the user is redirected to the "Edit Event" page
             var editPage = new EditPage(driver);

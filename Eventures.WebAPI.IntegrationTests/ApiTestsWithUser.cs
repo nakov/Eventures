@@ -39,8 +39,6 @@ namespace Eventures.WebAPI.IntegrationTests
             var responseResult = resposeContent.Result;
             Assert.AreEqual(this.dbContext.Users.Count(), 
                 responseResult.Count());
-            Assert.AreEqual(this.dbContext.Users.FirstOrDefault().UserName, 
-                responseResult.FirstOrDefault().Username);
         }
 
         [Test]
@@ -56,8 +54,6 @@ namespace Eventures.WebAPI.IntegrationTests
 
             var responseContent = response.Content.ReadAsAsync<List<EventListingModel>>().Result;
             Assert.AreEqual(this.dbContext.Events.Count(), responseContent.Count());
-            Assert.AreEqual(this.dbContext.Events.FirstOrDefault().Name, responseContent.FirstOrDefault().Name);
-            Assert.AreEqual(this.dbContext.Events.LastOrDefault().Name, responseContent.LastOrDefault().Name);
         }
 
         [Test]
