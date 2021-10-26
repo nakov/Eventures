@@ -39,8 +39,6 @@ namespace Eventures.WebAPI.IntegrationTests
             var responseResult = resposeContent.Result;
             Assert.AreEqual(this.dbContext.Users.Count(), 
                 responseResult.Count());
-            Assert.AreEqual(this.dbContext.Users.FirstOrDefault().UserName, 
-                responseResult.FirstOrDefault().Username);
         }
 
         [Test]
@@ -56,8 +54,6 @@ namespace Eventures.WebAPI.IntegrationTests
 
             var responseContent = response.Content.ReadAsAsync<List<EventListingModel>>().Result;
             Assert.AreEqual(this.dbContext.Events.Count(), responseContent.Count());
-            Assert.AreEqual(this.dbContext.Events.FirstOrDefault().Name, responseContent.FirstOrDefault().Name);
-            Assert.AreEqual(this.dbContext.Events.LastOrDefault().Name, responseContent.LastOrDefault().Name);
         }
 
         [Test]
@@ -252,7 +248,7 @@ namespace Eventures.WebAPI.IntegrationTests
             var openFestEvent = this.testDb.EventOpenFest;
 
             // Create an event binding model with changed name
-            var changedName = "OpenFest 2022 (New Edition)";
+            var changedName = "OpenFest (New Edition)";
             var changedEvent = new EventBindingModel()
             {
                 Name = changedName,
@@ -315,7 +311,7 @@ namespace Eventures.WebAPI.IntegrationTests
         public async Task Test_Events_PartialEditEvent_InvalidId()
         {
             // Arrange: create an event model with changed name
-            var changedName = "Softuniada 2021 (New Edition)";
+            var changedName = "Dev Conference (New Edition)";
             var changedEvent = new PatchEventModel()
             {
                 Name = changedName
@@ -375,7 +371,7 @@ namespace Eventures.WebAPI.IntegrationTests
 
             var eventInDbBefore = this.dbContext.Events.FirstOrDefault(x => x.Id == openFestEvent.Id);
 
-            var changedName = "OpenFest 2022 (New Edition)";
+            var changedName = "OpenFest (New Edition)";
             var changedEvent = new PatchEventModel()
             {
                 Name = changedName

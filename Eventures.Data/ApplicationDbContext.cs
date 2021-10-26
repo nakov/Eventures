@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -9,61 +8,68 @@ namespace Eventures.Data
 {
     public class ApplicationDbContext : IdentityDbContext<EventuresUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private bool seedDb = true;
+        public ApplicationDbContext(
+            DbContextOptions<ApplicationDbContext> options, bool seedDb = true)
             : base(options)
         {
+            this.seedDb = seedDb;
             this.Database.EnsureCreated();
         }
+
         public DbSet<Event> Events { get; set; }
         private EventuresUser GuestUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            SeedUsers();
-            builder.Entity<EventuresUser>()
-                .HasData(this.GuestUser);
+            if(seedDb)
+            {
+                SeedUsers();
+                builder.Entity<EventuresUser>()
+                    .HasData(this.GuestUser);
 
-            builder
-                .Entity<Event>()
-                .HasData(new Event() 
-                { 
-                    Id = 1,
-                    Name = "Softuniada 2022",
-                    Place = "Sofia",
-                    Start = DateTime.ParseExact(DateTime.Now.AddDays(200)
-                        .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                    End = DateTime.ParseExact(DateTime.Now.AddDays(201)
-                        .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                    TotalTickets = 200,
-                    PricePerTicket = 12.50M,
-                    OwnerId = this.GuestUser.Id
-                },
-                new Event()
-                {
-                    Id = 2,
-                    Name = "OpenFest 2022",
-                    Place = "Online",
-                    Start = DateTime.ParseExact(DateTime.Now.AddDays(500)
-                        .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                    End = DateTime.ParseExact(DateTime.Now.AddDays(500).AddHours(8)
-                        .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                    TotalTickets = 500,
-                    PricePerTicket = 10.00M,
-                    OwnerId = this.GuestUser.Id
-                },
-                new Event()
-                {
-                    Id = 3,
-                    Name = "Microsoft Build 2022",
-                    Place = "Online",
-                    Start = DateTime.ParseExact(DateTime.Now.AddDays(300)
-                        .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                    End = DateTime.ParseExact(DateTime.Now.AddDays(300).AddHours(12)
-                    .ToString("yyyy-MM-dd HH:mm"), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                    TotalTickets = 1000,
-                    PricePerTicket = 0.00m,
-                    OwnerId = this.GuestUser.Id
-                });
+                builder
+                    .Entity<Event>()
+                    .HasData(new Event()
+                    {
+                        Id = 1,
+                        Name = "Softuniada",
+                        Place = "Sofia",
+                        Start = DateTime.Parse(DateTime.Now.AddDays(200)
+                            .ToString("yyyy-MM-dd HH:mm")), 
+                        End = DateTime.Parse(DateTime.Now.AddDays(201)
+                            .ToString("yyyy-MM-dd HH:mm")),
+                        TotalTickets = 200,
+                        PricePerTicket = 12.50M,
+                        OwnerId = this.GuestUser.Id
+                    },
+                    new Event()
+                    {
+                        Id = 2,
+                        Name = "OpenFest",
+                        Place = "Online",
+                        Start = DateTime.Parse(DateTime.Now.AddDays(500)
+                            .ToString("yyyy-MM-dd HH:mm")),
+                        End = DateTime.Parse(DateTime.Now.AddDays(500).AddHours(8)
+                            .ToString("yyyy-MM-dd HH:mm")),
+                        TotalTickets = 500,
+                        PricePerTicket = 10.00M,
+                        OwnerId = this.GuestUser.Id
+                    },
+                    new Event()
+                    {
+                        Id = 3,
+                        Name = "Microsoft Build",
+                        Place = "Online",
+                        Start = DateTime.Parse(DateTime.Now.AddDays(300)
+                            .ToString("yyyy-MM-dd HH:mm")),
+                        End = DateTime.Parse(DateTime.Now.AddDays(300).AddHours(12)
+                            .ToString("yyyy-MM-dd HH:mm")),
+                        TotalTickets = 1000,
+                        PricePerTicket = 0.00m,
+                        OwnerId = this.GuestUser.Id
+                    });
+            }
 
             base.OnModelCreating(builder);
         }

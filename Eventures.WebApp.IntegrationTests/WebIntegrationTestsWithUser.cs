@@ -129,9 +129,7 @@ namespace Eventures.WebApp.IntegrationTests
             Assert.That(postResponseBody, Does.Contain(eventPlace));
 
             // Assert the event is also created in the database
-            var lastEvent = this.testDb.CreateDbContext().Events.Last();
-            Assert.AreEqual(lastEvent.Name, eventName);
-            Assert.AreEqual(lastEvent.Place, eventPlace);
+            Assert.IsTrue(this.testDb.CreateDbContext().Events.Any(e => e.Name == eventName));
         }
 
         [Test]
@@ -320,17 +318,17 @@ namespace Eventures.WebApp.IntegrationTests
         [Test]
         public async Task Test_EventsPage_EditEvent_InvalidData()
         {
-            // Arrange: get the "Softuniada 2021" event
-            var softuniadaEvent = this.testDb.EventDevConf;
+            // Arrange: get the "Dev Conference" event
+            var devConfEvent = this.testDb.EventDevConf;
 
             // Go to the "All Events" page and assert the event exists
             var allResponse = await this.httpClient.GetAsync("/Events/All");
             var allResponseBody = await allResponse.Content.ReadAsStringAsync();
-            Assert.That(allResponseBody.Contains(softuniadaEvent.Name));
+            Assert.That(allResponseBody.Contains(devConfEvent.Name));
 
             // Go to the "Edit Event" page with the new event id
             var editResponse = await this.httpClient.GetAsync(
-               $"/Events/Edit/{softuniadaEvent.Id}");
+               $"/Events/Edit/{devConfEvent.Id}");
             Assert.AreEqual(HttpStatusCode.OK, editResponse.StatusCode);
 
             // Prepare request content with invalid event name: name == empty string
@@ -339,24 +337,24 @@ namespace Eventures.WebApp.IntegrationTests
                 new Dictionary<string, string>
                 {
                     { "Name", invalidEventName },
-                    { "Place", softuniadaEvent.Place },
-                    { "Start", softuniadaEvent.Start.ToString()},
-                    { "End", softuniadaEvent.End.ToString()},
-                    { "TotalTickets", softuniadaEvent.TotalTickets.ToString()},
-                    { "PricePerTicket", softuniadaEvent.PricePerTicket.ToString()}
+                    { "Place", devConfEvent.Place },
+                    { "Start", devConfEvent.Start.ToString()},
+                    { "End", devConfEvent.End.ToString()},
+                    { "TotalTickets", devConfEvent.TotalTickets.ToString()},
+                    { "PricePerTicket", devConfEvent.PricePerTicket.ToString()}
                 });
 
             // Act: send a POST request with the new event data
             var postResponse = await this.httpClient.PostAsync(
-                $"/Events/Edit/{softuniadaEvent.Id}", postContent);
+                $"/Events/Edit/{devConfEvent.Id}", postContent);
             Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode);
 
             // Assert the user is on the same page
-            Assert.AreEqual($"/Events/Edit/{softuniadaEvent.Id}", postResponse.RequestMessage.RequestUri.LocalPath);
+            Assert.AreEqual($"/Events/Edit/{devConfEvent.Id}", postResponse.RequestMessage.RequestUri.LocalPath);
 
             // Assert the event is not edited in the database
-            var eventInDb = this.testDb.CreateDbContext().Events.FirstOrDefault(x => x.Id == softuniadaEvent.Id);
-            Assert.AreEqual(eventInDb.Name, softuniadaEvent.Name);
+            var eventInDb = this.testDb.CreateDbContext().Events.FirstOrDefault(x => x.Id == devConfEvent.Id);
+            Assert.AreEqual(eventInDb.Name, devConfEvent.Name);
         }
 
         public async Task LoginUser(string username, string password)
