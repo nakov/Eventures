@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 
 using OpenQA.Selenium;
 
@@ -6,31 +7,32 @@ namespace Eventures.WebApp.SeleniumPOMTests.PageObjects
 {
     public class AllEventsPage : BasePage
     {
-        private IWebElement lastRow => driver.FindElements(By.TagName("tr")).Last();
-        private IWebElement lastDeleteButton => 
-            driver.FindElements(By.XPath("//a[contains(.,'Delete')]")).Last();
-        private IWebElement lastEditButton =>
-            driver.FindElements(By.XPath("//a[contains(.,'Edit')]")).Last();
-
+        private List<IWebElement> eventRows => driver.FindElements(By.TagName("tr")).ToList();
+       
         public AllEventsPage(IWebDriver driver) : base(driver)
         {
         }
 
         protected override string PageUrl => "/Events/All";
 
-        public string GetLastEventRow()
+        public string GetEventRow(string eventName)
         {
-            return this.lastRow.Text;
+            return this.eventRows
+                .FirstOrDefault(r => r.Text.Contains(eventName)).Text;
         }
 
-        public void PressLastDeleteButton()
+        public void PressEventDeleteButton(string eventName)
         {
-            this.lastDeleteButton.Click();
+            var deleteButton = driver
+                .FindElement(By.XPath($"//tr//td[contains(text(), '{eventName}')]/..//a[contains(.,'Delete')]"));
+            deleteButton.Click();
         }
 
-        public void PressLastEditButton()
+        public void PressEventEditButton(string eventName)
         {
-            this.lastEditButton.Click();
+            var editButton = driver
+                .FindElement(By.XPath($"//tr//td[contains(text(), '{eventName}')]/..//a[contains(.,'Edit')]"));
+            editButton.Click();
         }
     }
 }

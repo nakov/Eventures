@@ -82,13 +82,6 @@ namespace Eventures.WebApp.IntegrationTests
             // Assert that the user was redirected to the "Home" page
             Assert.AreEqual("/", postResponse.RequestMessage.RequestUri.LocalPath);
             Assert.That(responseBody.Contains($"Welcome, {username}"));
-
-            // Assert that the ASP.NET Identity cookie was set correctly by the server
-            //var requestHeaders = this.httpClient.DefaultRequestHeaders;
-            //var cookies = postResponse.Headers.GetValues(HeaderNames.Cookie);
-            //var aspNetIdentityCookie = cookies.FirstOrDefault(
-            //    c => c.Contains(".AspNetCore.Identity.Application"));
-            //Assert.NotNull(aspNetIdentityCookie);
         }
 
         [Test]

@@ -2,8 +2,8 @@
 
 using Eventures.Data;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Eventures.Tests.Common
@@ -27,7 +27,12 @@ namespace Eventures.Tests.Common
         public ApplicationDbContext CreateDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            // Uncomment to use an in-memory database
             optionsBuilder.UseInMemoryDatabase(uniqueDbName);
+
+            // Uncomment to use the "Eventures_QA" testing database 
+            //optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Eventures_QA");
+
             return new ApplicationDbContext(optionsBuilder.Options, false);
         }
 
@@ -43,19 +48,21 @@ namespace Eventures.Tests.Common
             // Create GuestUser
             this.GuestUser = new EventuresUser()
             {
-                UserName = "guest",
-                NormalizedUserName = "guest",
+                UserName = "guest", // + DateTime.Now.Ticks.ToString().Substring(10),
+                NormalizedUserName = "guest", //+ DateTime.Now.Ticks.ToString().Substring(10),
                 Email = "guest@mail.com",
                 NormalizedEmail = "guest@mail.com",
                 FirstName = "Guest",
-                LastName = "User",
+                LastName = "User"
             };
-            userManager.CreateAsync(this.GuestUser, this.GuestUser.UserName).Wait();
+            userManager
+                .CreateAsync(this.GuestUser, this.GuestUser.UserName)
+                .Wait();
 
             // EventOpenFest has owner GuestUser
             this.EventOpenFest = new Event()
             {
-                Name = "OpenFest",
+                Name = "OpenFest", //+ DateTime.Now.Ticks.ToString().Substring(10),
                 Place = "Online",
                 Start = DateTime.Now.AddDays(500),
                 End = DateTime.Now.AddDays(500).AddHours(8),
@@ -69,8 +76,10 @@ namespace Eventures.Tests.Common
             // Create UserMaria
             this.UserMaria = new EventuresUser()
             {
-                UserName = "maria",
+                UserName = "maria", //+ DateTime.Now.Ticks.ToString().Substring(10),
+                NormalizedUserName = "maria", //+ DateTime.Now.Ticks.ToString().Substring(10),
                 Email = "maria@gmail.com",
+                NormalizedEmail = "maria@gmail.com",
                 FirstName = "Maria",
                 LastName = "Green",
             };
@@ -79,7 +88,7 @@ namespace Eventures.Tests.Common
             // EventDevConf has owner UserMaria
             this.EventDevConf = new Event()
             {
-                Name = "Dev Conference",
+                Name = "Dev Conference", //+ DateTime.Now.Ticks.ToString().Substring(10),
                 Place = "Varna",
                 Start = DateTime.Now.AddMonths(5),
                 End = DateTime.Now.AddMonths(5).AddDays(5),

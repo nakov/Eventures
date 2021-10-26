@@ -50,7 +50,7 @@ Android mobile app client for the Eventures RESTful API.
 <kbd>![image](https://user-images.githubusercontent.com/69080997/135711976-d201d880-33c3-48ca-8105-f5686865242b.png)</kbd>
 <kbd>![image](https://user-images.githubusercontent.com/69080997/135712009-b53b097a-6965-4633-b773-a3beccf54c69.png)</kbd>
 <kbd>![image](https://user-images.githubusercontent.com/69080997/135712052-e0f6e38c-d3c9-4aa3-8bf1-df0677f7859b.png)</kbd>
-<kbd>![image](https://user-images.githubusercontent.com/69080997/135712155-068322fa-7144-450b-86da-63cf4e2d0383.png)</kbd>
+<kbd>![image](https://user-images.githubusercontent.com/69080997/137502117-020b2db5-d01a-4712-ae4b-e9743d88dbfc.png)</kbd>
 
 ### Eventures RESTful API
 
