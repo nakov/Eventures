@@ -6,6 +6,7 @@ Sample apps for demonstrating how to implement **continuous integration** and bu
   - Seeded database with one user and three events
   - Default user credentials: **guest** / **guest**
 
+
 ## Eventures Web App
 
 The ASP.NET Core app "Eventures" is an app for creating events.
@@ -16,6 +17,7 @@ The ASP.NET Core app "Eventures" is an app for creating events.
  - Create a new task (name + place + start date + end date + total tickets + price per ticket): `/Events/Create`
  - Edit event: `/Events/Edit/:id`
  - Delete event: `/Events/Delete/:id`
+
 
 ## Eventures RESTful API
 
@@ -32,10 +34,12 @@ The following endpoints are supported:
  - `POST /api/users/login` - logs in an existing user (send a JSON object in the request body, holding all fields, e.g. `{"username": "username", "password": "pass123"}`)
  - `POST /api/users/register` - registers a new user (send a JSON object in the request body, holding all fields, e.g. `{"username": "username", "email": "user@example.com", "password": "pass123", "confirmPassword": "pass123", "firstName": "Test", "lastName": "User"}`)
 
+
 ## Desktop Client
 
 Windows Forms client app for the Eventures RESTful API.
 * Technologies: C#, .NET 5, Windows Forms, RestSharp
+
 
 ## Android Client
 
@@ -43,7 +47,11 @@ Android mobile app client for the Eventures RESTful API.
 * Technologies: Java, Android SDK, Retrofit HTTP client
 * Platform: Android
 
+
 ## Screenshots
+
+Screenshots from the Eventures apps.
+
 
 ### Eventures Web App
 
@@ -52,11 +60,13 @@ Android mobile app client for the Eventures RESTful API.
 <kbd>![image](https://user-images.githubusercontent.com/69080997/135712052-e0f6e38c-d3c9-4aa3-8bf1-df0677f7859b.png)</kbd>
 <kbd>![image](https://user-images.githubusercontent.com/69080997/137502117-020b2db5-d01a-4712-ae4b-e9743d88dbfc.png)</kbd>
 
+
 ### Eventures RESTful API
 
 <kbd>![image](https://user-images.githubusercontent.com/69080997/136526348-4a3c00d9-b4b0-40f8-81f9-9904785c0172.png)</kbd>
 <kbd>![image](https://user-images.githubusercontent.com/69080997/136526560-721e6f6a-b3d4-4f1e-9646-2e2052c4912b.png)</kbd>
 <kbd>![image](https://user-images.githubusercontent.com/69080997/136526724-01b3a68f-2909-4c4b-8799-97e6f19b6d87.png)</kbd>
+
 
 ### Desktop Client
 
@@ -66,6 +76,7 @@ Android mobile app client for the Eventures RESTful API.
 <kbd>![image](https://user-images.githubusercontent.com/69080997/135712288-2b281f60-74f0-4269-b8f2-db0aa02bd777.png)</kbd>
 <kbd>![Screenshot_43](https://user-images.githubusercontent.com/69080997/133249884-505f52c5-a8ba-4764-a012-ec64f56baf05.png)</kbd>
 
+
 ### Android Client
 
 ![Screenshot_25](https://user-images.githubusercontent.com/69080997/133249110-02744bb1-8936-4854-9f3a-512034d79edd.png)
@@ -73,8 +84,5 @@ Android mobile app client for the Eventures RESTful API.
 ![Screenshot_27](https://user-images.githubusercontent.com/69080997/133249144-b14f7967-3ffe-4434-acbc-7fa00581eb39.png)
 ![image](https://user-images.githubusercontent.com/69080997/135712372-ea0c6099-7f59-41ab-ae3d-75bf97733b7e.png)
 ![Screenshot_31](https://user-images.githubusercontent.com/69080997/133249220-c1ec76ae-10aa-4790-986f-ab4dcc4368b4.png)
-
-
-
 
 
