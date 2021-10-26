@@ -34,7 +34,7 @@ The following endpoints are supported:
 
 ## Desktop Client
 
-Windows Forms Client for the Eventures RESTful API.
+Windows Forms client app for the Eventures RESTful API.
 * Technologies: C#, .NET 5, Windows Forms, RestSharp
 
 ## Android Client
