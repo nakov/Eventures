@@ -26,10 +26,10 @@ namespace Eventures.Tests.Common
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             
             // Uncomment to use an in-memory database from Entity Framework
-            //optionsBuilder.UseInMemoryDatabase(uniqueDbName);
+            optionsBuilder.UseInMemoryDatabase(uniqueDbName);
 
             // Uncomment to use the "Eventures_QA" SQL Server testing database 
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Eventures_QA");
+            //optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Eventures_QA");
 
             return new ApplicationDbContext(optionsBuilder.Options, false);
         }
