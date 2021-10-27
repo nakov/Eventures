@@ -11,12 +11,12 @@ jobs:
       - run: dotnet restore Eventures.WebApp.IntegrationTests
       - run: dotnet build Eventures.WebApp.IntegrationTests --no-restore
       - run: dotnet test Eventures.WebApp.IntegrationTests --no-build --verbosity normal
-      - uses: browser-actions/setup-chrome@latest
-      - name: Set up latest Chrome
-        run: chrome --version
       - run: dotnet restore Eventures.WebApp.SeleniumTests
       - run: dotnet build Eventures.WebApp.SeleniumTests --no-restore
-      - run: dotnet test Eventures.WebApp.SeleniumTests --no-build --verbosity normal
+      - name: Set up latest Chrome
+        uses: browser-actions/setup-chrome@latest
+        with: 
+         script: dotnet test Eventures.WebApp.SeleniumTests --no-build --verbosity normal
       - run: dotnet restore Eventures.WebApp.SeleniumPOMTests
       - run: dotnet build Eventures.WebApp.SeleniumPOMTests --no-restore
       - run: dotnet test Eventures.WebApp.SeleniumPOMTests --no-build --verbosity normal
