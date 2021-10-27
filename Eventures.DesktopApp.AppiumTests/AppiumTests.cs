@@ -261,7 +261,7 @@ namespace Eventures.DesktopApp.AppiumTests
             // Click on the [Create] button under the "Create" form
             driver.FindElementByAccessibilityId("buttonCreateConfirm").Click();
 
-            Thread.Sleep(2000);
+            driver.SwitchTo().Window(driver.WindowHandles.Last());
 
             // Assert an error window appears
             var errorMsgAppered = this.wait
