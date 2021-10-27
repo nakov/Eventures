@@ -13,6 +13,10 @@ jobs:
       - run: dotnet test Eventures.WebApp.IntegrationTests --no-build --verbosity normal
       - run: dotnet restore Eventures.WebApp.SeleniumTests
       - run: dotnet build Eventures.WebApp.SeleniumTests --no-restore
+      - uses: browser-actions/setup-chrome@latest
+      - name: Set up latest Chrome
+        working-directory: /usr/bin/google-chrome
+        run: chrome --version
       - run: dotnet test Eventures.WebApp.SeleniumTests --no-build --verbosity normal
       - run: dotnet restore Eventures.WebApp.SeleniumPOMTests
       - run: dotnet build Eventures.WebApp.SeleniumPOMTests --no-restore
