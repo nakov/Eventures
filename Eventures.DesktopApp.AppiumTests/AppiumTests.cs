@@ -259,9 +259,7 @@ namespace Eventures.DesktopApp.AppiumTests
             priceUpBtn.Click();
 
             // Click on the [Create] button under the "Create" form
-            var createConfirmationBtn = driver
-                .FindElementByAccessibilityId("buttonCreateConfirm");
-            createConfirmationBtn.Click();
+            driver.FindElementByAccessibilityId("buttonCreateConfirm").Click();
 
             // Assert an error window appears
             var errorMsgAppered = this.wait
@@ -270,15 +268,14 @@ namespace Eventures.DesktopApp.AppiumTests
             Assert.IsTrue(errorMsgAppered);
 
             // Click on the [Ok] button to close the window
-            var okBtn = driver.FindElementByName("OK");
-            okBtn.Click();
+            driver.FindElementByName("OK").Click();
 
             // Fill in a valid event place
             var eventPlace = "Beach";
             placeField.SendKeys(eventPlace);
 
             // Click on the [Create] button again
-            createConfirmationBtn.Click();
+            driver.FindElementByAccessibilityId("buttonCreateConfirm").Click();
 
             // Wait until in the database the events count is increased by 1
             this.wait.Until(
