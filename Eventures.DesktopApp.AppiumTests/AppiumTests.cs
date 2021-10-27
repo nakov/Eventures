@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-
+using System.Threading;
 using NUnit.Framework;
 
 namespace Eventures.DesktopApp.AppiumTests
@@ -260,6 +260,8 @@ namespace Eventures.DesktopApp.AppiumTests
 
             // Click on the [Create] button under the "Create" form
             driver.FindElementByAccessibilityId("buttonCreateConfirm").Click();
+
+            Thread.Sleep(2000);
 
             // Assert an error window appears
             var errorMsgAppered = this.wait
