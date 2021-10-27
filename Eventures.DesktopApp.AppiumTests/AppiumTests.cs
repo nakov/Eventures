@@ -241,10 +241,22 @@ namespace Eventures.DesktopApp.AppiumTests
             nameField.SendKeys(eventName);
 
             // Fill in invalid event place, e.g. empty string
-            var invalidPlace = "b";
+            var invalidPlace = string.Empty;
             var placeField = driver.FindElementByAccessibilityId("textBoxPlace");
             placeField.Clear();
             placeField.SendKeys(invalidPlace);
+
+            // Locate the up arrow buttons
+            var upBtns = driver.FindElementsByName("Up");
+
+            // Click the second up arrow button to increase the event tickets field value
+            var ticketsUpBtn = upBtns[1];
+            ticketsUpBtn.Click();
+
+            // Click the first up arrow button to increase the event price field value
+            var priceUpBtn = upBtns[0];
+            priceUpBtn.Click();
+            priceUpBtn.Click();
 
             // Click on the [Create] button under the "Create" form
             var createConfirmationBtn = driver
@@ -254,7 +266,7 @@ namespace Eventures.DesktopApp.AppiumTests
             // Assert an error window appears
             var errorMsgAppered = this.wait
                     .Until(s => driver.PageSource)
-                    .Contains("Place should be at least 3 characters long.");
+                    .Contains("Place field is required.");
             Assert.IsTrue(errorMsgAppered);
 
             // Click on the [Ok] button to close the window
@@ -263,7 +275,6 @@ namespace Eventures.DesktopApp.AppiumTests
 
             // Fill in a valid event place
             var eventPlace = "Beach";
-            placeField.Clear();
             placeField.SendKeys(eventPlace);
 
             // Click on the [Create] button again
@@ -285,6 +296,11 @@ namespace Eventures.DesktopApp.AppiumTests
 
             // Assert the "Event Board" windows appears
             Assert.That(pageSource.Contains(AppiumTests.EventBoardWindowName));
+
+            // Assert the new event is displayed correctly
+            Assert.That(pageSource.Contains(eventName));
+            Assert.That(pageSource.Contains(eventPlace));
+            Assert.That(pageSource.Contains(this.username));
         }
     }
 }
