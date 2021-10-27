@@ -47,10 +47,10 @@ namespace Eventures.DesktopApp.AppiumTests
                 appiumLocalService, appiumOptions);
             
             // Set an implicit wait for the UI interaction
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(60);
 
             // Set an explicit wait for the UI interaction
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
         }
 
         [OneTimeTearDown]
