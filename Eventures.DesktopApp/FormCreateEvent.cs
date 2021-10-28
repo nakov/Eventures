@@ -10,8 +10,8 @@ namespace Eventures.DesktopApp
     {
         public string EvName { get => this.textBoxName.Text; }
         public string Place { get => this.textBoxPlace.Text; }
-        public DateTime Start { get => DateTime.ParseExact(this.dateTimePickerStart.Text, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture); }
-        public DateTime End { get => DateTime.ParseExact(this.dateTimePickerEnd.Text, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture); }
+        public DateTime Start { get => DateTime.SpecifyKind(DateTime.Parse(this.dateTimePickerStart.Text), DateTimeKind.Utc); }
+        public DateTime End { get => DateTime.SpecifyKind(DateTime.Parse(this.dateTimePickerEnd.Text), DateTimeKind.Utc); }
         public int TotalTickets { get => int.Parse(this.numboxTickets.Text); }
         public decimal PricePerTicket { get => decimal.Parse(this.numboxPrice.Text); }
 
