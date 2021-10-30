@@ -104,6 +104,7 @@ namespace Eventures.WebApp.IntegrationTests
             // Prepare content for creating a new event
             var eventName = "Party" + DateTime.Now.Ticks;
             var eventPlace = "Beach";
+            var startDate = DateTime.Now.AddDays(1).ToString();
             var postContent = new FormUrlEncodedContent(
                 new Dictionary<string, string>
                 {
@@ -114,6 +115,8 @@ namespace Eventures.WebApp.IntegrationTests
                     { "TotalTickets", "120"},
                     { "PricePerTicket", "20"}
                 });
+
+            Assert.AreEqual("30/10/2021 22:59",startDate);
 
             // Act: send a POST request with event data
             var postResponse = await this.httpClient.PostAsync(
