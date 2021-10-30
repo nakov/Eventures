@@ -116,8 +116,6 @@ namespace Eventures.WebApp.IntegrationTests
                     { "PricePerTicket", "20"}
                 });
 
-            Assert.AreEqual("30/10/2021 22:59",startDate);
-
             // Act: send a POST request with event data
             var postResponse = await this.httpClient.PostAsync(
                 "/Events/Create", postContent);

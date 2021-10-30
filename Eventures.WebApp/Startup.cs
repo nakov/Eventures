@@ -51,9 +51,10 @@ namespace Eventures.WebApp
         {
             var cultureInfo = new CultureInfo("en-US");
             cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
-            cultureInfo.DateTimeFormat.ShortDatePattern = "dd/MM/yyyy";
-            cultureInfo.DateTimeFormat.DateSeparator = "/";
-            cultureInfo.DateTimeFormat.LongTimePattern = "";
+            //cultureInfo.DateTimeFormat.ShortDatePattern = "dd/MM/yyyy";
+            //cultureInfo.DateTimeFormat.DateSeparator = "/";
+            //cultureInfo.DateTimeFormat.ShortTimePattern = "HH:mm";
+            //cultureInfo.DateTimeFormat.LongTimePattern = "HH:mm";
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
