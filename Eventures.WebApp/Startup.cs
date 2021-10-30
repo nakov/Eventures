@@ -50,24 +50,13 @@ namespace Eventures.WebApp
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var cultureInfo = new CultureInfo("en-US");
-            cultureInfo.NumberFormat.NumberGroupSeparator = ".";
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+            cultureInfo.DateTimeFormat.ShortDatePattern = "dd/MM/yyyy";
+            cultureInfo.DateTimeFormat.DateSeparator = "/";
+            cultureInfo.DateTimeFormat.LongTimePattern = "";
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-
-            var supportedCultures = new[]
-                {
-                    new CultureInfo("en-US")
-                };
-
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("en-US"),
-                // Formatting numbers, dates, etc.
-                SupportedCultures = supportedCultures,
-                // Localized UI strings.
-                SupportedUICultures = supportedCultures
-            });
 
             if (env.IsDevelopment())
             {

@@ -131,24 +131,10 @@ namespace Eventures.WebAPI
             });
 
             var cultureInfo = new CultureInfo("en-US");
-            cultureInfo.NumberFormat.NumberGroupSeparator = ".";
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-
-            var supportedCultures = new[]
-                {
-                    new CultureInfo("en-US")
-                };
-
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("en-US"),
-                // Formatting numbers, dates, etc.
-                SupportedCultures = supportedCultures,
-                // Localized UI strings.
-                SupportedUICultures = supportedCultures
-            });
 
             app.UseSwagger(c =>
             {

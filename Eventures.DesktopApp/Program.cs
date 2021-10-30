@@ -13,6 +13,7 @@ namespace Eventures.DesktopApp
         static void Main()
         {
             var culture = new CultureInfo("en-US");
+            culture.NumberFormat.NumberDecimalSeparator = ".";
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
 
