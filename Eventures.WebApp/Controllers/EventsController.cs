@@ -38,7 +38,10 @@ namespace Eventures.WebApp.Controllers
         {
             var currentDate = DateTime.Now;
             var startDate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, currentDate.AddHours(1).Hour, currentDate.Minute, 0);
-            var endDate = new DateTime(currentDate.Year, currentDate.Month, currentDate.AddDays(1).Day, currentDate.AddHours(6).Hour, currentDate.Minute, 0);
+
+            var nextDay = DateTime.Now.AddDays(1);
+            var endDate = new DateTime(nextDay.Year, nextDay.Month, nextDay.Day, currentDate.AddHours(6).Hour, currentDate.Minute, 0);
+           
             EventBindingModel model = new EventBindingModel()
             {
                 Name = "New Event",

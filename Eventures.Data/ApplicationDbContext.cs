@@ -81,9 +81,9 @@ namespace Eventures.Data
             this.GuestUser = new EventuresUser()
             {
                 UserName = "guest",
-                NormalizedUserName = "guest",
+                NormalizedUserName = "GUEST",
                 Email = "guest@mail.com",
-                NormalizedEmail = "guest@mail.com",
+                NormalizedEmail = "GUEST@MAIL.COM",
                 FirstName = "Guest",
                 LastName = "User",
             };
