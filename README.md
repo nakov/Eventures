@@ -9,6 +9,8 @@ Sample apps for demonstrating how to implement **continuous integration** and bu
 
 ## Eventures Web App
 
+Live demo in Replit: [Eventures Web App](https://eventures-web-app.softuniorg.repl.co)
+
 The ASP.NET Core app "Eventures" is an app for creating events.
 * Technologies: C#, ASP.NET Core, Entity Framework Core, ASP.NET Core Identity, NUnit
 * The app supports the following operations:
@@ -20,6 +22,8 @@ The ASP.NET Core app "Eventures" is an app for creating events.
 
 
 ## Eventures RESTful API
+
+Live demo in Replit: [Eventures Web API](https://eventures-web-api.softuniorg.repl.co)
 
 The following endpoints are supported:
  - `GET /api` - list all API endpoints 
