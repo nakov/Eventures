@@ -1,5 +1,5 @@
 name: Build and Test
-on: [push]
+on: [push, workflow_dispatch]
 jobs:
   WebApp-tests:
     runs-on: ubuntu-latest
